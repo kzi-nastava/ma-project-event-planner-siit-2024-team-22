@@ -46,8 +46,7 @@ public class RegisterScreen extends AppCompatActivity {
         });
 
         btnBackRegister.setOnClickListener(v -> {
-            Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
-            startActivity(intent);
+            onBackPressed();
         });
     }
 
