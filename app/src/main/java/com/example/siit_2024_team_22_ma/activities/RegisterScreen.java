@@ -1,8 +1,9 @@
-package com.example.siit_2024_team_22_ma;
+package com.example.siit_2024_team_22_ma.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,13 +11,30 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SplashScreen extends AppCompatActivity {
+import com.example.siit_2024_team_22_ma.R;
+
+public class RegisterScreen extends AppCompatActivity {
+
+    private EditText etEmailRegister;
+    private EditText etPasswordRegister;
+    private EditText etUsernameRegister;
+    private EditText etPhoneNumberRegister;
+    private Button btnConfirmRegister;
+    private Button btnBackRegister;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_splash_screen);
+        setContentView(R.layout.activity_register_screen);
+
+        etEmailRegister = findViewById(R.id.etEmailRegister);
+        etPasswordRegister = findViewById(R.id.etPasswordRegister);
+        etUsernameRegister = findViewById(R.id.etUsernameRegister);
+        etPhoneNumberRegister = findViewById(R.id.etPhoneNumberRegister);
+        btnConfirmRegister = findViewById(R.id.btnConfirmRegister);
+        btnBackRegister = findViewById(R.id.btnBackRegister);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -24,11 +42,14 @@ public class SplashScreen extends AppCompatActivity {
             return insets;
         });
 
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreen.this, LoginScreen.class);
+        btnConfirmRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterScreen.this, HomeScreen.class);
             startActivity(intent);
-            finish();
-        }, 5000);
+        });
+
+        btnBackRegister.setOnClickListener(v -> {
+            onBackPressed();
+        });
     }
 
     @Override

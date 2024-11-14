@@ -1,4 +1,4 @@
-package com.example.siit_2024_team_22_ma;
+package com.example.siit_2024_team_22_ma.activities;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.siit_2024_team_22_ma.R;
 
 public class MainActivity extends AppCompatActivity {
 
