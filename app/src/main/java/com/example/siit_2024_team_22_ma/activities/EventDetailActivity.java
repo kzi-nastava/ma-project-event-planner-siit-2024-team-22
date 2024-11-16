@@ -28,16 +28,14 @@ public class EventDetailActivity extends AppCompatActivity {
         acceptButton = findViewById(R.id.accept_button);
 
         Event event = (Event) getIntent().getSerializableExtra("event");
-        int eventImageRes = getIntent().getIntExtra("event_image", -1);
+
+
+        eventImage.setImageResource(event.getImage());
 
         if (event != null) {
             eventTitle.setText(event.getTitle());
             eventDescription.setText(event.getDescription());
             eventOrganization.setText("Organization: " + event.getTitle());
-
-            if (eventImageRes != -1) {
-                eventImage.setImageResource(eventImageRes);
-            }
 
             if (event.isPrivate()) {
                 acceptButton.setVisibility(View.GONE);

@@ -17,11 +17,9 @@ import com.example.siit_2024_team_22_ma.models.Event;
 import java.util.ArrayList;
 
 public class EventListAdapter extends ArrayAdapter<Event> {
-    private ArrayList<Event> events;
 
     public EventListAdapter(Context context, ArrayList<Event> events) {
         super(context, R.layout.event_card, events);
-        this.events = events;
     }
 
     @NonNull
