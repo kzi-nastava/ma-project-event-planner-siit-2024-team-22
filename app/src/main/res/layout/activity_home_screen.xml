@@ -150,6 +150,30 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/nav_add_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_add_service"
+        android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Service"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary" />
+    </LinearLayout>
+
+
+        <LinearLayout
         android:id="@+id/nav_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
