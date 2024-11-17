@@ -55,6 +55,14 @@ public class HomeScreen extends AppCompatActivity {
             closeDrawer();
         });
 
+        LinearLayout addServiceButton = findViewById(R.id.nav_add_service);
+        addServiceButton.setOnClickListener(v -> {
+            Intent intent =  new Intent(HomeScreen.this, AddServiceActivity.class);
+            startActivity(intent);
+            closeDrawer();
+        });
+
+
         LinearLayout logoutButton = findViewById(R.id.nav_logout);
         logoutButton.setOnClickListener(v -> {
             Toast.makeText(this, "Logout placeholder", Toast.LENGTH_SHORT).show();
