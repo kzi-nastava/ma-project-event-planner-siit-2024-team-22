@@ -41,7 +41,6 @@ public class ServiceListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            // Инфляция layout из service_card.xml
             convertView = LayoutInflater.from(context).inflate(R.layout.service_card, parent, false);
         }
 

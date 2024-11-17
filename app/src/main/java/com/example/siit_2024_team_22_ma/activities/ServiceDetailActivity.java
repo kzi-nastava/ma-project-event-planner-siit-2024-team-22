@@ -40,14 +40,12 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 serviceImage.setImageResource(service.getImageResource());
             }
         } else {
-            // Если объект не передан, можно показать ошибку или вернуться на главный экран
-            finish();  // Закрыть активность и вернуться на предыдущую
+            finish();
         }
 
         backButton.setOnClickListener(v -> finish());
 
         acceptButton.setOnClickListener(v -> {
-            // Логика для кнопки "Accept"
         });
     }
 }

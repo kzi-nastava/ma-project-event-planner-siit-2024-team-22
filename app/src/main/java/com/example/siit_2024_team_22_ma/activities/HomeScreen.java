@@ -3,16 +3,17 @@ package com.example.siit_2024_team_22_ma.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.siit_2024_team_22_ma.R;
 import com.example.siit_2024_team_22_ma.adapters.EventListAdapter;
-import com.example.siit_2024_team_22_ma.models.Event;
 import com.example.siit_2024_team_22_ma.adapters.ServiceListAdapter;
+import com.example.siit_2024_team_22_ma.adapters.CarouselAdapter;
+import com.example.siit_2024_team_22_ma.models.Event;
 import com.example.siit_2024_team_22_ma.models.Service;
 
 import java.util.ArrayList;
@@ -20,10 +21,13 @@ import java.util.ArrayList;
 public class HomeScreen extends AppCompatActivity {
 
     private ListView listView;
+    private ViewPager2 viewPager2;
     private EventListAdapter eventListAdapter;
     private ServiceListAdapter serviceListAdapter;
     private ArrayList<Event> events;
     private ArrayList<Service> services;
+    private ArrayList<?> carouselItems;
+    private CarouselAdapter carouselAdapter;
     private boolean isShowingEvents = true;
 
     @Override
@@ -32,14 +36,42 @@ public class HomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
 
         listView = findViewById(R.id.event_list);
+        viewPager2 = findViewById(R.id.carousel_viewpager);
 
         events = new ArrayList<>();
         events.add(new Event(R.drawable.event_image2, "Concert at the Square", "Open-air concert featuring popular bands.", false));
         events.add(new Event(R.drawable.event_image1, "Art Exhibition", "Exhibition of modern artists in the city center.", true));
+        events.add(new Event(R.drawable.event_image2, "Art Exhibition1", "Exhibition of modern artists in the city center.", true));
+        events.add(new Event(R.drawable.event_image1, "Art Exhibition2", "Exhibition of modern artists in the city center.", true));
+        events.add(new Event(R.drawable.event_image2, "Art Exhibition3", "Exhibition of modern artists in the city center.", true));
+
 
         services = new ArrayList<>();
         services.add(new Service("Web Development", "Professional web development services", "Tech Co.", "contact@techco.com", R.drawable.service_image1));
         services.add(new Service("Graphic Design", "Creative graphic design services", "Design Studio", "info@designstudio.com", R.drawable.service_image2));
+        services.add(new Service("Graphic Design1", "Creative graphic design services", "Design Studio", "info@designstudio.com", R.drawable.service_image1));
+        services.add(new Service("Graphic Design2", "Creative graphic design services", "Design Studio", "info@designstudio.com", R.drawable.service_image2));
+        services.add(new Service("Graphic Design3", "Creative graphic design services", "Design Studio", "info@designstudio.com", R.drawable.service_image1));
+
+
+        carouselAdapter = new CarouselAdapter(this, events, position -> {
+            if (isShowingEvents) {
+                Event selectedEvent = events.get(position);
+                if (selectedEvent != null) {
+                    Intent intent = new Intent(HomeScreen.this, EventDetailActivity.class);
+                    intent.putExtra("event", selectedEvent);
+                    startActivity(intent);
+                }
+            } else {
+                Service selectedService = services.get(position);
+                if (selectedService != null) {
+                    Intent intent = new Intent(HomeScreen.this, ServiceDetailActivity.class);
+                    intent.putExtra("service", selectedService);
+                    startActivity(intent);
+                }
+            }
+        });
+        viewPager2.setAdapter(carouselAdapter);
 
         eventListAdapter = new EventListAdapter(this, events);
         serviceListAdapter = new ServiceListAdapter(this, services);
@@ -86,13 +118,30 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     private void showEvents() {
+        carouselAdapter = new CarouselAdapter(this, events, position -> {
+            Event selectedEvent = events.get(position);
+            if (selectedEvent != null) {
+                Intent intent = new Intent(HomeScreen.this, EventDetailActivity.class);
+                intent.putExtra("event", selectedEvent);
+                startActivity(intent);
+            }
+        });
+        viewPager2.setAdapter(carouselAdapter);
         listView.setAdapter(eventListAdapter);
     }
 
     private void showServices() {
+        carouselAdapter = new CarouselAdapter(this, services, position -> {
+            Service selectedService = services.get(position);
+            if (selectedService != null) {
+                Intent intent = new Intent(HomeScreen.this, ServiceDetailActivity.class);
+                intent.putExtra("service", selectedService);
+                startActivity(intent);
+            }
+        });
+        viewPager2.setAdapter(carouselAdapter);
         listView.setAdapter(serviceListAdapter);
     }
-
 
     @Override
     protected void onStart() {

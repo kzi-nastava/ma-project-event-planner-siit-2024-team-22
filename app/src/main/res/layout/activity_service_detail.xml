@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.ServiceDetailActivity">
 
-    <!-- Изображение сервиса -->
     <ImageView
         android:id="@+id/service_image"
         android:layout_width="100dp"
@@ -18,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <!-- Название сервиса -->
     <TextView
         android:id="@+id/service_title"
         android:layout_width="0dp"
@@ -30,7 +28,6 @@
         app:layout_constraintTop_toTopOf="@id/service_image"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <!-- Название компании -->
     <TextView
         android:id="@+id/service_company"
         android:layout_width="0dp"
@@ -42,7 +39,6 @@
         app:layout_constraintTop_toBottomOf="@id/service_title"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <!-- Описание сервиса -->
     <TextView
         android:id="@+id/service_description"
         android:layout_width="0dp"
@@ -55,7 +51,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <!-- Контактная информация -->
     <TextView
         android:id="@+id/service_contact"
         android:layout_width="0dp"
@@ -68,7 +63,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <!-- Кнопка назад -->
     <Button
         android:id="@+id/service_back_button"
         android:layout_width="wrap_content"
@@ -79,7 +73,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="24dp" />
 
-    <!-- Кнопка согласия -->
     <Button
         android:id="@+id/service_accept_button"
         android:layout_width="wrap_content"
