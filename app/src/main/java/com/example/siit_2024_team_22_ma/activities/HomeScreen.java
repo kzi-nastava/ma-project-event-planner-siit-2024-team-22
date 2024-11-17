@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.siit_2024_team_22_ma.R;
@@ -30,10 +33,36 @@ public class HomeScreen extends AppCompatActivity {
     private CarouselAdapter carouselAdapter;
     private boolean isShowingEvents = true;
 
+    private boolean isDrawerOpen = false;
+
+    private DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        LinearLayout homeButton = findViewById(R.id.nav_home);
+        homeButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Home placeholder", Toast.LENGTH_SHORT).show();
+            closeDrawer();
+        });
+
+        LinearLayout settingsButton = findViewById(R.id.nav_settings);
+        settingsButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Settings placeholder", Toast.LENGTH_SHORT).show();
+            closeDrawer();
+        });
+
+        LinearLayout logoutButton = findViewById(R.id.nav_logout);
+        logoutButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Logout placeholder", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(HomeScreen.this, LoginScreen.class);
+            startActivity(intent);
+            closeDrawer();
+            finish();
+        });
 
         listView = findViewById(R.id.event_list);
         viewPager2 = findViewById(R.id.carousel_viewpager);
@@ -115,6 +144,25 @@ public class HomeScreen extends AppCompatActivity {
         filterButton.setOnClickListener(v -> {
 
         });
+    }
+
+    private void openDrawer() {
+        drawerLayout.openDrawer(findViewById(R.id.custom_drawer));
+        isDrawerOpen = true;
+    }
+
+    private void closeDrawer() {
+        drawerLayout.closeDrawer(findViewById(R.id.custom_drawer));
+        isDrawerOpen = false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isDrawerOpen) {
+            closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void showEvents() {

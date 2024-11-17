@@ -45,6 +45,7 @@ public class RegisterScreen extends AppCompatActivity {
         btnConfirmRegister.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterScreen.this, HomeScreen.class);
             startActivity(intent);
+            finish();
         });
 
         btnBackRegister.setOnClickListener(v -> {
