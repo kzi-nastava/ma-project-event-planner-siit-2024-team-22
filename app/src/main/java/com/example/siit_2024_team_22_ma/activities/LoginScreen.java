@@ -40,6 +40,7 @@ public class LoginScreen extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
             startActivity(intent);
+            finish();
         });
 
         btnRegister.setOnClickListener(v ->{
