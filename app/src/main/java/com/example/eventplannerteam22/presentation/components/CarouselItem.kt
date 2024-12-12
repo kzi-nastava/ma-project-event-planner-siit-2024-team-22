@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.presentation
+package com.example.eventplannerteam22.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
