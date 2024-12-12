@@ -6,17 +6,19 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import com.example.eventplannerteam22.router.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainLayout(
+    navController: NavController,
     drawerState: DrawerState, // Accept drawerState
     coroutineScope: CoroutineScope, // Accept coroutineScope
     drawerContent: @Composable () -> Unit,
     topBarTitle: String = "Event Planner",
-    onProfileClick: () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 
 ) {
@@ -41,7 +43,7 @@ fun MainLayout(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { onProfileClick() }) {
+                        IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
                             Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
                         }
                     }

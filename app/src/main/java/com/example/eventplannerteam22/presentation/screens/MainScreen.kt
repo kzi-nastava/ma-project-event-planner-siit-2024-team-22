@@ -15,14 +15,14 @@ import com.example.eventplannerteam22.presentation.components.sampleData
 
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
     val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(16.dp)
+            .padding(paddingValues)
     ) {
         repeat(3) {
             SectionBlock()
