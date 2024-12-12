@@ -7,16 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.eventplannerteam22.R
 
-@Preview
 @Composable
-fun TopCarousel(modifier: Modifier = Modifier){
-    val carouselItems: List<Pair<String, String>> = listOf(
-        "Item 1" to "Description 1",
-        "Item 2" to "Description 2",
-        "Item 3" to "Description 3",
-        "Item 4" to "Description 5",
-        "Item 5" to "Description 5"
+fun TopCarousel(modifier: Modifier = Modifier) {
+    val carouselItems: List<Triple<Int, String, String>> = listOf(
+        Triple(R.drawable.sample_image2, "Item 1", "Description 1"),
+        Triple(R.drawable.sample_image, "Item 2", "Description 2"),
+        Triple(R.drawable.sample_image2, "Item 3", "Description 3"),
+        Triple(R.drawable.sample_image, "Item 4", "Description 4"),
+        Triple(R.drawable.sample_image2, "Item 5", "Description 5")
     )
 
     LazyRow(
@@ -24,12 +24,19 @@ fun TopCarousel(modifier: Modifier = Modifier){
         horizontalArrangement = Arrangement.spacedBy(30.dp)
     ) {
         items(carouselItems.size) { index ->
-            val item = carouselItems[index] // Access the Pair by index
+            val item = carouselItems[index]
             CarouselItem(
                 modifier = Modifier,
-                name = item.first,
-                description = item.second
+                imageRes = item.first,
+                name = item.second,
+                description = item.third
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewTopCarousel() {
+    TopCarousel()
 }
