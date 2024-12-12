@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SIIT_2024_Team_22_MA"
+rootProject.name = "EventPlannerTeam22"
 include(":app")
+ 
