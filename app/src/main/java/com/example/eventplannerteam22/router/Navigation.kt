@@ -19,6 +19,7 @@ import com.example.eventplannerteam22.presentation.screens.MainScreen
 import com.example.eventplannerteam22.presentation.screens.ProductsScreen
 import com.example.eventplannerteam22.presentation.screens.ProfileScreen
 import com.example.eventplannerteam22.presentation.screens.RegistrationScreen
+import com.example.eventplannerteam22.presentation.screens.ServiceDetail
 import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import kotlinx.coroutines.launch
@@ -114,10 +115,16 @@ fun Navigation() {
             composable(route = Screen.ServicesScreen.route){
                 ServicesScreen(navController)
             }
+            composable(route = Screen.ServicesDetailScreen.route) {
+                backStackEntry ->
+                val serviceId = backStackEntry.arguments?.getString("serviceId")
+                ServiceDetail(
+                    serviceId =serviceId,
+                )
+            }
             composable(route = Screen.ProfileScreen.route){
                 ProfileScreen(navController)
             }
-
             composable(route = Screen.SplashScreen.route){
                 SplashScreen(navController)
             }
