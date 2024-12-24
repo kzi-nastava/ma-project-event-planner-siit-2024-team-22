@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.eventplannerteam22.presentation.screens.LoginScreen
+import com.example.eventplannerteam22.auth.login.presentation.LoginScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.EventsScreen
 import com.example.eventplannerteam22.presentation.screens.MainScreen
