@@ -1,5 +1,6 @@
-package com.example.eventplannerteam22.data
+package com.example.eventplannerteam22.auth.login.data
 
+import com.example.eventplannerteam22.auth.login.domen.LoginRequest
 import retrofit2.http.Body
 import retrofit2.http.POST
 

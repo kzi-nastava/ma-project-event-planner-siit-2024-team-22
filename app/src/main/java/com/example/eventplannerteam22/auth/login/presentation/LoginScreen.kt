@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.auth.login.data
+package com.example.eventplannerteam22.auth.login.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

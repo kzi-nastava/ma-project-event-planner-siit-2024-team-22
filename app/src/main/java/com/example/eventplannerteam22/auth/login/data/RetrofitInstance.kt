@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.data
+package com.example.eventplannerteam22.auth.login.data
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

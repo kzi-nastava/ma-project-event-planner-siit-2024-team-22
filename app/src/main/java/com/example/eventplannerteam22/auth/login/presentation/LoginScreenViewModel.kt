@@ -1,7 +1,9 @@
-package com.example.eventplannerteam22.auth.login.data
+package com.example.eventplannerteam22.auth.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eventplannerteam22.auth.login.data.RetrofitInstance
+import com.example.eventplannerteam22.auth.login.domen.LoginRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

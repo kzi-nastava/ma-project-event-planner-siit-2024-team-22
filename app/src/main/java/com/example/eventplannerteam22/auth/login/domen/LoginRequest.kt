@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.auth.login.data
+package com.example.eventplannerteam22.auth.login.domen
 
 data class LoginRequest(
     var email: String,
