@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.eventplannerteam22.AuthScreen
 import com.example.eventplannerteam22.presentation.screens.LoginScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.EventsScreen
@@ -64,7 +65,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                LoginScreen(navController, paddingValues)
+                AuthScreen(navController, paddingValues)
             }
         }
 
