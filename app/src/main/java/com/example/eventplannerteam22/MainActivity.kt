@@ -8,7 +8,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventplannerteam22.router.Navigation
 import com.example.eventplannerteam22.ui.theme.EventPlannerTeam22Theme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

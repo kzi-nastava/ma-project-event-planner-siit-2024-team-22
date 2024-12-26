@@ -1,11 +1,14 @@
 package com.example.eventplannerteam22
 
 import android.content.SharedPreferences
+import android.util.Log
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
-    private val prefs: SharedPreferences) : AuthRepository {
+    private val prefs: SharedPreferences
+) : AuthRepository {
     override suspend fun login(
         email: String,
         password: String
@@ -18,9 +21,11 @@ class AuthRepositoryImpl(
             if(e.code() == 401){
                 AuthResult.Unauthorized()
             } else{
+                Log.e("AuthRepositoryImpl", e.message.toString())
                 AuthResult.UnknownError()
             }
         } catch (e : Exception){
+            Log.e("AuthRepositoryImpl", e.message.toString())
             AuthResult.UnknownError()
         }
     }
