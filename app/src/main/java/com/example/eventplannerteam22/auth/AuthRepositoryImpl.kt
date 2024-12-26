@@ -3,6 +3,7 @@ package com.example.eventplannerteam22.auth
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.eventplannerteam22.auth.login.LoginRequest
+import com.example.eventplannerteam22.auth.registration.RegistrationRequest
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -43,6 +44,28 @@ class AuthRepositoryImpl @Inject constructor(
                 AuthResult.UnknownError()
             }
         } catch (e : Exception){
+            AuthResult.UnknownError()
+        }
+    }
+
+    override suspend fun register(
+        name: String,
+        surname: String,
+        email: String,
+        password: String
+    ): AuthResult<Unit> {
+        return try {
+            api.register(request = RegistrationRequest(name, surname, email, password))
+            login(email,password)
+        } catch (e : HttpException){
+            if(e.code() == 401){
+                AuthResult.Unauthorized()
+            } else{
+                Log.e("AuthRepositoryImpl", e.message.toString())
+                AuthResult.UnknownError()
+            }
+        } catch (e : Exception){
+            Log.e("AuthRepositoryImpl", e.message.toString())
             AuthResult.UnknownError()
         }
     }

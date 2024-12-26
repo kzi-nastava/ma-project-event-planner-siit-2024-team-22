@@ -18,7 +18,7 @@ import com.example.eventplannerteam22.presentation.screens.EventsScreen
 import com.example.eventplannerteam22.presentation.screens.MainScreen
 import com.example.eventplannerteam22.presentation.screens.ProductsScreen
 import com.example.eventplannerteam22.presentation.screens.ProfileScreen
-import com.example.eventplannerteam22.presentation.screens.RegistrationScreen
+import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import kotlinx.coroutines.CoroutineScope
