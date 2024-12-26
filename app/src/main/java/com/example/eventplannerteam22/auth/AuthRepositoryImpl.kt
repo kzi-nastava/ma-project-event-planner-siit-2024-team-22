@@ -1,7 +1,8 @@
-package com.example.eventplannerteam22
+package com.example.eventplannerteam22.auth
 
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.eventplannerteam22.auth.login.LoginRequest
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -14,7 +15,7 @@ class AuthRepositoryImpl @Inject constructor(
         password: String
     ): AuthResult<Unit> {
         return try {
-            val token = api.login(request = AuthRequest(email, password))
+            val token = api.login(request = LoginRequest(email, password))
             prefs.edit().putString("jwt", "Bearer $token")
             AuthResult.Authorized()
         } catch (e : HttpException){

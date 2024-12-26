@@ -1,10 +1,13 @@
-package com.example.eventplannerteam22
+package com.example.eventplannerteam22.auth.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eventplannerteam22.auth.AuthRepository
+import com.example.eventplannerteam22.auth.AuthResult
+import com.example.eventplannerteam22.auth.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -12,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
@@ -27,15 +30,15 @@ class MainViewModel @Inject constructor(
         auth()
     }
 
-    fun onEvent(event: AuthUiEvent) {
+    fun onEvent(event: LoginUiEvent) {
         when (event) {
-            is AuthUiEvent.LoginEmailChanged -> {
+            is LoginUiEvent.LoginEmailChanged -> {
                 state = state.copy(loginEmail = event.value)
             }
-            is AuthUiEvent.LoginPasswordChanged -> {
+            is LoginUiEvent.LoginPasswordChanged -> {
                 state = state.copy(loginPassword = event.value)
             }
-            is AuthUiEvent.Login -> {
+            is LoginUiEvent.Login -> {
                 // Handle sign-in logic here (e.g., call repository)
                 login()
             }

@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22
+package com.example.eventplannerteam22.auth
 
 data class AuthState(
     val isLoading: Boolean = false,

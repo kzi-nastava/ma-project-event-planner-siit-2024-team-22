@@ -1,6 +1,4 @@
-package com.example.eventplannerteam22
-
-import kotlin.time.Duration
+package com.example.eventplannerteam22.auth
 
 data class TokenResponse(
     val token: String,

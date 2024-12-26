@@ -1,5 +1,6 @@
-package com.example.eventplannerteam22
+package com.example.eventplannerteam22.auth
 
+import com.example.eventplannerteam22.auth.login.LoginRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -13,7 +14,7 @@ interface AuthApi {
 
     @POST("/auth/login")
     suspend fun login(
-        @Body request: AuthRequest
+        @Body request: LoginRequest
     ) : TokenResponse
 
     @GET("/auth")

@@ -1,9 +1,9 @@
-package com.example.eventplannerteam22
+package com.example.eventplannerteam22.di
 
-import android.content.SharedPreferences
+import com.example.eventplannerteam22.auth.AuthRepository
+import com.example.eventplannerteam22.auth.AuthRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 

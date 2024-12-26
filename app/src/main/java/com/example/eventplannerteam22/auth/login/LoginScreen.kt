@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22
+package com.example.eventplannerteam22.auth.login
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -16,14 +16,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.eventplannerteam22.auth.AuthResult
 import com.example.eventplannerteam22.router.Screen
-import javax.inject.Inject
 
 @Composable
-fun AuthScreen (
+fun LoginScreen(
     navController: NavController,
     paddingValues: PaddingValues,
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     val context = LocalContext.current
@@ -60,7 +60,7 @@ fun AuthScreen (
         TextField(
             value = state.loginEmail,
             onValueChange = {
-                viewModel.onEvent(AuthUiEvent.LoginEmailChanged(it))
+                viewModel.onEvent(LoginUiEvent.LoginEmailChanged(it))
             },
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
@@ -71,7 +71,7 @@ fun AuthScreen (
         TextField(
             value = state.loginPassword,
             onValueChange = {
-                viewModel.onEvent(AuthUiEvent.LoginPasswordChanged(it))
+                viewModel.onEvent(LoginUiEvent.LoginPasswordChanged(it))
             },
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
@@ -81,7 +81,7 @@ fun AuthScreen (
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                viewModel.onEvent(AuthUiEvent.Login)
+                viewModel.onEvent(LoginUiEvent.Login)
             },
             modifier = Modifier.align(Alignment.End)
         ) {

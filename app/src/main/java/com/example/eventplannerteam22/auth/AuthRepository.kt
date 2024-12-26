@@ -1,6 +1,4 @@
-package com.example.eventplannerteam22
-
-import android.content.SharedPreferences
+package com.example.eventplannerteam22.auth
 
 interface AuthRepository{
 //    suspend fun register(email : String, password: String) : AuthResult<Unit>
