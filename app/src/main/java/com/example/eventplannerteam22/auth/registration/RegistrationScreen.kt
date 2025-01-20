@@ -5,10 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +25,7 @@ import androidx.navigation.NavController
 import com.example.eventplannerteam22.auth.AuthResult
 import com.example.eventplannerteam22.router.Screen
 
+
 @Composable
 fun RegistrationScreen(
     navController: NavController,
@@ -27,6 +34,8 @@ fun RegistrationScreen(
 ) {
     val state = viewModel.state
     val context = LocalContext.current
+    var expanded by remember { mutableStateOf(false) }
+
     LaunchedEffect(viewModel, context) {
         viewModel.authResults.collect { result ->
             when (result) {
@@ -100,6 +109,32 @@ fun RegistrationScreen(
                 Text(text = "Password")
             }
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                onClick = { expanded = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = state.registrationRole ?: "User")
+
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                UserRole.values().forEach { role ->
+                    DropdownMenuItem(
+                        text = { Text(text = role.name) },
+                        onClick = {
+                            viewModel.onEvent(RegistrationUiEvent.RegistrationRoleChanged(role.name))
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {

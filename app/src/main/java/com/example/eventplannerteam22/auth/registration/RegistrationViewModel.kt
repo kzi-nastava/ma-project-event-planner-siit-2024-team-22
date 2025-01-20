@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val repository: AuthRepository
-): ViewModel(){
+): ViewModel() {
 
     var state by mutableStateOf(AuthState())
         private set
@@ -47,6 +47,10 @@ class RegistrationViewModel @Inject constructor(
                 state = state.copy(registrationPassword = event.value)
             }
 
+            is RegistrationUiEvent.RegistrationRoleChanged -> {
+                state = state.copy(registrationRole = event.value)
+            }
+
             is RegistrationUiEvent.Registration -> {
                 registration()
             }
@@ -56,7 +60,13 @@ class RegistrationViewModel @Inject constructor(
     private fun registration(){
         viewModelScope.launch {
             state = state.copy(isLoading = true)
-            val result = repository.register(state.registrationName, state.registrationSurname, state.registrationEmail, state.registrationPassword)
+            val result = repository.register(
+                state.registrationName,
+                state.registrationSurname,
+                state.registrationEmail,
+                state.registrationPassword,
+                state.registrationRole
+            )
             resultChannel.send(result)
             state = state.copy(isLoading = false)
         }
