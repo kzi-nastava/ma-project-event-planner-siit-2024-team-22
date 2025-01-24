@@ -52,19 +52,20 @@ class AuthRepositoryImpl @Inject constructor(
         name: String,
         surname: String,
         email: String,
-        password: String
+        password: String,
+        role: String
     ): AuthResult<Unit> {
         return try {
-            api.register(request = RegistrationRequest(name, surname, email, password))
-            login(email,password)
-        } catch (e : HttpException){
-            if(e.code() == 401){
+            api.register(request = RegistrationRequest(name, surname, email, password, role))
+            login(email, password)
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
                 AuthResult.Unauthorized()
-            } else{
+            } else {
                 Log.e("AuthRepositoryImpl", e.message.toString())
                 AuthResult.UnknownError()
             }
-        } catch (e : Exception){
+        } catch (e: Exception) {
             Log.e("AuthRepositoryImpl", e.message.toString())
             AuthResult.UnknownError()
         }

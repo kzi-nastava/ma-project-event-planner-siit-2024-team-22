@@ -7,5 +7,6 @@ data class AuthState(
     val registrationName: String = "",
     val registrationSurname: String = "",
     val registrationEmail: String = "",
-    val registrationPassword: String = ""
+    val registrationPassword: String = "",
+    val registrationRole: String = "User"
 )
