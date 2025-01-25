@@ -3,6 +3,7 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
+import com.example.eventplannerteam22.events.EventApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +34,11 @@ object AppModule {
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventApi(retrofit: Retrofit): EventApi {
+        return retrofit.create(EventApi::class.java)
     }
 }

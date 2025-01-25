@@ -88,7 +88,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                EventsScreen(navController, paddingValues)
+                com.example.eventplannerteam22.ui.events.EventsScreen(navController, paddingValues)
             }
         }
 
