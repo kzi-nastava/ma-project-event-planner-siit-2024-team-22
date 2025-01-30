@@ -1,51 +1,47 @@
-package com.example.eventplannerteam22.ui.events
+package com.example.eventplannerteam22.solutions
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eventplannerteam22.events.Event
-import com.example.eventplannerteam22.events.EventRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EventsViewModel @Inject constructor(
-    private val repository: EventRepository
+class SolutionsViewModel @Inject constructor(
+    private val repository: SolutionRepository
 ) : ViewModel() {
 
-    var events by mutableStateOf<List<Event>>(emptyList())
+    var solutions by mutableStateOf<List<Solution>>(emptyList())
         private set
 
     var isLoading by mutableStateOf(false)
         private set
 
-    var hasMoreEvents by mutableStateOf(true)
+    var hasMoreSolutions by mutableStateOf(true)
         private set
 
     private var currentOffset = 0
     private val limit = 3
 
     init {
-        loadEvents()
+        loadSolutions()
     }
 
-    fun loadEvents() {
-        if (isLoading || !hasMoreEvents) return
+    fun loadSolutions() {
+        if (isLoading || !hasMoreSolutions) return
 
         isLoading = true
         viewModelScope.launch {
             try {
-                val newEvents = repository.getEvents(limit, currentOffset)
-                events = events + newEvents
+                val newSolutions = repository.getSolutions(limit, currentOffset)
+                solutions = solutions + newSolutions
                 currentOffset += limit
 
-
-                hasMoreEvents = newEvents.size == limit
+                hasMoreSolutions = newSolutions.size == limit
             } catch (e: Exception) {
-
                 e.printStackTrace()
             } finally {
                 isLoading = false

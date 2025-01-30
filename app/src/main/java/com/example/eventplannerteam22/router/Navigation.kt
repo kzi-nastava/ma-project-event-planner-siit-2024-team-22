@@ -101,7 +101,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                ProductsScreen(navController, paddingValues)
+                com.example.eventplannerteam22.products.ProductsScreen(navController, paddingValues)
             }
         }
 
@@ -114,7 +114,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                ServicesScreen(navController, paddingValues)
+                com.example.eventplannerteam22.solutions.SolutionsScreen(navController, paddingValues)
             }
         }
 
