@@ -4,6 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
 import com.example.eventplannerteam22.events.EventApi
+import com.example.eventplannerteam22.products.BigDecimalAdapter
+import com.example.eventplannerteam22.products.ProductApi
+import com.example.eventplannerteam22.solutions.DurationAdapter
+import com.example.eventplannerteam22.solutions.LocalDateAdapter
+import com.example.eventplannerteam22.solutions.Solution
+import com.example.eventplannerteam22.solutions.SolutionApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,14 +29,32 @@ object AppModule {
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
     }
+
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
+        val moshi = Moshi.Builder()
+            .add(LocalDateAdapter())
+            .add(DurationAdapter())
+            .add(BigDecimalAdapter())
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
         return Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
+
+
+//    @Provides
+//    @Singleton
+//    fun provideRetrofit(): Retrofit {
+//        return Retrofit.Builder()
+//            .baseUrl("http://10.0.2.2:8080")
+//            .addConverterFactory(MoshiConverterFactory.create())
+//            .build()
+//    }
 
     @Provides
     @Singleton
@@ -40,5 +66,17 @@ object AppModule {
     @Singleton
     fun provideEventApi(retrofit: Retrofit): EventApi {
         return retrofit.create(EventApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductApi(retrofit: Retrofit): ProductApi {
+        return retrofit.create(ProductApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSolutionApi(retrofit: Retrofit): SolutionApi {
+        return retrofit.create(SolutionApi::class.java)
     }
 }

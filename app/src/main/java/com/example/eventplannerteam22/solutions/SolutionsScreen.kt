@@ -1,0 +1,92 @@
+package com.example.eventplannerteam22.solutions
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+
+@Composable
+fun SolutionsScreen(
+    navController: NavController,
+    paddingValues: PaddingValues,
+    viewModel: SolutionsViewModel = hiltViewModel()
+) {
+    val solutions = viewModel.solutions
+    val isLoading = viewModel.isLoading
+    val hasMoreSolutions = viewModel.hasMoreSolutions
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            items(solutions) { solution ->
+                SolutionCard(solution = solution, navController = navController)
+            }
+        }
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (hasMoreSolutions) {
+            Button(
+                onClick = { viewModel.loadSolutions() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(text = "Load More")
+            }
+        }
+    }
+}
+
+@Composable
+fun SolutionCard(
+    solution: Solution,
+    navController: NavController
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable {
+                navController.navigate("solutions/${solution.id}")
+            }
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = solution.name, style = MaterialTheme.typography.headlineSmall)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Category type: ${solution.category.categoryType}", style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Price: ${solution.price}", style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Discount: ${solution.discount}", style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = solution.description, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}

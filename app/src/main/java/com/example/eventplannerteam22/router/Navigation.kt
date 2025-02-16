@@ -21,6 +21,7 @@ import com.example.eventplannerteam22.presentation.screens.ProfileScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
+import com.example.eventplannerteam22.products.AddProductScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -101,8 +102,12 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                ProductsScreen(navController, paddingValues)
+                com.example.eventplannerteam22.products.ProductsScreen(navController, paddingValues)
             }
+        }
+
+        composable(route = "add_product") {
+            AddProductScreen(navController)
         }
 
         composable(route = Screen.ServicesScreen.route) {
@@ -114,7 +119,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                ServicesScreen(navController, paddingValues)
+                com.example.eventplannerteam22.solutions.SolutionsScreen(navController, paddingValues)
             }
         }
 
