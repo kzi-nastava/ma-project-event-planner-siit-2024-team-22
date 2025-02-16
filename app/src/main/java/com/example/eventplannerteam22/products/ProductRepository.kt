@@ -8,4 +8,7 @@ class ProductRepository @Inject constructor(
     suspend fun getProducts(limit: Int, offset: Int): List<Product> {
         return productApi.getProducts(limit, offset)
     }
+    suspend fun addProduct(product: Product) {
+        productApi.addProduct(product)
+    }
 }
