@@ -19,9 +19,12 @@ import com.example.eventplannerteam22.presentation.screens.MainScreen
 import com.example.eventplannerteam22.presentation.screens.ProductsScreen
 import com.example.eventplannerteam22.presentation.screens.ProfileScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
+import com.example.eventplannerteam22.events.EventDetailScreen
 import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.products.AddProductScreen
+import com.example.eventplannerteam22.products.ProductDetailScreen
+import com.example.eventplannerteam22.solutions.SolutionDetailScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -108,6 +111,24 @@ fun Navigation() {
 
         composable(route = "add_product") {
             AddProductScreen(navController)
+        }
+        composable("products/{productId}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
+            if (productId != null) {
+                ProductDetailScreen(productId = productId, navController = navController)
+            }
+        }
+        composable("solutions/{solutionId}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("solutionId")?.toIntOrNull()
+            if (productId != null) {
+                SolutionDetailScreen(solutionId = productId, navController = navController)
+            }
+        }
+        composable("events/{eventId}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull()
+            if (productId != null) {
+                EventDetailScreen(eventId = productId, navController = navController)
+            }
         }
 
         composable(route = Screen.ServicesScreen.route) {
