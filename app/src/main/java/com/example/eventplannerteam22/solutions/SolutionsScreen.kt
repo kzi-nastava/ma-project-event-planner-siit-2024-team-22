@@ -80,7 +80,7 @@ fun SolutionCard(
         ) {
             Text(text = solution.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Category type: ${solution.category.categoryType}", style = MaterialTheme.typography.bodyMedium)
+            Text(text = "Category type: ${solution.category.name}", style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Price: ${solution.price}", style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(8.dp))

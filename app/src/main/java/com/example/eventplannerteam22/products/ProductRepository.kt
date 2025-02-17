@@ -11,4 +11,7 @@ class ProductRepository @Inject constructor(
     suspend fun addProduct(product: Product) {
         productApi.addProduct(product)
     }
+    suspend fun getProductById(id: Int): Product {
+        return productApi.getProductById(id)
+    }
 }
