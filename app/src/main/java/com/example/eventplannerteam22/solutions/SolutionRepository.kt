@@ -12,4 +12,7 @@ class SolutionRepository @Inject constructor(
     suspend fun getSolutionById(id: Int): Solution {
         return solutionApi.getSolutionById(id)
     }
+    suspend fun addSolution(solution: Solution) {
+        return solutionApi.addSolution(solution)
+    }
 }

@@ -24,6 +24,7 @@ import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.products.AddProductScreen
 import com.example.eventplannerteam22.products.ProductDetailScreen
+import com.example.eventplannerteam22.solutions.AddSolutionScreen
 import com.example.eventplannerteam22.solutions.SolutionDetailScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -129,6 +130,10 @@ fun Navigation() {
             if (productId != null) {
                 EventDetailScreen(eventId = productId, navController = navController)
             }
+        }
+
+        composable("add_solution") {
+            AddSolutionScreen(navController)
         }
 
         composable(route = Screen.ServicesScreen.route) {
