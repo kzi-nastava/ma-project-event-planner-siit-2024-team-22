@@ -14,14 +14,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.presentation.MainLayout
-import com.example.eventplannerteam22.presentation.screens.EventsScreen
 import com.example.eventplannerteam22.presentation.screens.MainScreen
-import com.example.eventplannerteam22.presentation.screens.ProductsScreen
 import com.example.eventplannerteam22.presentation.screens.ProfileScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.events.AddEventScreen
 import com.example.eventplannerteam22.events.EventDetailScreen
-import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.products.AddProductScreen
 import com.example.eventplannerteam22.products.ProductDetailScreen
@@ -55,7 +52,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                MainScreen(navController, paddingValues)
+                com.example.eventplannerteam22.mainscreen.MainScreen(navController, paddingValues)
             }
         }
 
@@ -94,7 +91,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                com.example.eventplannerteam22.ui.events.EventsScreen(navController, paddingValues)
+                com.example.eventplannerteam22.events.EventsScreen(navController, paddingValues)
             }
         }
 
