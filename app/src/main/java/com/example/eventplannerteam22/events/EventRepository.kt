@@ -1,7 +1,6 @@
 package com.example.eventplannerteam22.events
 
 
-import com.example.eventplannerteam22.products.Product
 import javax.inject.Inject
 
 
