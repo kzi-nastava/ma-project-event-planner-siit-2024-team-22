@@ -15,7 +15,7 @@ class EventRepository @Inject constructor(
     suspend fun getEventById(id: Int): Event {
         return eventApi.getEventById(id)
     }
-    suspend fun addEvent(event: Event) {
-        eventApi.addEvent(event)
+    suspend fun addEvent(eventRequest: CreateEventRequest) {
+        eventApi.addEvent(eventRequest)
     }
 }

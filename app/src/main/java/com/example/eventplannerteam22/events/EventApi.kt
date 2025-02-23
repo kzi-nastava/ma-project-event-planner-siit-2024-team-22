@@ -18,5 +18,5 @@ interface EventApi {
     @GET("events/{id}")
     suspend fun getEventById(@Path("id") id: Int): Event
     @POST("/events")
-    suspend fun addEvent(@Body event: Event)
+    suspend fun addEvent(@Body eventRequest: CreateEventRequest)
 }
