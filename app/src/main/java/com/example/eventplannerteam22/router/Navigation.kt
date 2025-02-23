@@ -19,6 +19,7 @@ import com.example.eventplannerteam22.presentation.screens.MainScreen
 import com.example.eventplannerteam22.presentation.screens.ProductsScreen
 import com.example.eventplannerteam22.presentation.screens.ProfileScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
+import com.example.eventplannerteam22.events.AddEventScreen
 import com.example.eventplannerteam22.events.EventDetailScreen
 import com.example.eventplannerteam22.presentation.screens.ServicesScreen
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
@@ -130,6 +131,10 @@ fun Navigation() {
             if (productId != null) {
                 EventDetailScreen(eventId = productId, navController = navController)
             }
+        }
+
+        composable("add_event") {
+            AddEventScreen(navController)
         }
 
         composable("add_solution") {
