@@ -16,8 +16,11 @@ class AuthRepositoryImpl @Inject constructor(
         password: String
     ): AuthResult<Unit> {
         return try {
-            val token = api.login(request = LoginRequest(email, password))
-            prefs.edit().putString("jwt", "Bearer $token")
+            val tokens = api.login(request = LoginRequest(email, password))
+            prefs.edit()
+                .putString("jwt-access", "Bearer ${tokens.accessToken}")
+                .putString("jwt-refresh", "Bearer ${tokens.refreshToken}")
+                .apply();
             AuthResult.Authorized()
         } catch (e : HttpException){
             if(e.code() == 401){
@@ -34,7 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun auth(): AuthResult<Unit> {
         return try {
-            val token = prefs.getString("jwt", null) ?: return AuthResult.Unauthorized()
+            val token = prefs.getString("jwt-access", null) ?: return AuthResult.Unauthorized()
             api.auth("Bearer $token")
             AuthResult.Authorized()
         } catch (e : HttpException){
