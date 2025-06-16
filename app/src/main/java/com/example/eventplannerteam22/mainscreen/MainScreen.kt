@@ -17,6 +17,7 @@ import com.example.eventplannerteam22.events.Event
 import com.example.eventplannerteam22.events.EventsViewModel
 import com.example.eventplannerteam22.products.Product
 import com.example.eventplannerteam22.products.ProductsViewModel
+import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.solutions.Solution
 import com.example.eventplannerteam22.solutions.SolutionsViewModel
 
@@ -75,7 +76,7 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             }
             item {
                 Button(
-                    onClick = { navController.navigate("solutions_screen") },
+                    onClick = { navController.navigate(Screen.ServicesScreen.route) },
                     modifier = Modifier.fillMaxWidth().padding(16.dp)
                 ) {
                     Text(text = "View All Solutions")
