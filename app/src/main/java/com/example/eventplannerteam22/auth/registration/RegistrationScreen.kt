@@ -44,13 +44,8 @@ fun RegistrationScreen(
                     navController.navigate(Screen.MainScreen.route)
                 }
 
-                is ApiResult.BadRequest -> {
-                    Toast.makeText(context, "Email or password is not correct!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                is ApiResult.NotFound -> {
-                    Toast.makeText(context, "You're not registered yet!", Toast.LENGTH_LONG).show()
+                is ApiResult.Conflict -> {
+                    Toast.makeText(context, "User with this email already exists", Toast.LENGTH_SHORT).show()
                 }
 
                 is ApiResult.UnknownError -> {
@@ -58,24 +53,11 @@ fun RegistrationScreen(
                         .show()
                 }
 
-                is ApiResult.Unauthorized -> {
-                    Toast.makeText(
-                        context,
-                        "You have to be logged in to perform this action!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                is ApiResult.Forbidden -> {
-                    Toast.makeText(
-                        context,
-                        "You don't have enough privileges to perform this action!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
                 is ApiResult.ServerError -> {
                     Toast.makeText(context, "Server error occurred! ${result.code}, ${result.message}", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(context, "Something is really really bad here", Toast.LENGTH_SHORT).show()
                 }
             }
         }
