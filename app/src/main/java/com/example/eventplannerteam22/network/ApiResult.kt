@@ -6,6 +6,7 @@ sealed class ApiResult<out T> {
     object Unauthorized : ApiResult<Nothing>()
     object Forbidden : ApiResult<Nothing>()
     object NotFound : ApiResult<Nothing>()
+    object Conflict : ApiResult<Nothing>()
     data class ServerError(val code: Int, val message: String? = null) : ApiResult<Nothing>()
     data class UnknownError(val code: Int, val message: String? = null): ApiResult<Nothing>()
 }

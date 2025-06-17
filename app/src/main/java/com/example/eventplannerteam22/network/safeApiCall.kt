@@ -10,6 +10,7 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ApiResult<T> {
             401 -> ApiResult.Unauthorized
             403 -> ApiResult.Forbidden
             404 -> ApiResult.NotFound
+            409 -> ApiResult.Conflict
             in 500..599 -> ApiResult.ServerError(e.code(), e.message())
             else -> ApiResult.UnknownError(e.code(), e.message())
         }
