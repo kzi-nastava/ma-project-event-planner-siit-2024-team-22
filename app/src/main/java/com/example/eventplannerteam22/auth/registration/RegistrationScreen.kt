@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.auth.AuthResult
+import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.router.Screen
 
 
@@ -39,22 +40,42 @@ fun RegistrationScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.authResults.collect { result ->
             when (result) {
-                is AuthResult.Authorized -> {
+                is ApiResult.Success -> {
                     navController.navigate(Screen.MainScreen.route)
                 }
-                is AuthResult.Unauthorized -> {
+
+                is ApiResult.BadRequest -> {
+                    Toast.makeText(context, "Email or password is not correct!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is ApiResult.NotFound -> {
+                    Toast.makeText(context, "You're not registered yet!", Toast.LENGTH_LONG).show()
+                }
+
+                is ApiResult.UnknownError -> {
+                    Toast.makeText(context, "Sorry, Unknown error occurred! ${result.code}, ${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is ApiResult.Unauthorized -> {
                     Toast.makeText(
                         context,
-                        "Registration failed. Please try again.",
-                        Toast.LENGTH_LONG
+                        "You have to be logged in to perform this action!",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
-                is AuthResult.UnknownError -> {
+
+                is ApiResult.Forbidden -> {
                     Toast.makeText(
                         context,
-                        "An unknown error occurred during registration.",
-                        Toast.LENGTH_LONG
+                        "You don't have enough privileges to perform this action!",
+                        Toast.LENGTH_SHORT
                     ).show()
+                }
+
+                is ApiResult.ServerError -> {
+                    Toast.makeText(context, "Server error occurred! ${result.code}, ${result.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
