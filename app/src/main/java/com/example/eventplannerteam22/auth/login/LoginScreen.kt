@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -28,26 +29,7 @@ fun LoginScreen(
     val state = viewModel.state
     val context = LocalContext.current
     LaunchedEffect(viewModel, context) {
-        viewModel.authResults.collect { result ->
-//            when(result) {
-//                is AuthResult.Authorized -> {
-//                    navController.navigate(Screen.MainScreen.route)
-//                }
-//                is AuthResult.Unauthorized -> {
-//                    Toast.makeText(
-//                        context,
-//                        "You're not authorized",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//                is AuthResult.UnknownError -> {
-//                    Toast.makeText(
-//                        context,
-//                        "An unknown error occurred",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            }
+        viewModel.apiResults.collect { result ->
             when (result){
                 is ApiResult.Success -> {navController.navigate(Screen.MainScreen.route)}
                 is ApiResult.UnknownError -> {
@@ -72,26 +54,20 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
-            value = state.loginEmail,
-            onValueChange = {
-                viewModel.onEvent(LoginUiEvent.LoginEmailChanged(it))
-            },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(text = "Username")
-            }
+        ValidatingInputTextField(
+            label = "Email",
+            value = state.email,
+            onValueChange = { input -> viewModel.onEvent(LoginUiEvent.EmailChanged(input))},
+            isError = state.emailErrorText!=null,
+            errorText = state.emailErrorText
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = state.loginPassword,
-            onValueChange = {
-                viewModel.onEvent(LoginUiEvent.LoginPasswordChanged(it))
-            },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(text = "Password")
-            }
+        ValidatingInputTextField(
+            label = "Password",
+            value = state.password,
+            onValueChange = { input -> viewModel.onEvent(LoginUiEvent.PasswordChanged(input))},
+            isError = state.passwordErrorText!=null,
+            errorText = state.passwordErrorText
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
@@ -113,4 +89,27 @@ fun LoginScreen(
             CircularProgressIndicator()
         }
     }
+}
+
+@Composable
+fun ValidatingInputTextField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isError: Boolean,
+    errorText: String?
+) {
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(errorText?:"")
+            }
+        }
+    )
 }
