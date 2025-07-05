@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -17,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.eventplannerteam22.auth.ValidatingInputTextField
 import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
@@ -104,27 +104,4 @@ fun LoginScreen(
             CircularProgressIndicator()
         }
     }
-}
-
-@Composable
-fun ValidatingInputTextField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    isError: Boolean,
-    errorText: String?
-) {
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth(),
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        isError = isError,
-        supportingText = {
-            if (isError) {
-                Text(errorText ?: "")
-            }
-        }
-    )
 }

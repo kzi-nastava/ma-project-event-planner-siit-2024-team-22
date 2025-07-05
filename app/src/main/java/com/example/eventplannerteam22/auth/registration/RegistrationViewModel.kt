@@ -64,7 +64,7 @@ class RegistrationViewModel @Inject constructor(
             }
 
             is RegistrationUiEvent.Registration -> {
-                registration()
+                if (validateAll()) registration()
             }
         }
     }
@@ -87,14 +87,14 @@ class RegistrationViewModel @Inject constructor(
     private fun validateName(name: String): String? =
         when {
             name.isBlank() -> "Name cannot be empty"
-            !name.any { it.isLetter() } -> "Name can only contain letters"
+            name.any { !it.isLetter() } -> "Name can only contain letters"
             else -> null
         }
 
     private fun validateSurname(surname: String): String? =
         when {
             surname.isBlank() -> "Name cannot be empty"
-            !surname.any { it.isLetter() } -> "Name can only contain letters"
+            surname.any { !it.isLetter() } -> "Name can only contain letters"
             else -> null
         }
 
@@ -105,12 +105,33 @@ class RegistrationViewModel @Inject constructor(
 
     private fun validatePassword(password: String): String? =
         when {
-            password.length < 6 -> "Password must be at least 6 characters"
-            password.none() { it.isDigit() } -> "Password must contain at least one digit"
             password.any { it.isWhitespace() } -> "No whitespaces allowed in password"
+            password.length < 6 -> "Password must be at least 6 characters"
+            password.none { it.isDigit() } -> "Password must contain at least one digit"
             password.none { it in """!@#${'$'}%^&*()-_=+[]{};:'\",.<>?/""" }
-                -> """Password should contain at least on of these special characters !@#${'$'}%^&*()-_=+[]{};:'\",.<>?/"""
+                -> """Password should contain at least one of these special characters !@#${'$'}%^&*()-_=+[]{};:'\",.<>?/"""
 
             else -> null
         }
+
+    private fun validateAll(): Boolean {
+        val nameError = validateName(registrationScreenState.name)
+        val surnameError = validateSurname(registrationScreenState.surname)
+        val emailError = validateEmail(registrationScreenState.email)
+        val passwordError = validatePassword(registrationScreenState.password)
+
+        registrationScreenState = registrationScreenState.copy(
+            nameErrorText = nameError,
+            surnameErrorText = surnameError,
+            emailErrorText = emailError,
+            passwordErrorText = passwordError,
+        )
+
+        return listOf(
+            nameError,
+            surnameError,
+            emailError,
+            passwordError,
+        ).all { it == null }
+    }
 }
