@@ -68,12 +68,15 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun isValidPassword(password: String): String? {
-        return when {
-            password.isBlank() -> "Password cannot be empty"
+    private fun isValidPassword(password: String): String? =
+        when {
+            password.any { it.isWhitespace() } -> "No whitespaces allowed in password"
             password.length < 6 -> "Password must be at least 6 characters"
+            password.none() { it.isDigit() } -> "Password must contain at least one digit"
+            password.none { it in """!@#${'$'}%^&*()-_=+[]{};:'\",.<>?/""" }
+                -> """Password should contain at least on of these special characters !@#${'$'}%^&*()-_=+[]{};:'\",.<>?/"""
+
             else -> null
         }
-    }
 }
 
