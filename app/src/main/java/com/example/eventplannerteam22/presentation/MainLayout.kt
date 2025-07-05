@@ -1,30 +1,39 @@
 package com.example.eventplannerteam22.presentation
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.router.Screen
+import com.example.eventplannerteam22.session.SessionViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainLayout(
+    sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
     navController: NavController,
     drawerState: DrawerState, // Accept drawerState
     coroutineScope: CoroutineScope, // Accept coroutineScope
     drawerContent: @Composable () -> Unit,
     topBarTitle: String = "Event Planner",
     content: @Composable (PaddingValues) -> Unit,
-
 ) {
+
+    val session = sessionViewModel.session.collectAsState()
+
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = {ModalDrawerSheet { drawerContent() } }
+        drawerContent = { ModalDrawerSheet { drawerContent() } }
     ) {
         Scaffold(
             topBar = {
@@ -33,7 +42,8 @@ fun MainLayout(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer),
+                        actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
                     title = { Text(topBarTitle) },
                     navigationIcon = {
                         IconButton(onClick = {
@@ -43,8 +53,17 @@ fun MainLayout(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
-                            Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
+                        if (session.value.loggedIn) {
+                            IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
+                                Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
+                            }
+                        } else {
+                            IconButton(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                                Icon(
+                                    Icons.Default.ExitToApp,
+                                    contentDescription = "Login or register"
+                                )
+                            }
                         }
                     }
                 )
