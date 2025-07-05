@@ -48,11 +48,6 @@ fun RegistrationScreen(
                     Toast.makeText(context, "User with this email already exists", Toast.LENGTH_SHORT).show()
                 }
 
-                is ApiResult.UnknownError -> {
-                    Toast.makeText(context, "Sorry, Unknown error occurred! ${result.code}, ${result.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
                 is ApiResult.ServerError -> {
                     Toast.makeText(context, "Server error occurred! ${result.code}, ${result.message}", Toast.LENGTH_SHORT).show()
                 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eventplannerteam22.auth.AuthRepository
+import com.example.eventplannerteam22.auth.TokenResponse
 import com.example.eventplannerteam22.network.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -19,10 +20,10 @@ class LoginViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    var state by mutableStateOf(LoginState())
+    var state by mutableStateOf(LoginScreenState())
         private set
 
-    private val resultChannel = Channel<ApiResult<Unit>>()
+    private val resultChannel = Channel<ApiResult<TokenResponse>>()
     val apiResults = resultChannel.receiveAsFlow()
 
     fun onEvent(event: LoginUiEvent) {
@@ -33,23 +34,25 @@ class LoginViewModel @Inject constructor(
                     emailErrorText = isValidEmail(event.value)
                 )
             }
+
             is LoginUiEvent.PasswordChanged -> {
                 state = state.copy(
                     password = event.value,
                     passwordErrorText = isValidPassword(event.value)
                 )
             }
+
             is LoginUiEvent.Login -> {
                 if (
-                    isValidEmail(state.email)==null &&
-                    isValidPassword(state.password)==null
-                    ) login()
+                    isValidEmail(state.email) == null &&
+                    isValidPassword(state.password) == null
+                ) login()
             }
         }
     }
 
     private fun login() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             state = state.copy(isLoading = true)
             val result = repository.login(state.email, state.password)
             resultChannel.send(result)

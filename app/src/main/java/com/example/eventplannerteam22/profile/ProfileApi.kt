@@ -1,0 +1,12 @@
+package com.example.eventplannerteam22.profile
+
+import retrofit2.http.GET
+import retrofit2.http.Path
+
+interface ProfileApi {
+    @GET("/profiles/{id}")
+    suspend fun getProfileById(@Path("id") id: Int): Profile
+
+    @GET("/profiles/email?email={email}")                                   // not sure if this is correct
+    suspend fun getProfileByEmail(@Path("email") email: String): Profile
+}

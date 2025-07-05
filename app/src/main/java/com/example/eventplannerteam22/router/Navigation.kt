@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.router
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -7,21 +8,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.eventplannerteam22.auth.login.LoginScreen
-import com.example.eventplannerteam22.presentation.MainLayout
-import com.example.eventplannerteam22.presentation.screens.MainScreen
-import com.example.eventplannerteam22.presentation.screens.ProfileScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.events.AddEventScreen
 import com.example.eventplannerteam22.events.EventDetailScreen
+import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.products.AddProductScreen
 import com.example.eventplannerteam22.products.ProductDetailScreen
+import com.example.eventplannerteam22.profile.ProfileScreen
+import com.example.eventplannerteam22.session.SessionViewModel
 import com.example.eventplannerteam22.solutions.AddSolutionScreen
 import com.example.eventplannerteam22.solutions.SolutionDetailScreen
 import kotlinx.coroutines.CoroutineScope
@@ -147,7 +151,10 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                com.example.eventplannerteam22.solutions.SolutionsScreen(navController, paddingValues)
+                com.example.eventplannerteam22.solutions.SolutionsScreen(
+                    navController,
+                    paddingValues
+                )
             }
         }
 
@@ -160,7 +167,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                ProfileScreen(navController, paddingValues)
+                ProfileScreen(navController, coroutineScope, paddingValues)
             }
         }
     }
@@ -170,7 +177,8 @@ fun Navigation() {
 fun DrawerContent(
     navController: NavController,
     coroutineScope: CoroutineScope,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     Column {
         TextButton(
@@ -203,19 +211,21 @@ fun DrawerContent(
             }
         ) { Text("Services") }
 
-        TextButton(
-            onClick = {
-                navController.navigate(Screen.LoginScreen.route)
-                coroutineScope.launch { drawerState.close() }
-            }
-        ) { Text("Login") }
+        if (!sessionViewModel.session.collectAsState().value.loggedIn) {
+            TextButton(
+                onClick = {
+                    navController.navigate(Screen.LoginScreen.route)
+                    coroutineScope.launch { drawerState.close() }
+                }
+            ) { Text("Login") }
 
-        TextButton(
-            onClick = {
-                navController.navigate(Screen.RegistrationScreen.route)
-                coroutineScope.launch { drawerState.close() }
-            }
-        ) { Text("Register") }
+            TextButton(
+                onClick = {
+                    navController.navigate(Screen.RegistrationScreen.route)
+                    coroutineScope.launch { drawerState.close() }
+                }
+            ) { Text("Register") }
+        }
     }
 }
 

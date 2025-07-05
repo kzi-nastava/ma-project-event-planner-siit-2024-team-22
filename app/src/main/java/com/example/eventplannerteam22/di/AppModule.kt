@@ -6,9 +6,9 @@ import com.example.eventplannerteam22.auth.AuthApi
 import com.example.eventplannerteam22.events.EventApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.ProductApi
+import com.example.eventplannerteam22.profile.ProfileApi
 import com.example.eventplannerteam22.solutions.DurationAdapter
 import com.example.eventplannerteam22.solutions.LocalDateAdapter
-import com.example.eventplannerteam22.solutions.Solution
 import com.example.eventplannerteam22.solutions.SolutionApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -46,16 +46,6 @@ object AppModule {
             .build()
     }
 
-
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit(): Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl("http://10.0.2.2:8080")
-//            .addConverterFactory(MoshiConverterFactory.create())
-//            .build()
-//    }
-
     @Provides
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
@@ -78,5 +68,11 @@ object AppModule {
     @Singleton
     fun provideSolutionApi(retrofit: Retrofit): SolutionApi {
         return retrofit.create(SolutionApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileApi(retrofit: Retrofit): ProfileApi {
+        return retrofit.create(ProfileApi::class.java)
     }
 }

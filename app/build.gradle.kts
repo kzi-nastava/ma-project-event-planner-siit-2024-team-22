@@ -63,7 +63,6 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-//    implementation (libs.androidx.hilt.lifecycle.viewmodel)
     ksp (libs.androidx.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
 
@@ -75,5 +74,6 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.moshi)
 
-
+    // Jwt library
+    implementation(libs.java.jwt)
 }
