@@ -8,7 +8,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.eventplannerteam22.auth.AuthResult
+import com.example.eventplannerteam22.auth.ValidatingInputTextField
 import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.router.Screen
 
@@ -33,7 +32,7 @@ fun RegistrationScreen(
     paddingValues: PaddingValues,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state
+    val registrationScreenState = viewModel.registrationScreenState
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
 
@@ -45,14 +44,27 @@ fun RegistrationScreen(
                 }
 
                 is ApiResult.Conflict -> {
-                    Toast.makeText(context, "User with this email already exists", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "User with this email already exists",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 is ApiResult.ServerError -> {
-                    Toast.makeText(context, "Server error occurred! ${result.code}, ${result.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Server error occurred! ${result.code}, ${result.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 else -> {
-                    Toast.makeText(context, "Something is really really bad here", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Something is really really bad here",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -64,49 +76,68 @@ fun RegistrationScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
-            value = state.registrationName,
-            onValueChange = {
-                viewModel.onEvent(RegistrationUiEvent.RegistrationNameChanged(it))
+        ValidatingInputTextField(
+            label = "Name",
+            value = registrationScreenState.name,
+            onValueChange = { input ->
+                viewModel.onEvent(
+                    RegistrationUiEvent.RegistrationNameChanged(
+                        input
+                    )
+                )
             },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(text = "Name")
-            }
+            isError = registrationScreenState.nameErrorText != null,
+            errorText = registrationScreenState.nameErrorText
         )
+
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = state.registrationSurname,
-            onValueChange = {
-                viewModel.onEvent(RegistrationUiEvent.RegistrationSurnameChanged(it))
+
+        ValidatingInputTextField(
+            label = "Surname",
+            value = registrationScreenState.surname,
+            onValueChange = { input ->
+                viewModel.onEvent(
+                    RegistrationUiEvent.RegistrationSurnameChanged(
+                        input
+                    )
+                )
             },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(text = "Surname")
-            }
+            isError = registrationScreenState.surnameErrorText != null,
+            errorText = registrationScreenState.surnameErrorText
         )
+
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = state.registrationEmail,
-            onValueChange = {
-                viewModel.onEvent(RegistrationUiEvent.RegistrationEmailChanged(it))
+
+        ValidatingInputTextField(
+            label = "Email",
+            value = registrationScreenState.email,
+            onValueChange = { input ->
+                viewModel.onEvent(
+                    RegistrationUiEvent.RegistrationEmailChanged(
+                        input
+                    )
+                )
             },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(text = "Email")
-            }
+            isError = registrationScreenState.emailErrorText != null,
+            errorText = registrationScreenState.emailErrorText
         )
+
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = state.registrationPassword,
-            onValueChange = {
-                viewModel.onEvent(RegistrationUiEvent.RegistrationPasswordChanged(it))
+
+        ValidatingInputTextField(
+            label = "Password",
+            value = registrationScreenState.password,
+            onValueChange = { input ->
+                viewModel.onEvent(
+                    RegistrationUiEvent.RegistrationPasswordChanged(
+                        input
+                    )
+                )
             },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(text = "Password")
-            }
+            isError = registrationScreenState.passwordErrorText != null,
+            errorText = registrationScreenState.passwordErrorText
         )
+
         Spacer(modifier = Modifier.height(16.dp))
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -115,7 +146,7 @@ fun RegistrationScreen(
                 onClick = { expanded = true },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = state.registrationRole ?: "User")
+                Text(text = registrationScreenState.role)
 
             }
             DropdownMenu(
@@ -143,7 +174,7 @@ fun RegistrationScreen(
             Text(text = "Register")
         }
     }
-    if (state.isLoading) {
+    if (registrationScreenState.isLoading) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

@@ -6,8 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eventplannerteam22.auth.AuthRepository
-import com.example.eventplannerteam22.auth.AuthResult
-import com.example.eventplannerteam22.auth.AuthState
 import com.example.eventplannerteam22.network.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -18,34 +16,51 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val repository: AuthRepository
-): ViewModel() {
+) : ViewModel() {
 
-    var state by mutableStateOf(AuthState())
+    var registrationScreenState by mutableStateOf(RegistrationScreenState())
         private set
 
     private val resultChannel = Channel<ApiResult<Unit>>()
     val authResults = resultChannel.receiveAsFlow()
 
-    fun onEvent(event: RegistrationUiEvent){
-        when(event) {
+    fun onEvent(event: RegistrationUiEvent) {
+        when (event) {
             is RegistrationUiEvent.RegistrationNameChanged -> {
-                state = state.copy(registrationName = event.value)
+                registrationScreenState =
+                    registrationScreenState.copy(
+                        name = event.value,
+                        nameErrorText = validateName(event.value)
+                    )
             }
 
             is RegistrationUiEvent.RegistrationSurnameChanged -> {
-                state = state.copy(registrationSurname = event.value)
+                registrationScreenState =
+                    registrationScreenState.copy(
+                        surname = event.value,
+                        surnameErrorText = validateSurname(event.value)
+                    )
             }
 
             is RegistrationUiEvent.RegistrationEmailChanged -> {
-                state = state.copy(registrationEmail = event.value)
+                registrationScreenState =
+                    registrationScreenState.copy(
+                        email = event.value,
+                        emailErrorText = validateEmail(event.value)
+                    )
             }
 
             is RegistrationUiEvent.RegistrationPasswordChanged -> {
-                state = state.copy(registrationPassword = event.value)
+                registrationScreenState =
+                    registrationScreenState.copy(
+                        password = event.value,
+                        passwordErrorText = validatePassword(event.value)
+                    )
             }
 
             is RegistrationUiEvent.RegistrationRoleChanged -> {
-                state = state.copy(registrationRole = event.value)
+                registrationScreenState =
+                    registrationScreenState.copy(role = event.value)
             }
 
             is RegistrationUiEvent.Registration -> {
@@ -54,19 +69,48 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun registration(){
+    private fun registration() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true)
+            registrationScreenState = registrationScreenState.copy(isLoading = true)
             val result = repository.register(
-                state.registrationName,
-                state.registrationSurname,
-                state.registrationEmail,
-                state.registrationPassword,
-                state.registrationRole
+                registrationScreenState.name,
+                registrationScreenState.surname,
+                registrationScreenState.email,
+                registrationScreenState.password,
+                registrationScreenState.role
             )
             resultChannel.send(result)
-            state = state.copy(isLoading = false)
+            registrationScreenState = registrationScreenState.copy(isLoading = false)
         }
     }
 
+    private fun validateName(name: String): String? =
+        when {
+            name.isBlank() -> "Name cannot be empty"
+            !name.any { it.isLetter() } -> "Name can only contain letters"
+            else -> null
+        }
+
+    private fun validateSurname(surname: String): String? =
+        when {
+            surname.isBlank() -> "Name cannot be empty"
+            !surname.any { it.isLetter() } -> "Name can only contain letters"
+            else -> null
+        }
+
+    private fun validateEmail(email: String): String? =
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            "Invalid email address"
+        else null
+
+    private fun validatePassword(password: String): String? =
+        when {
+            password.length < 6 -> "Password must be at least 6 characters"
+            password.none() { it.isDigit() } -> "Password must contain at least one digit"
+            password.any { it.isWhitespace() } -> "No whitespaces allowed in password"
+            password.none { it in """!@#${'$'}%^&*()-_=+[]{};:'\",.<>?/""" }
+                -> """Password should contain at least on of these special characters !@#${'$'}%^&*()-_=+[]{};:'\",.<>?/"""
+
+            else -> null
+        }
 }
