@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.auth.registration
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,6 +26,7 @@ import com.example.eventplannerteam22.auth.ValidatingInputTextField
 import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.router.Screen
 
+const val LOG_TAG = "RegistrationScreen"
 
 @Composable
 fun RegistrationScreen(
@@ -40,10 +42,37 @@ fun RegistrationScreen(
         viewModel.authResults.collect { result ->
             when (result) {
                 is ApiResult.Success -> {
-                    navController.navigate(Screen.MainScreen.route)
+                    Log.w(LOG_TAG, "Successful registration: ${result.data}")
+                    navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.RegistrationScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+
+                is ApiResult.BadRequest -> {
+                    Log.w(LOG_TAG, "BadRequest: ${result.message}")
+                    Toast.makeText(context, result.message ?: "Bad request", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is ApiResult.Unauthorized -> {
+                    Log.w(LOG_TAG, "Unauthorized: ${result.message}")
+                    Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT).show()
+                }
+
+                is ApiResult.Forbidden -> {
+                    Log.w(LOG_TAG, "Forbidden: ${result.message}")
+                    Toast.makeText(context, "Access denied", Toast.LENGTH_SHORT).show()
+                }
+
+                is ApiResult.NotFound -> {
+                    Log.w(LOG_TAG, "NotFound: ${result.message}")
+                    Toast.makeText(context, "Resource not found", Toast.LENGTH_SHORT).show()
                 }
 
                 is ApiResult.Conflict -> {
+                    Log.w(LOG_TAG, "Conflict: ${result.message}")
                     Toast.makeText(
                         context,
                         "User with this email already exists",
@@ -52,6 +81,7 @@ fun RegistrationScreen(
                 }
 
                 is ApiResult.ServerError -> {
+                    Log.e(LOG_TAG, "ServerError ${result.code}: ${result.message}")
                     Toast.makeText(
                         context,
                         "Server error occurred! ${result.code}, ${result.message}",
@@ -59,10 +89,20 @@ fun RegistrationScreen(
                     ).show()
                 }
 
-                else -> {
+                is ApiResult.UnknownError -> {
+                    Log.e(LOG_TAG, "UnknownError ${result.code}: ${result.message}")
                     Toast.makeText(
                         context,
-                        "Something is really really bad here",
+                        "Unexpected error (${result.code})",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is ApiResult.ConnectionError -> {
+                    Log.e(LOG_TAG, "ConnectionError: ${result.message}")
+                    Toast.makeText(
+                        context,
+                        "Connection error: ${result.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
