@@ -39,12 +39,7 @@ fun LoginScreen(
             when (result) {
                 is ApiResult.Success -> {
                     Log.w(LOG_TAG, "Successful login: ${result.data}")
-                    sessionViewModel.updateState(
-                        accessToken = result.data.accessToken,
-                        refreshToken = result.data.refreshToken,
-                        expiresIn = result.data.expiresIn,
-                        loggedIn = true
-                    )
+                    sessionViewModel.login(result.data)
                     navController.navigate(Screen.MainScreen.route) {
                         popUpTo(Screen.LoginScreen.route) { inclusive = true }
                     }
