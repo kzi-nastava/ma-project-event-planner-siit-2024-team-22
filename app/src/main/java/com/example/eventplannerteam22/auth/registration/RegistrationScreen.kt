@@ -1,9 +1,15 @@
 package com.example.eventplannerteam22.auth.registration
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -23,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.auth.ValidatingInputTextField
-import com.example.eventplannerteam22.network.ApiResult
+import com.example.eventplannerteam22.network.apiResultHandler
 import com.example.eventplannerteam22.router.Screen
 
 const val LOG_TAG = "RegistrationScreen"
@@ -40,73 +46,17 @@ fun RegistrationScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.authResults.collect { result ->
-            when (result) {
-                is ApiResult.Success -> {
-                    Log.w(LOG_TAG, "Successful registration: ${result.data}")
+            apiResultHandler(
+                onSuccess = {
                     navController.navigate(Screen.MainScreen.route) {
-                        popUpTo(Screen.RegistrationScreen.route) {
-                            inclusive = true
-                        }
+                        popUpTo(Screen.RegistrationScreen.route) { inclusive = true }
                     }
-                }
-
-                is ApiResult.BadRequest -> {
-                    Log.w(LOG_TAG, "BadRequest: ${result.message}")
-                    Toast.makeText(context, result.message ?: "Bad request", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                is ApiResult.Unauthorized -> {
-                    Log.w(LOG_TAG, "Unauthorized: ${result.message}")
-                    Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT).show()
-                }
-
-                is ApiResult.Forbidden -> {
-                    Log.w(LOG_TAG, "Forbidden: ${result.message}")
-                    Toast.makeText(context, "Access denied", Toast.LENGTH_SHORT).show()
-                }
-
-                is ApiResult.NotFound -> {
-                    Log.w(LOG_TAG, "NotFound: ${result.message}")
-                    Toast.makeText(context, "Resource not found", Toast.LENGTH_SHORT).show()
-                }
-
-                is ApiResult.Conflict -> {
-                    Log.w(LOG_TAG, "Conflict: ${result.message}")
-                    Toast.makeText(
-                        context,
-                        "User with this email already exists",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                is ApiResult.ServerError -> {
-                    Log.e(LOG_TAG, "ServerError ${result.code}: ${result.message}")
-                    Toast.makeText(
-                        context,
-                        "Server error occurred! ${result.code}, ${result.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                is ApiResult.UnknownError -> {
-                    Log.e(LOG_TAG, "UnknownError ${result.code}: ${result.message}")
-                    Toast.makeText(
-                        context,
-                        "Unexpected error (${result.code})",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                is ApiResult.ConnectionError -> {
-                    Log.e(LOG_TAG, "ConnectionError: ${result.message}")
-                    Toast.makeText(
-                        context,
-                        "Connection error: ${result.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+                },
+                apiResult = result,
+                logTag = LOG_TAG,
+                context = context,
+                conflictErrorText = "User with this email already exists"
+            )
         }
     }
     Column(
