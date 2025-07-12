@@ -13,7 +13,7 @@ sealed class UserRole(val label: String) {
     companion object {
         fun parse(authority: Authority): UserRole {
             return when (authority.authority) {
-                "ROLE_User" -> User
+                "ROLE_FastRegistrationUser" -> User     // TODO: Add fastregistrationuser support
                 "ROLE_Admin" -> Admin
                 "ROLE_EventOrganizer" -> EventOrganizer
                 "ROLE_Supplier" -> Supplier
