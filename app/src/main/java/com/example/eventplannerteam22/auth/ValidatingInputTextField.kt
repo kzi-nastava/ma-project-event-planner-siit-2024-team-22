@@ -1,6 +1,7 @@
 package com.example.eventplannerteam22.auth
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -14,7 +15,7 @@ import androidx.compose.ui.Modifier
 fun ValidatingInputTextField(
     label: String,
     value: String,
-    isPasswordField: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (String) -> Unit,
     isError: Boolean,
     errorText: String?
@@ -33,6 +34,6 @@ fun ValidatingInputTextField(
             }
         },
         singleLine = true,
-
-        )
+        keyboardOptions = keyboardOptions,
+    )
 }
