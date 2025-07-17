@@ -6,6 +6,7 @@ plugins {
 //    id ("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
@@ -63,16 +64,16 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    ksp (libs.androidx.hilt.compiler)
-    implementation (libs.androidx.hilt.navigation.compose)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
 
     implementation(libs.moshi.kotlin)
-    implementation (libs.retrofit)
-    implementation (libs.converter.moshi)
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 
     // Jwt library
     implementation(libs.java.jwt)

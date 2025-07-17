@@ -16,18 +16,24 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.events.AddEventScreen
 import com.example.eventplannerteam22.events.EventDetailScreen
+import com.example.eventplannerteam22.events.EventsScreen
+import com.example.eventplannerteam22.mainscreen.MainScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.products.AddProductScreen
 import com.example.eventplannerteam22.products.ProductDetailScreen
+import com.example.eventplannerteam22.products.ProductsScreen
+import com.example.eventplannerteam22.profile.EditProfileScreen
 import com.example.eventplannerteam22.profile.ProfileScreen
 import com.example.eventplannerteam22.session.SessionViewModel
 import com.example.eventplannerteam22.solutions.AddSolutionScreen
 import com.example.eventplannerteam22.solutions.SolutionDetailScreen
+import com.example.eventplannerteam22.solutions.SolutionsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -56,8 +62,19 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                com.example.eventplannerteam22.mainscreen.MainScreen(navController, paddingValues)
+                MainScreen(navController, paddingValues)
             }
+        }
+
+        composable(route = Screen.AuthScreen.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = {
+                    DrawerContent(navController, coroutineScope, drawerState)
+                }
+            ) { paddingValues -> AuthScreen(navController, paddingValues) }
         }
 
         composable(route = Screen.LoginScreen.route) {
@@ -95,7 +112,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                com.example.eventplannerteam22.events.EventsScreen(navController, paddingValues)
+                EventsScreen(navController, paddingValues)
             }
         }
 
@@ -108,7 +125,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                com.example.eventplannerteam22.products.ProductsScreen(navController, paddingValues)
+                ProductsScreen(navController, paddingValues)
             }
         }
 
@@ -151,7 +168,7 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                com.example.eventplannerteam22.solutions.SolutionsScreen(
+                SolutionsScreen(
                     navController,
                     paddingValues
                 )
@@ -168,6 +185,17 @@ fun Navigation() {
                 }
             ) { paddingValues ->
                 ProfileScreen(navController, coroutineScope, paddingValues)
+            }
+        }
+
+        composable(route = Screen.EditProfileScreen.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                EditProfileScreen(navController = navController)
             }
         }
     }
@@ -214,7 +242,7 @@ fun DrawerContent(
         if (!sessionViewModel.session.collectAsState().value.loggedIn) {
             TextButton(
                 onClick = {
-                    navController.navigate(Screen.LoginScreen.route)
+                    navController.navigate(Screen.AuthScreen.route)
                     coroutineScope.launch { drawerState.close() }
                 }
             ) { Text("Login") }

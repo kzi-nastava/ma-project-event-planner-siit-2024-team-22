@@ -6,7 +6,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.*
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
@@ -22,8 +32,8 @@ import kotlinx.coroutines.launch
 fun MainLayout(
     sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
     navController: NavController,
-    drawerState: DrawerState, // Accept drawerState
-    coroutineScope: CoroutineScope, // Accept coroutineScope
+    drawerState: DrawerState,
+    coroutineScope: CoroutineScope,
     drawerContent: @Composable () -> Unit,
     topBarTitle: String = "Event Planner",
     content: @Composable (PaddingValues) -> Unit,
@@ -58,7 +68,7 @@ fun MainLayout(
                                 Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
                             }
                         } else {
-                            IconButton(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                            IconButton(onClick = { navController.navigate(Screen.AuthScreen.route) }) {
                                 Icon(
                                     Icons.Default.ExitToApp,
                                     contentDescription = "Login or register"
