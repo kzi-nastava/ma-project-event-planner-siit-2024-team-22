@@ -44,7 +44,6 @@ class ProfileViewModel @Inject constructor(
         password: String?,
         phone: String?,
         homeAddress: String?,
-        role: String?
     ) {
         userProfile = userProfile.copy(
             id = id ?: userProfile.id,
@@ -54,7 +53,6 @@ class ProfileViewModel @Inject constructor(
             password = password ?: userProfile.password,
             phone = phone ?: userProfile.phone,
             homeAddress = homeAddress ?: userProfile.homeAddress,
-            role = role ?: userProfile.role,
         )
     }
 

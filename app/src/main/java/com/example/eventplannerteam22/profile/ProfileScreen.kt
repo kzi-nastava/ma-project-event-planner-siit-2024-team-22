@@ -4,11 +4,13 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -94,29 +96,38 @@ fun ProfileScreen(
                     ProfileItem("Email", userProfile.email)
                     ProfileItem("Phone", userProfile.phone ?: "Not provided")
                     ProfileItem("Address", userProfile.homeAddress ?: "Not provided")
-                    ProfileItem("Role", userProfile.role)
-                    ProfileItem("Username", userProfile.username)
-                    ProfileItem("Enabled", userProfile.enabled.toString())
-                    ProfileItem(
-                        "Authorities",
-                        userProfile.authorities?.joinToString() ?: "Not provided"
-                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate(Screen.MainScreen.route)
-                    sessionViewModel.clearSession()
-                    profileViewModel.unloadUserProfile()
-                },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 24.dp)
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Logout")
+                Button(
+                    onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            "userProfile",
+                            userProfile
+                        )
+
+                        navController.navigate(Screen.EditProfileScreen.route)
+                    }
+                ) {
+                    Text("Edit")
+                }
+
+                Spacer(modifier = Modifier.width(32.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate(Screen.MainScreen.route)
+                        sessionViewModel.clearSession()
+                        profileViewModel.unloadUserProfile()
+                    }
+                ) {
+                    Text("Logout")
+                }
             }
         }
     }
