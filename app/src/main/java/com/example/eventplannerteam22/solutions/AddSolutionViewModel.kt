@@ -20,7 +20,8 @@ class AddSolutionViewModel @Inject constructor(
         features: String,
         price: String,
         discount: String,
-        duration: String,
+        durationHours: String,
+        durationMinutes: String,
         dateStartBooking: String,
         dateFinishBooking: String
     ) {
@@ -36,7 +37,7 @@ class AddSolutionViewModel @Inject constructor(
                     discount = discount.toDouble(),
                     imgUrl = "",
                     visible = true,
-                    duration = java.time.Duration.parse(duration),
+                    duration = parseDuration(durationHours, durationMinutes),
                     dateStartBooking = java.time.LocalDate.parse(dateStartBooking),
                     dateFinishBooking = java.time.LocalDate.parse(dateFinishBooking),
                     bookingConfirmType = "Manual",
@@ -48,6 +49,12 @@ class AddSolutionViewModel @Inject constructor(
             _addSolutionResult.emit(AddSolutionResult.Failure(e.message ?: "Unknown error"))
         }
     }
+}
+
+private fun parseDuration(hoursStr: String, minutesStr: String): java.time.Duration {
+    val hours = hoursStr.toLongOrNull() ?: 0L
+    val minutes = minutesStr.toLongOrNull() ?: 0L
+    return java.time.Duration.ofHours(hours).plusMinutes(minutes)
 }
 
 sealed class AddSolutionResult {

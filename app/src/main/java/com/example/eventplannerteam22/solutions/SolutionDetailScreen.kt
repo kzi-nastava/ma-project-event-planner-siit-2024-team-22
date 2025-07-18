@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
+import com.example.eventplannerteam22.solutions.toReadableFormat
 
 @Composable
 fun SolutionDetailScreen(
@@ -57,7 +58,7 @@ fun SolutionDetailScreen(
                 Text(text = "Category: ${solution!!.category.name}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                 Text(text = "Price: ${solution!!.price}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                 Text(text = "Discount: ${solution!!.discount}%", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-                Text(text = "Duration: ${solution!!.duration}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = "Duration: ${solution!!.duration.toReadableFormat()}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                 Text(text = "Start Booking: ${solution!!.dateStartBooking}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                 Text(text = "Finish Booking: ${solution!!.dateFinishBooking}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                 Text(text = solution!!.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
