@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventplannerteam22.router.Navigation
-import com.example.eventplannerteam22.ui.theme.EventPlannerTeam22Theme
+import com.example.eventplannerteam22.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +17,7 @@ class MainActivity constructor(
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            EventPlannerTeam22Theme(darkTheme = true) {
+            AppTheme {
                 Navigation()
             }
         }
@@ -27,7 +27,7 @@ class MainActivity constructor(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    EventPlannerTeam22Theme {
+    AppTheme {
         Navigation()
     }
 }
