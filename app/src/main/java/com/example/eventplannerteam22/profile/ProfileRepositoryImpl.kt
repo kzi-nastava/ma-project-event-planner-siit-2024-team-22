@@ -15,7 +15,15 @@ class ProfileRepositoryImpl @Inject constructor(
         return safeApiCall { api.getProfileByEmail(email) }
     }
 
-    override suspend fun updateProfile(updateProfileRequest: UpdateProfileRequest): ApiResult<Profile> {
-        return safeApiCall { api.updateProfile(updateProfileRequest.id) }
+    override suspend fun updateProfile(
+        id: Int,
+        updateProfileRequest: UpdateProfileRequest
+    ): ApiResult<Profile> {
+        return safeApiCall {
+            api.updateProfile(
+                id = id,
+                updateProfileRequest = updateProfileRequest
+            )
+        }
     }
 }

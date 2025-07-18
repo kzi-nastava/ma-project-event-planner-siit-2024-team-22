@@ -5,15 +5,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.eventplannerteam22.network.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-
+    val profileRepository: ProfileRepository,
 ) : ViewModel() {
 
     var screenState by mutableStateOf(EditProfileScreenState())
+    private val resultChannel = Channel<ApiResult<Profile>>()
+    val apiResults = resultChannel.receiveAsFlow()
     lateinit var oldProfile: Profile
 
     fun onEvent(event: EditProfileUIEvent) {
@@ -60,7 +67,7 @@ class EditProfileViewModel @Inject constructor(
             }
 
             is EditProfileUIEvent.SubmitChanges -> {
-                TODO()
+                submitChanges(event.id)
             }
         }
     }
@@ -96,8 +103,19 @@ class EditProfileViewModel @Inject constructor(
         TODO()
     }
 
-    fun submitChanges() {
-        TODO()
+    fun submitChanges(id: Int) {
+        viewModelScope.launch {
+            resultChannel.send(
+                profileRepository.updateProfile(
+                    id = id,
+                    updateProfileRequest = UpdateProfileRequest(
+                        name = screenState.name,
+                        surname = screenState.surname,
+                        email = screenState.email
+                    )
+                )
+            )
+        }
     }
 
     fun initScreenState(profile: Profile) {

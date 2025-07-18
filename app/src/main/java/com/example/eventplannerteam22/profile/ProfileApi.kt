@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.profile
 
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -12,5 +13,8 @@ interface ProfileApi {
     suspend fun getProfileByEmail(@Path("email") email: String): Profile
 
     @PUT("/profiles/{id}")
-    suspend fun updateProfile(@Path("id") id: Int): Profile
+    suspend fun updateProfile(
+        @Path("id") id: Int,
+        @Body updateProfileRequest: UpdateProfileRequest
+    ): Profile
 }
