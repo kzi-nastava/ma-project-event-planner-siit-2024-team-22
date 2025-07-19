@@ -28,7 +28,8 @@ fun AddSolutionScreen(
     var features by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var discount by remember { mutableStateOf("") }
-    var duration by remember { mutableStateOf("") }
+    var durationHours by remember { mutableStateOf("") }
+    var durationMinutes by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -126,13 +127,25 @@ fun AddSolutionScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = duration,
-                onValueChange = { duration = it },
-                label = { Text("Duration (e.g., PT2H30M)") },
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                OutlinedTextField(
+                    value = durationHours,
+                    onValueChange = { durationHours = it.filter { ch -> ch.isDigit() } },
+                    label = { Text("Hours") },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = durationMinutes,
+                    onValueChange = { durationMinutes = it.filter { ch -> ch.isDigit() } },
+                    label = { Text("Minutes") },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(1f)
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
@@ -163,7 +176,8 @@ fun AddSolutionScreen(
                 onClick = {
                     scope.launch {
                         viewModel.addSolution(
-                            name, description, features, price, discount, duration,
+                            name, description, features, price, discount,
+                            durationHours, durationMinutes,
                             startBookingDate.toString(), finishBookingDate.toString()
                         )
                     }

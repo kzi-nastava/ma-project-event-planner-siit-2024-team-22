@@ -20,6 +20,9 @@ import com.example.eventplannerteam22.products.ProductsViewModel
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.solutions.Solution
 import com.example.eventplannerteam22.solutions.SolutionsViewModel
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @Composable
@@ -105,16 +108,25 @@ fun ProductCard(product: Product, navController: NavController) {
 
 @Composable
 fun EventCard(event: Event, navController: NavController) {
+    val formattedDate = try {
+        val dt = OffsetDateTime.parse(event.dateOfEvent).toLocalDateTime()
+        dt.format(DateTimeFormatter.ofPattern("d MMM yyyy, HH:mm", Locale.ENGLISH))
+    } catch (e: Exception) {
+        event.dateOfEvent
+    }
+
     Card(
-        // подумать как сделать это по красивее
-        modifier = Modifier.fillMaxWidth().padding(12.dp).clickable {
-            navController.navigate("events/${event.id}")
-        }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .clickable {
+                navController.navigate("events/${event.id}")
+            }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = event.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Date: ${event.dateOfEvent}", style = MaterialTheme.typography.bodyMedium)
+            Text(text = formattedDate, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
