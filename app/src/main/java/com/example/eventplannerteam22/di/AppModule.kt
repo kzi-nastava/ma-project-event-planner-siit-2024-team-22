@@ -3,6 +3,7 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
+import com.example.eventplannerteam22.eventType.EventTypeApi
 import com.example.eventplannerteam22.events.EventApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.ProductApi
@@ -17,6 +18,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -32,7 +34,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .retryOnConnectionFailure(true)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val moshi = Moshi.Builder()
             .add(LocalDateAdapter())
             .add(DurationAdapter())
@@ -43,6 +53,7 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient)
             .build()
     }
 
@@ -74,5 +85,11 @@ object AppModule {
     @Singleton
     fun provideProfileApi(retrofit: Retrofit): ProfileApi {
         return retrofit.create(ProfileApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventTypeApi(retrofit: Retrofit): EventTypeApi {
+        return retrofit.create(EventTypeApi::class.java)
     }
 }
