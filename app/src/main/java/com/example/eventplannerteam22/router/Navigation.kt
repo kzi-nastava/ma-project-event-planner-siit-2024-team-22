@@ -26,7 +26,8 @@ import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
-import com.example.eventplannerteam22.eventType.EventTypeManagementScreen
+import com.example.eventplannerteam22.eventType.CreateEventType
+import com.example.eventplannerteam22.eventType.EventTypesScreen
 import com.example.eventplannerteam22.events.AddEventScreen
 import com.example.eventplannerteam22.events.EventDetailScreen
 import com.example.eventplannerteam22.events.EventsScreen
@@ -53,15 +54,15 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route
+        startDestination = Screen.Splash.route
     ) {
         // Splash Screen (No MainLayout)
-        composable(route = Screen.SplashScreen.route) {
+        composable(route = Screen.Splash.route) {
             SplashScreen(navController)
         }
 
         // Other screens (wrapped in MainLayout)
-        composable(route = Screen.MainScreen.route) {
+        composable(route = Screen.Main.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -74,7 +75,7 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.AuthScreen.route) {
+        composable(route = Screen.Auth.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -85,7 +86,7 @@ fun Navigation() {
             ) { paddingValues -> AuthScreen(navController, paddingValues) }
         }
 
-        composable(route = Screen.LoginScreen.route) {
+        composable(route = Screen.Login.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -98,7 +99,7 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.RegistrationScreen.route) {
+        composable(route = Screen.Registration.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -111,7 +112,7 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.EventsScreen.route) {
+        composable(route = Screen.Events.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -124,7 +125,7 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.ProductsScreen.route) {
+        composable(route = Screen.Products.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -167,7 +168,7 @@ fun Navigation() {
             AddSolutionScreen(navController)
         }
 
-        composable(route = Screen.ServicesScreen.route) {
+        composable(route = Screen.Services.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -183,7 +184,7 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.ProfileScreen.route) {
+        composable(route = Screen.Profile.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -196,7 +197,7 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.EditProfileScreen.route) {
+        composable(route = Screen.EditProfile.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
@@ -207,17 +208,31 @@ fun Navigation() {
             }
         }
 
-        composable(route = Screen.EventTypeManagementScreen.route) {
+        composable(route = Screen.EventTypes.route) {
             MainLayout(
                 navController = navController,
                 drawerState = drawerState,
                 coroutineScope = coroutineScope,
                 drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
             ) { paddingValues ->
-                EventTypeManagementScreen(
+                EventTypesScreen(
                     paddingValues = paddingValues,
                     navController = navController
                 )
+            }
+        }
+
+        composable(route = Screen.CreateEventType.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                CreateEventType(
+                    paddingValues = paddingValues
+                )
+
             }
         }
     }
@@ -239,7 +254,7 @@ fun DrawerContent(
         HorizontalDivider()
         NavigationDrawerItem(
             onClick = {
-                navController.navigate(Screen.MainScreen.route)
+                navController.navigate(Screen.Main.route)
                 coroutineScope.launch { drawerState.close() }
             },
             selected = false,
@@ -253,7 +268,7 @@ fun DrawerContent(
         )
         NavigationDrawerItem(
             onClick = {
-                navController.navigate(Screen.EventsScreen.route)
+                navController.navigate(Screen.Events.route)
                 coroutineScope.launch { drawerState.close() }
             },
             selected = false,
@@ -267,7 +282,7 @@ fun DrawerContent(
         )
         NavigationDrawerItem(
             onClick = {
-                navController.navigate(Screen.ProductsScreen.route)
+                navController.navigate(Screen.Products.route)
                 coroutineScope.launch { drawerState.close() }
             },
             selected = false,
@@ -281,7 +296,7 @@ fun DrawerContent(
         )
         NavigationDrawerItem(
             onClick = {
-                navController.navigate(Screen.ServicesScreen.route)
+                navController.navigate(Screen.Services.route)
                 coroutineScope.launch { drawerState.close() }
             },
             selected = false,
@@ -296,7 +311,7 @@ fun DrawerContent(
         HorizontalDivider()
         NavigationDrawerItem(
             onClick = {
-                navController.navigate(Screen.EventTypeManagementScreen.route)
+                navController.navigate(Screen.EventTypes.route)
                 coroutineScope.launch { drawerState.close() }
             },
             selected = false,

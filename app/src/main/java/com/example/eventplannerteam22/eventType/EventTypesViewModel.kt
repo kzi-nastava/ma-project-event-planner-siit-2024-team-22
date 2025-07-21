@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class EventTypeManagementViewModel @Inject constructor(
+class EventTypesViewModel @Inject constructor(
     private val eventTypeRepository: EventTypeRepository
 ) : ViewModel() {
-    var screenState by mutableStateOf(EventTypeManagementScreenState())
+    var screenState by mutableStateOf(EventTypesScreenState())
         private set
     private var loadEventTypesResultChannel = Channel<ApiResult<List<EventType>>>()
     val loadEventTypesResults = loadEventTypesResultChannel.receiveAsFlow()

@@ -64,11 +64,11 @@ fun MainLayout(
                     },
                     actions = {
                         if (session.value.loggedIn) {
-                            IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
+                            IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
                                 Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
                             }
                         } else {
-                            IconButton(onClick = { navController.navigate(Screen.AuthScreen.route) }) {
+                            IconButton(onClick = { navController.navigate(Screen.Auth.route) }) {
                                 Icon(
                                     Icons.Default.ExitToApp,
                                     contentDescription = "Login or register"

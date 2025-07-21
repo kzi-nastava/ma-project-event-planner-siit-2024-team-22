@@ -1,15 +1,17 @@
 package com.example.eventplannerteam22.router
 
 sealed class Screen(val route: String) {
-    object MainScreen : Screen("main_screen")
-    object AuthScreen : Screen("auth_screen")
-    object LoginScreen : Screen("login_screen")
-    object RegistrationScreen : Screen("registration_screen")
-    object EventsScreen : Screen("events_screen")
-    object ProductsScreen : Screen("products_screen")
-    object ServicesScreen : Screen("services_screen")
-    object ProfileScreen : Screen("profile_screen")
-    object EditProfileScreen : Screen("edit_profile_screen")
-    object SplashScreen : Screen("splash_screen")
-    object EventTypeManagementScreen : Screen("event_type_management_screen")
+    object Main : Screen("main-screen")
+    object Auth : Screen("auth-screen")
+    object Login : Screen("login-screen")
+    object Registration : Screen("registration-screen")
+    object Events : Screen("events-screen")
+    object Products : Screen("products-screen")
+    object Services : Screen("services-screen")
+    object Profile : Screen("profile-screen")
+    object EditProfile : Screen("edit-profile-screen")
+    object Splash : Screen("splash-screen")
+    object EventTypes : Screen("event-type-screen")
+    data class EditEventType(val id: Int) : Screen("event-type/${id}")
+    object CreateEventType : Screen("create-event-type")
 }

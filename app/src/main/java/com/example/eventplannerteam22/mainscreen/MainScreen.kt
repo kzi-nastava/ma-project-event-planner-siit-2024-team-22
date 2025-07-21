@@ -44,9 +44,11 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
     val events = eventsViewModel.events.take(3)
     val solutions = solutionsViewModel.solutions.take(3)
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(paddingValues)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -108,7 +110,7 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             }
             item {
                 Button(
-                    onClick = { navController.navigate(Screen.ServicesScreen.route) },
+                    onClick = { navController.navigate(Screen.Services.route) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
