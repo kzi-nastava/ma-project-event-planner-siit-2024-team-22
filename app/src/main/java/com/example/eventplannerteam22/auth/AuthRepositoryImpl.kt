@@ -4,17 +4,19 @@ import com.example.eventplannerteam22.auth.login.LoginRequest
 import com.example.eventplannerteam22.auth.registration.RegistrationRequest
 import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.network.safeApiCall
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
+    private val okHttpClient: OkHttpClient
 ) : AuthRepository {
 
     override suspend fun login(
         email: String,
         password: String
     ): ApiResult<TokenResponse> {
-        return safeApiCall<TokenResponse> {
+        return safeApiCall(okHttpClient) {
             api.login(LoginRequest(email, password))
         }
     }
@@ -26,7 +28,7 @@ class AuthRepositoryImpl @Inject constructor(
         password: String,
         role: String
     ): ApiResult<Unit> {
-        return safeApiCall {
+        return safeApiCall(okHttpClient) {
             api.register(
                 RegistrationRequest(
                     name,
