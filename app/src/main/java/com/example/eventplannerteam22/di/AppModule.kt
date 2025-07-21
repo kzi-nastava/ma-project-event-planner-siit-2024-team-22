@@ -3,6 +3,7 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
+import com.example.eventplannerteam22.eventType.EventTypeApi
 import com.example.eventplannerteam22.events.EventApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.ProductApi
@@ -74,5 +75,11 @@ object AppModule {
     @Singleton
     fun provideProfileApi(retrofit: Retrofit): ProfileApi {
         return retrofit.create(ProfileApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventTypeApi(retrofit: Retrofit): EventTypeApi {
+        return retrofit.create(EventTypeApi::class.java)
     }
 }
