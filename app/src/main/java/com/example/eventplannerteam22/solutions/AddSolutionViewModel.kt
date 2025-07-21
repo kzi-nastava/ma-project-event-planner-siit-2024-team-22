@@ -30,7 +30,7 @@ class AddSolutionViewModel @Inject constructor(
                 Solution(
                     id = 0,
                     name = name,
-                    category = Category(1, "IT Services", "ACCEPTED"),
+                    solutionCategory = SolutionCategory(1, "IT Services", "ACCEPTED"),
                     description = description,
                     features = features,
                     price = price.toDouble(),
