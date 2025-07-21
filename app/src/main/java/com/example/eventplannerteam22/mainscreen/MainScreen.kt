@@ -1,7 +1,15 @@
 package com.example.eventplannerteam22.mainscreen
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -36,11 +44,20 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
     val events = eventsViewModel.events.take(3)
     val solutions = solutionsViewModel.solutions.take(3)
 
-    Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-        LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(paddingValues)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             item {
 
-                Text("Products", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(16.dp))
+                Text(
+                    "Products",
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
             items(products) { product ->
                 ProductCard(product = product, navController = navController)
@@ -48,7 +65,9 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             item {
                 Button(
                     onClick = { navController.navigate("products_screen") },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
                     Text(text = "View All Products")
                 }
@@ -56,7 +75,11 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
 
             item {
 
-                Text("Events", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(16.dp))
+                Text(
+                    "Events",
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
             items(events) { event ->
                 EventCard(event = event, navController = navController)
@@ -64,7 +87,9 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             item {
                 Button(
                     onClick = { navController.navigate("events_screen") },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
                     Text(text = "View All Events")
                 }
@@ -72,7 +97,11 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
 
             item {
 
-                Text("Solutions", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(16.dp))
+                Text(
+                    "Solutions",
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
             items(solutions) { solution ->
                 SolutionCard(solution = solution, navController = navController)
@@ -80,7 +109,9 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             item {
                 Button(
                     onClick = { navController.navigate(Screen.ServicesScreen.route) },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
                     Text(text = "View All Solutions")
                 }
@@ -92,14 +123,20 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
 @Composable
 fun ProductCard(product: Product, navController: NavController) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(8.dp).clickable {
-            navController.navigate("products/${product.id}")
-        }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable {
+                navController.navigate("products/${product.id}")
+            }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Category: ${product.category}", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "Category: ${product.category}",
+                style = MaterialTheme.typography.bodyMedium
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Price: ${product.price}", style = MaterialTheme.typography.bodyMedium)
         }
@@ -134,14 +171,20 @@ fun EventCard(event: Event, navController: NavController) {
 @Composable
 fun SolutionCard(solution: Solution, navController: NavController) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(8.dp).clickable {
-            navController.navigate("solutions/${solution.id}")
-        }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable {
+                navController.navigate("solutions/${solution.id}")
+            }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = solution.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Category: ${solution.category.name}", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "Category: ${solution.solutionCategory.name}",
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

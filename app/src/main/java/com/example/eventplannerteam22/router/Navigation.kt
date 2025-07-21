@@ -26,6 +26,7 @@ import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
+import com.example.eventplannerteam22.eventType.EventTypeManagementScreen
 import com.example.eventplannerteam22.events.AddEventScreen
 import com.example.eventplannerteam22.events.EventDetailScreen
 import com.example.eventplannerteam22.events.EventsScreen
@@ -205,6 +206,20 @@ fun Navigation() {
                 EditProfileScreen(navController = navController)
             }
         }
+
+        composable(route = Screen.EventTypeManagementScreen.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                EventTypeManagementScreen(
+                    paddingValues = paddingValues,
+                    navController = navController
+                )
+            }
+        }
     }
 }
 
@@ -275,6 +290,21 @@ fun DrawerContent(
                 Icon(
                     painter = painterResource(R.drawable.home_repair_service_24px),
                     contentDescription = "Service list"
+                )
+            }
+        )
+        HorizontalDivider()
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.EventTypeManagementScreen.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Event type management") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.home_repair_service_24px),
+                    contentDescription = "Event type management"
                 )
             }
         )

@@ -9,7 +9,7 @@ import java.time.LocalDate
 data class Solution(
     val id: Int,
     val name: String,
-    val category: Category,
+    val solutionCategory: SolutionCategory,
     val description: String,
     val features: String?,
     val price: Double,
@@ -24,7 +24,7 @@ data class Solution(
 )
 
 @JsonClass(generateAdapter = true)
-data class Category(
+data class SolutionCategory(
     val id: Int,
     val name: String,
     val categoryType: String
