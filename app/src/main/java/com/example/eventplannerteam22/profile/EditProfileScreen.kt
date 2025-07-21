@@ -49,8 +49,8 @@ fun EditProfileScreen(
                 onSuccess = {
                     when (result) {
                         is ApiResult.Success -> {
-                            navController.navigate(Screen.ProfileScreen.route) {
-                                popUpTo(Screen.EditProfileScreen.route) { inclusive = true }
+                            navController.navigate(Screen.Profile.route) {
+                                popUpTo(Screen.EditProfile.route) { inclusive = true }
                             }
                         }
 

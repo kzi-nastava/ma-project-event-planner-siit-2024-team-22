@@ -111,7 +111,7 @@ fun ProfileScreen(
                             userProfile
                         )
 
-                        navController.navigate(Screen.EditProfileScreen.route)
+                        navController.navigate(Screen.EditProfile.route)
                     }
                 ) {
                     Text("Edit")
@@ -121,7 +121,7 @@ fun ProfileScreen(
 
                 Button(
                     onClick = {
-                        navController.navigate(Screen.MainScreen.route)
+                        navController.navigate(Screen.Main.route)
                         sessionViewModel.clearSession()
                         profileViewModel.unloadUserProfile()
                     }

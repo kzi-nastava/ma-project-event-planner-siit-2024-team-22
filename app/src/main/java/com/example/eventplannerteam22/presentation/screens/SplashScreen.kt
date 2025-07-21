@@ -19,8 +19,8 @@ fun SplashScreen(navController: NavController) {
     // Navigate to MainScreen after delay
     LaunchedEffect(Unit) {
         delay(2000) // 2 seconds delay
-        navController.navigate(Screen.MainScreen.route) {
-            popUpTo(Screen.SplashScreen.route) { inclusive = true } // Clear splash screen from back stack
+        navController.navigate(Screen.Main.route) {
+            popUpTo(Screen.Splash.route) { inclusive = true } // Clear splash screen from back stack
         }
     }
 

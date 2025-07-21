@@ -48,8 +48,8 @@ fun RegistrationScreen(
         viewModel.authResults.collect { result ->
             apiResultHandler(
                 onSuccess = {
-                    navController.navigate(Screen.MainScreen.route) {
-                        popUpTo(Screen.RegistrationScreen.route) { inclusive = true }
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Registration.route) { inclusive = true }
                     }
                 },
                 apiResult = result,

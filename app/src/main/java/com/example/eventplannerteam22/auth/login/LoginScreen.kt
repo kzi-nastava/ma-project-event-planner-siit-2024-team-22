@@ -47,8 +47,8 @@ fun LoginScreen(
                     when (result) {
                         is ApiResult.Success -> {
                             sessionViewModel.login(result.data)
-                            navController.navigate(Screen.MainScreen.route) {
-                                popUpTo(Screen.LoginScreen.route) { inclusive = true }
+                            navController.navigate(Screen.Main.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
                             }
                         }
 
