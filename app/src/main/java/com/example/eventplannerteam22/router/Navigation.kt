@@ -230,7 +230,8 @@ fun Navigation() {
                 drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
             ) { paddingValues ->
                 CreateEventType(
-                    paddingValues = paddingValues
+                    paddingValues = paddingValues,
+                    navController = navController
                 )
 
             }
