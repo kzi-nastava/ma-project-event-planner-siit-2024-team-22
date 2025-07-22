@@ -2,8 +2,8 @@ package com.example.eventplannerteam22.auth
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +21,7 @@ fun ValidatingInputTextField(
     errorText: String?
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
-    TextField(
+    OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth(),
         value = value,
