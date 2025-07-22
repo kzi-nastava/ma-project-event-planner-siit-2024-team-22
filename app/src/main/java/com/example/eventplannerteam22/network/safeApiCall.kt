@@ -27,7 +27,5 @@ suspend fun <T> safeApiCall(okHttpClient: OkHttpClient, apiCall: suspend () -> T
         ApiResult.ConnectionError("Connection pool corrupted")
     } catch (e: IOException) {
         ApiResult.ConnectionError(e.message ?: "Network error")
-    } catch (e: Exception) {
-        ApiResult.UnknownError(-1, e.message ?: "Unexpected error")
     }
 }
