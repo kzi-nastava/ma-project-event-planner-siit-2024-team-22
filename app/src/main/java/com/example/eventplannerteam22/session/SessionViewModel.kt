@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.auth0.jwt.JWT
 import com.example.eventplannerteam22.auth.TokenResponse
-import com.example.eventplannerteam22.profile.Authority
+import com.example.eventplannerteam22.profile.domen.Authority
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,6 +1,5 @@
 package com.example.eventplannerteam22.solutions
 
-import com.example.eventplannerteam22.products.Product
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -13,8 +12,10 @@ interface SolutionApi {
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
     ): List<Solution>
+
     @GET("/solutions/{id}")
     suspend fun getSolutionById(@Path("id") id: Int): Solution
+
     @POST("/solutions")
     suspend fun addSolution(@Body solution: Solution)
 }

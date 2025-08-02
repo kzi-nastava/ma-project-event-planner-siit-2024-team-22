@@ -21,16 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.eventplannerteam22.events.Event
-import com.example.eventplannerteam22.events.EventsViewModel
-import com.example.eventplannerteam22.products.Product
-import com.example.eventplannerteam22.products.ProductsViewModel
+import com.example.eventplannerteam22.events.domen.EventListItem
+import com.example.eventplannerteam22.events.presentation.eventlist.EventsViewModel
+import com.example.eventplannerteam22.products.domain.ProductListItem
+import com.example.eventplannerteam22.products.presentation.productlist.ProductsViewModel
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.solutions.Solution
 import com.example.eventplannerteam22.solutions.SolutionsViewModel
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
 @Composable
@@ -66,7 +63,7 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             }
             item {
                 Button(
-                    onClick = { navController.navigate("products_screen") },
+                    onClick = { navController.navigate(Screen.Products.route) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -88,7 +85,7 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
             }
             item {
                 Button(
-                    onClick = { navController.navigate("events_screen") },
+                    onClick = { navController.navigate(Screen.Events.route) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -123,7 +120,7 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
 }
 
 @Composable
-fun ProductCard(product: Product, navController: NavController) {
+fun ProductCard(product: ProductListItem, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,10 +132,10 @@ fun ProductCard(product: Product, navController: NavController) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Category: ${product.category}",
-                style = MaterialTheme.typography.bodyMedium
-            )
+//            Text(
+//                text = "Category: ${product.category}",
+//                style = MaterialTheme.typography.bodyMedium
+//            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Price: ${product.price}", style = MaterialTheme.typography.bodyMedium)
         }
@@ -146,14 +143,7 @@ fun ProductCard(product: Product, navController: NavController) {
 }
 
 @Composable
-fun EventCard(event: Event, navController: NavController) {
-    val formattedDate = try {
-        val dt = OffsetDateTime.parse(event.dateOfEvent).toLocalDateTime()
-        dt.format(DateTimeFormatter.ofPattern("d MMM yyyy, HH:mm", Locale.ENGLISH))
-    } catch (e: Exception) {
-        event.dateOfEvent
-    }
-
+fun EventCard(event: EventListItem, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -165,7 +155,6 @@ fun EventCard(event: Event, navController: NavController) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = event.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = formattedDate, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

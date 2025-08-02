@@ -1,6 +1,6 @@
 package com.example.eventplannerteam22.session
 
-import com.example.eventplannerteam22.profile.Authority
+import com.example.eventplannerteam22.profile.domen.Authority
 
 sealed class UserRole(val label: String) {
     object User : UserRole("User")
