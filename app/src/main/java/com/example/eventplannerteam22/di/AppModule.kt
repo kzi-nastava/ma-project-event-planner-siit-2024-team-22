@@ -3,11 +3,11 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
-import com.example.eventplannerteam22.eventType.EventTypeApi
-import com.example.eventplannerteam22.events.EventApi
+import com.example.eventplannerteam22.eventType.data.api.EventTypeApi
+import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
-import com.example.eventplannerteam22.products.ProductApi
-import com.example.eventplannerteam22.profile.ProfileApi
+import com.example.eventplannerteam22.products.data.api.ProductApi
+import com.example.eventplannerteam22.profile.data.ProfileApi
 import com.example.eventplannerteam22.solutions.DurationAdapter
 import com.example.eventplannerteam22.solutions.LocalDateAdapter
 import com.example.eventplannerteam22.solutions.SolutionApi
