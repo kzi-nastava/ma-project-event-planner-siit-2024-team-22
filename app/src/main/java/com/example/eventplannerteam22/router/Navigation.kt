@@ -29,14 +29,14 @@ import com.example.eventplannerteam22.admin.comments.presentation.AdminCommentMo
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
-import com.example.eventplannerteam22.eventType.presentation.createeventtype.CreateEventType
-import com.example.eventplannerteam22.eventType.presentation.eventtypelist.EventTypesScreen
-import com.example.eventplannerteam22.events.presentation.addevent.AddEventScreen
-import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
-import com.example.eventplannerteam22.events.presentation.eventlist.EventsScreen
+import com.example.eventplannerteam22.budgetPlan.presentation.BudgetPlanScreen
+import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
+import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
+import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
+import com.example.eventplannerteam22.priceList.presentation.PriceListScreen
 import com.example.eventplannerteam22.products.presentation.createproduct.CreateProductScreen
 import com.example.eventplannerteam22.products.presentation.productdetails.ProductDetailScreen
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsScreen
@@ -125,7 +125,9 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                EventsScreen(navController, paddingValues)
+                EventListScreen(
+                    paddingValues = paddingValues
+                )
             }
         }
 
@@ -168,16 +170,6 @@ fun Navigation() {
             if (productId != null) {
                 SolutionDetailScreen(solutionId = productId, navController = navController)
             }
-        }
-        composable("events/{eventId}") { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull()
-            if (productId != null) {
-                EventDetailScreen(eventId = productId, navController = navController)
-            }
-        }
-
-        composable("add_event") {
-            AddEventScreen(navController)
         }
 
         composable("add_solution") {
@@ -250,6 +242,37 @@ fun Navigation() {
                     navController = navController
                 )
 
+            }
+        }
+
+        composable(route = Screen.BudgetPlanScreen.route) { backStackEntry ->
+//            val eventId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull() ?: 0
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = {
+                    DrawerContent(navController, coroutineScope, drawerState)
+                }
+            ) {
+                BudgetPlanScreen(
+                    eventId = 1,
+                    onDetailsClick = { /* Handle details navigation if needed */ },
+//                    modifier = Modifier.padding(paddingValues)
+                )
+            }
+        }
+
+        composable(route = Screen.PriceListScreen.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = {
+                    DrawerContent(navController, coroutineScope, drawerState)
+                }
+            ) { paddingValues ->
+                PriceListScreen(modifier = Modifier.padding(paddingValues))
             }
         }
         composable(route = Screen.AdminModeration.route) {
@@ -367,6 +390,34 @@ fun DrawerContent(
             )
         }
 
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.BudgetPlanScreen.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Event budget") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.home_repair_service_24px),
+                    contentDescription = "Budget generation"
+                )
+            }
+        )
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.PriceListScreen.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Price List") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.event_list_24px),
+                    contentDescription = "Price List"
+                )
+            }
+        )
     }
 }
 

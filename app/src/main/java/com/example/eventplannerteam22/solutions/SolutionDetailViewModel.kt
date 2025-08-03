@@ -2,6 +2,8 @@ package com.example.eventplannerteam22.solutions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eventplannerteam22.solutions.data.SolutionRepository
+import com.example.eventplannerteam22.solutions.domain.Solution
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

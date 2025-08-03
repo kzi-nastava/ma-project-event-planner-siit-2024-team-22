@@ -4,6 +4,7 @@ import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.network.safeApiCall
 import com.example.eventplannerteam22.products.data.api.ProductApi
 import com.example.eventplannerteam22.products.data.model.CreateProductDTO
+import com.example.eventplannerteam22.products.data.model.ProductDTO
 import com.example.eventplannerteam22.products.data.toProduct
 import com.example.eventplannerteam22.products.data.toProductListItem
 import com.example.eventplannerteam22.products.domain.Product
@@ -17,6 +18,10 @@ class ProductRepositoryImpl @Inject constructor(
 ) : ProductRepository {
     override suspend fun getProducts(limit: Int, offset: Int): List<ProductListItem> {
         return productApi.getProducts(limit, offset).map { it.toProductListItem() }
+    }
+
+    override suspend fun getAllProducts(limit: Int, offset: Int): List<Product> {
+        return productApi.getProducts(limit, offset).map { it.toProduct() }
     }
 
     override suspend fun getProduct(id: Int): Product {

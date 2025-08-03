@@ -1,7 +1,11 @@
 package com.example.eventplannerteam22.events.data.model
 
-import com.example.eventplannerteam22.eventType.data.model.EventTypeDTO
+import com.example.eventplannerteam22.eventactivity.data.model.EventActivityDTO
+import com.example.eventplannerteam22.eventtype.data.model.EventTypeDTO
+import com.squareup.moshi.JsonClass
+import java.time.LocalDate
 
+@JsonClass(generateAdapter = true)
 data class EventDTO(
     val id: Int,
     val name: String,
@@ -10,9 +14,7 @@ data class EventDTO(
     val maxCapacity: Int,
     val isPrivate: Boolean,
     val location: String,
-//    val eventDate: Date,
-    val user: UserDTO
-//    val solutions: List<SolutionDTO>
-//    val products: List<ProductDTO>
-//    val eventActivities: List<EventActivityDTO>
+    val eventDate: LocalDate,
+    val user: UserDTO,
+    val eventActivities: List<EventActivityDTO>
 )

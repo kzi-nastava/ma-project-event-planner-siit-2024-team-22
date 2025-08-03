@@ -2,6 +2,7 @@ package com.example.eventplannerteam22.solutions
 
 import android.app.DatePickerDialog
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +15,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.auth0.jwt.JWT
+import com.example.eventplannerteam22.session.SessionViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.*
@@ -21,8 +24,11 @@ import java.util.*
 @Composable
 fun AddSolutionScreen(
     navController: NavController,
-    viewModel: AddSolutionViewModel = hiltViewModel()
+    viewModel: AddSolutionViewModel = hiltViewModel(),
+    sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
+    var session = sessionViewModel.session.collectAsState()
+
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var features by remember { mutableStateOf("") }
@@ -176,9 +182,16 @@ fun AddSolutionScreen(
                 onClick = {
                     scope.launch {
                         viewModel.addSolution(
-                            name, description, features, price, discount,
-                            durationHours, durationMinutes,
-                            startBookingDate.toString(), finishBookingDate.toString()
+                            name,
+                            description,
+                            features,
+                            price,
+                            discount,
+                            durationHours,
+                            durationMinutes,
+                            startBookingDate.toString(),
+                            finishBookingDate.toString(),
+                            JWT.decode(session.value.accessToken).getClaim("userId").asInt()
                         )
                     }
                 },

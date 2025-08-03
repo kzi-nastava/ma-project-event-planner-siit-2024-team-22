@@ -5,15 +5,18 @@ import android.content.SharedPreferences
 import com.example.eventplannerteam22.admin.comments.data.api.AdminCommentApi
 import com.example.eventplannerteam22.admin.comments.domain.AdminComment
 import com.example.eventplannerteam22.auth.AuthApi
-import com.example.eventplannerteam22.eventType.data.api.EventTypeApi
+import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
+import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.events.data.api.EventApi
+import com.example.eventplannerteam22.priceList.data.PriceListApiService
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.comments.data.ProductCommentApi
 import com.example.eventplannerteam22.products.data.api.ProductApi
 import com.example.eventplannerteam22.profile.data.ProfileApi
+import com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryApi
 import com.example.eventplannerteam22.solutions.DurationAdapter
 import com.example.eventplannerteam22.solutions.LocalDateAdapter
-import com.example.eventplannerteam22.solutions.SolutionApi
+import com.example.eventplannerteam22.solutions.data.SolutionApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -105,5 +108,23 @@ object AppModule {
     @Singleton
     fun provideAdminComments(retrofit: Retrofit): AdminCommentApi{
         return retrofit.create(AdminCommentApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSolutionCategoryApi(retrofit: Retrofit): SolutionCategoryApi {
+        return retrofit.create(SolutionCategoryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBudgetPlanApi(retrofit: Retrofit): BudgetPlanApiService {
+        return retrofit.create(BudgetPlanApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePriceListApi(retrofit: Retrofit): PriceListApiService {
+        return retrofit.create(PriceListApiService::class.java)
     }
 }

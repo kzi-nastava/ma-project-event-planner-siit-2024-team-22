@@ -22,23 +22,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.events.domen.EventListItem
-import com.example.eventplannerteam22.events.presentation.eventlist.EventsViewModel
 import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsViewModel
 import com.example.eventplannerteam22.router.Screen
-import com.example.eventplannerteam22.solutions.Solution
+import com.example.eventplannerteam22.solutions.domain.Solution
 import com.example.eventplannerteam22.solutions.SolutionsViewModel
 
 
 @Composable
 fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
     val productsViewModel: ProductsViewModel = hiltViewModel()
-    val eventsViewModel: EventsViewModel = hiltViewModel()
+//    val eventsViewModel: EventsViewModel = hiltViewModel()
     val solutionsViewModel: SolutionsViewModel = hiltViewModel()
 
 
     val products = productsViewModel.products.take(3)
-    val events = eventsViewModel.events.take(3)
+//    val events = eventsViewModel.events.take(3)
     val solutions = solutionsViewModel.solutions.take(3)
 
     Box(
@@ -72,17 +71,17 @@ fun MainScreen(navController: NavController, paddingValues: PaddingValues) {
                 }
             }
 
-            item {
-
-                Text(
-                    "Events",
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            items(events) { event ->
-                EventCard(event = event, navController = navController)
-            }
+//            item {
+//
+//                Text(
+//                    "Events",
+//                    style = MaterialTheme.typography.labelMedium,
+//                    modifier = Modifier.padding(16.dp)
+//                )
+//            }
+//            items(events) { event ->
+//                EventCard(event = event, navController = navController)
+//            }
             item {
                 Button(
                     onClick = { navController.navigate(Screen.Events.route) },
@@ -173,7 +172,7 @@ fun SolutionCard(solution: Solution, navController: NavController) {
             Text(text = solution.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Category: ${solution.solutionCategory.name}",
+                text = "Category: ${solution.category.name}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

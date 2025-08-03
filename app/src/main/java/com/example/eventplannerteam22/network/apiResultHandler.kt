@@ -20,7 +20,7 @@ fun <T> apiResultHandler(
 ) {
     when (apiResult) {
         is ApiResult.Success -> {
-            Log.w(logTag, "Successful login: ${apiResult.data}")
+            Log.w(logTag, "Success: ${apiResult.data}")
             onSuccess()
         }
 
