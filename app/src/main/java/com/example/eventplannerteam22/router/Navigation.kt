@@ -27,11 +27,9 @@ import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.budgetPlan.presentation.BudgetPlanScreen
-import com.example.eventplannerteam22.eventType.presentation.createeventtype.CreateEventType
-import com.example.eventplannerteam22.eventType.presentation.eventtypelist.EventTypesScreen
-import com.example.eventplannerteam22.events.presentation.addevent.AddEventScreen
-import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
-import com.example.eventplannerteam22.events.presentation.eventlist.EventsScreen
+import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
+import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
+import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
@@ -123,7 +121,9 @@ fun Navigation() {
                     DrawerContent(navController, coroutineScope, drawerState)
                 }
             ) { paddingValues ->
-                EventsScreen(navController, paddingValues)
+                EventListScreen(
+                    paddingValues = paddingValues
+                )
             }
         }
 
@@ -166,16 +166,6 @@ fun Navigation() {
             if (productId != null) {
                 SolutionDetailScreen(solutionId = productId, navController = navController)
             }
-        }
-        composable("events/{eventId}") { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull()
-            if (productId != null) {
-                EventDetailScreen(eventId = productId, navController = navController)
-            }
-        }
-
-        composable("add_event") {
-            AddEventScreen(navController)
         }
 
         composable("add_solution") {

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
 import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
-import com.example.eventplannerteam22.eventType.data.api.EventTypeApi
+import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
 import com.example.eventplannerteam22.products.BigDecimalAdapter
