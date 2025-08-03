@@ -30,10 +30,10 @@ class ProductCommentViewModel @Inject constructor(
         }
     }
 
-    fun addComment(userId: Int, productId: Int, text: String) {
+    fun addComment(token: String, userId: Int, productId: Int, text: String) {
         viewModelScope.launch {
             try {
-                repository.addComment(userId, productId, text)
+                repository.addComment(token, userId, productId, text)
                 loadComments(productId)
             } catch (e: Exception) {
                 _error.value = e.message

@@ -10,7 +10,7 @@ class ProductCommentRepository @Inject constructor(
         return api.getComments(productId)
     }
 
-    suspend fun addComment(userId: Int, productId: Int, text: String): ProductComment {
-        return api.addComment(CreateProductCommentRequest(userId, productId, text))
+    suspend fun addComment(token: String, userId: Int, productId: Int, text: String): ProductComment {
+        return api.addComment("Bearer $token", CreateProductCommentRequest(userId, productId, text))
     }
 }

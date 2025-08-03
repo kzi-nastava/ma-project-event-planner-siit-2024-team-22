@@ -91,8 +91,8 @@ fun ProductCommentSection(
 
             Button(
                 onClick = {
-                    if (input.isNotBlank()) {
-                        viewModel.addComment(session.userId!!, productId, input)
+                    if (input.isNotBlank() && session.accessToken != null) {
+                        viewModel.addComment(session.accessToken, session.userId!!, productId, input)
                         input = ""
                     }
                 },
