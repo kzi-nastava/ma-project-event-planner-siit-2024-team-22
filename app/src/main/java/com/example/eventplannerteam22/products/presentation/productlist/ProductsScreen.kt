@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
+import com.example.eventplannerteam22.session.UserRole
 
 @Composable
 fun ProductsScreen(
