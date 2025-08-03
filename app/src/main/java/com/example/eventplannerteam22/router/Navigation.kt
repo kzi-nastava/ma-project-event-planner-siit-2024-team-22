@@ -150,8 +150,13 @@ fun Navigation() {
         }
         composable("products/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
             if (productId != null) {
-                ProductDetailScreen(productId = productId, navController = navController)
+                ProductDetailScreen(
+                    productId = productId,
+                    navController = navController,
+                    sessionViewModel = sessionViewModel
+                )
             }
         }
         composable("solutions/{solutionId}") { backStackEntry ->
