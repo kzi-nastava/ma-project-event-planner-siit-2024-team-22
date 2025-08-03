@@ -7,7 +7,7 @@ data class ProductDTO(
     val name: String,
     val description: String,
     val price: BigDecimal,
-    val discount: BigDecimal?,
+    val discount: BigDecimal? = BigDecimal.ZERO,
     val imageSource: String?,
     val isPrivate: Boolean,
     val isDeleted: Boolean,

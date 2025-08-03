@@ -20,6 +20,20 @@ class SessionViewModel @Inject constructor(
     private val _session = MutableStateFlow<Session>(Session())
     var session = _session.asStateFlow()
 
+    init {
+        loadPersistedSession()
+    }
+
+    private fun loadPersistedSession() {
+        _session.value = Session(
+            accessToken = sessionRepository.getAccessToken(),
+            refreshToken = sessionRepository.getRefreshToken(),
+            expiresIn = sessionRepository.getExpiresIn(),
+            loggedIn = sessionRepository.getLoggedIn(),
+            userId = sessionRepository.getUserId().takeIf { it != -1 }
+        )
+    }
+
     fun updateState(
         accessToken: String? = null,
         refreshToken: String? = null,
@@ -37,15 +51,16 @@ class SessionViewModel @Inject constructor(
     }
 
     fun login(tokenResponse: TokenResponse) {
-        val role = UserRole.parse(
-            JWT.decode(tokenResponse.accessToken)
-                .getClaim("role")
-                .asArray<Authority>(
-                    Authority::class.java
-                )[0]
-        )
-        val id = JWT.decode(tokenResponse.accessToken).getClaim("userId").asInt()
-        Log.i("LOGIN", "User logged in, id=$id, role=$role")
+        val decoded = JWT.decode(tokenResponse.accessToken)
+        val role = UserRole.parse(decoded.getClaim("role").asArray(Authority::class.java)[0])
+        val userId = decoded.getClaim("userId").asInt()
+
+        sessionRepository.setAccessToken(tokenResponse.accessToken)
+            .setRefreshToken(tokenResponse.refreshToken)
+            .setExpiresIn(tokenResponse.expiresIn)
+            .setUserId(userId)
+            .setLoggedIn()
+
         _session.update {
             it.copy(
                 accessToken = tokenResponse.accessToken,
@@ -53,13 +68,14 @@ class SessionViewModel @Inject constructor(
                 expiresIn = tokenResponse.expiresIn,
                 loggedIn = true,
                 userRole = role,
-                userId = id
+                userId = userId
             )
         }
         Log.i(logTag, session.value.toString())
     }
 
     fun clearSession() {
+        sessionRepository.clearSession()
         _session.update {
             it.copy(
                 accessToken = "",

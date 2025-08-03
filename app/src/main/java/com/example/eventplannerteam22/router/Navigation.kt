@@ -35,6 +35,7 @@ import com.example.eventplannerteam22.events.presentation.eventlist.EventsScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
+import com.example.eventplannerteam22.priceList.presentation.PriceListScreen
 import com.example.eventplannerteam22.products.presentation.createproduct.CreateProductScreen
 import com.example.eventplannerteam22.products.presentation.productdetails.ProductDetailScreen
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsScreen
@@ -267,6 +268,19 @@ fun Navigation() {
                 )
             }
         }
+
+        composable(route = Screen.PriceListScreen.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = {
+                    DrawerContent(navController, coroutineScope, drawerState)
+                }
+            ) { paddingValues ->
+                PriceListScreen(modifier = Modifier.padding(paddingValues))
+            }
+        }
     }
 }
 
@@ -366,6 +380,20 @@ fun DrawerContent(
                 Icon(
                     painter = painterResource(R.drawable.home_repair_service_24px),
                     contentDescription = "Budget generation"
+                )
+            }
+        )
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.PriceListScreen.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Price List") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.event_list_24px),
+                    contentDescription = "Price List"
                 )
             }
         )
