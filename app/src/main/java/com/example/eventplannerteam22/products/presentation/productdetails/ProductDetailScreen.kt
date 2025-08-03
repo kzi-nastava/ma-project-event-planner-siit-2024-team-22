@@ -24,12 +24,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
+import com.example.eventplannerteam22.products.comments.presentation.ProductCommentSection
+import com.example.eventplannerteam22.session.SessionViewModel
 
+
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 
 @Composable
 fun ProductDetailScreen(
     productId: Int,
     navController: NavController,
+    sessionViewModel: SessionViewModel,
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val product by viewModel.product.collectAsState()
@@ -39,12 +45,10 @@ fun ProductDetailScreen(
         viewModel.loadProduct(productId)
     }
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.error),
-        contentAlignment = Alignment.Center
+            .background(MaterialTheme.colorScheme.background)
     ) {
         if (errorMessage != null) {
             Text(text = errorMessage ?: "Unknown error", color = MaterialTheme.colorScheme.error)
@@ -52,8 +56,9 @@ fun ProductDetailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -63,11 +68,18 @@ fun ProductDetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = product!!.name, style = MaterialTheme.typography.headlineSmall)
                 Spacer(modifier = Modifier.height(8.dp))
-//                Text(text = "Category: ${product!!.category}", style = MaterialTheme.typography.bodyMedium)
                 Text(text = "Price: ${product!!.price}", style = MaterialTheme.typography.bodyMedium)
                 Text(text = "Discount: ${product!!.discount}", style = MaterialTheme.typography.bodyMedium)
                 Text(text = product!!.description, style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(16.dp))
+
+                ProductCommentSection(
+                    productId = productId,
+                    sessionViewModel = sessionViewModel
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
                     onClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxWidth()
