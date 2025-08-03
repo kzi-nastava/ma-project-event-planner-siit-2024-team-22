@@ -33,7 +33,7 @@ class SessionRepositorySharedPreferencesImpl @Inject constructor(
     override fun getRefreshToken(): String {
         return sharedPreferences
             .getString(SharedPreferencesKey.AccessToken.key, "")
-            .toString()
+            ?: ""
     }
 
     override fun setExpiresIn(expiresIn: Long): SessionRepository {
@@ -69,5 +69,14 @@ class SessionRepositorySharedPreferencesImpl @Inject constructor(
             }
             apply()
         }
+    }
+
+    override fun setUserId(userId: Int): SessionRepository {
+        sharedPreferences.edit().putInt(SharedPreferencesKey.UserId.key, userId).apply()
+        return this
+    }
+
+    override fun getUserId(): Int {
+        return sharedPreferences.getInt(SharedPreferencesKey.UserId.key, -1)
     }
 }

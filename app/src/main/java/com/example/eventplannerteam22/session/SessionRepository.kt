@@ -14,4 +14,7 @@ interface SessionRepository {
     fun getLoggedIn(): Boolean
 
     fun clearSession()
+
+    fun getUserId(): Int
+    fun setUserId(userId: Int): SessionRepository
 }

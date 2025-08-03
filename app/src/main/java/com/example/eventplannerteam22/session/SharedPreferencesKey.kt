@@ -7,6 +7,7 @@ sealed class SharedPreferencesKey(
     object RefreshToken : SharedPreferencesKey("refresh-token")
     object ExpiresIn : SharedPreferencesKey("expires-in")
     object LoggedIn : SharedPreferencesKey("logged-in")
+    object UserId : SharedPreferencesKey("user-id")
 
     companion object {
         val values: List<SharedPreferencesKey> by lazy {
