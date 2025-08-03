@@ -14,4 +14,5 @@ sealed class Screen(val route: String) {
     object EventTypes : Screen("event-type-screen")
     data class EditEventType(val id: Int) : Screen("event-type/${id}")
     object CreateEventType : Screen("create-event-type")
+    object BudgetPlanScreen : Screen("budget-plan")
 }

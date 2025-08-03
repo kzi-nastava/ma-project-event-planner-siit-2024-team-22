@@ -26,7 +26,7 @@ import com.example.eventplannerteam22.events.presentation.eventlist.EventsViewMo
 import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsViewModel
 import com.example.eventplannerteam22.router.Screen
-import com.example.eventplannerteam22.solutions.Solution
+import com.example.eventplannerteam22.solutions.domain.Solution
 import com.example.eventplannerteam22.solutions.SolutionsViewModel
 
 
@@ -173,7 +173,7 @@ fun SolutionCard(solution: Solution, navController: NavController) {
             Text(text = solution.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Category: ${solution.solutionCategory.name}",
+                text = "Category: ${solution.category.name}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

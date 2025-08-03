@@ -18,6 +18,12 @@ interface ProductApi {
     @POST("/products")
     suspend fun addProduct(@Body product: Product)
 
+    @POST("products/buy/{eventId}/{productId}")
+    suspend fun buyProduct(
+        @Path("eventId") eventId: Int,
+        @Path("productId") productId: Int
+    )
+
     @GET("/products/{id}")
     suspend fun getProductById(@Path("id") id: Int): ProductDTO
 }

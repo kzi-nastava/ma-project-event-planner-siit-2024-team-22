@@ -1,9 +1,14 @@
 package com.example.eventplannerteam22.solutions
 
 import androidx.lifecycle.ViewModel
+import com.example.eventplannerteam22.solutionCategory.domain.SolutionCategory
+import com.example.eventplannerteam22.solutions.data.SolutionRepository
+import com.example.eventplannerteam22.solutions.domain.CreateSolutionDTO
+import com.example.eventplannerteam22.solutions.domain.ServiceBookingConfirmType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,14 +28,14 @@ class AddSolutionViewModel @Inject constructor(
         durationHours: String,
         durationMinutes: String,
         dateStartBooking: String,
-        dateFinishBooking: String
+        dateFinishBooking: String,
+        createdBy: Int
     ) {
         try {
             repository.addSolution(
-                Solution(
-                    id = 0,
+                CreateSolutionDTO(
                     name = name,
-                    solutionCategory = SolutionCategory(1, "IT Services", "ACCEPTED"),
+                    category = SolutionCategory(1, null, null),
                     description = description,
                     features = features,
                     price = price.toDouble(),
@@ -38,10 +43,11 @@ class AddSolutionViewModel @Inject constructor(
                     imgUrl = "",
                     visible = true,
                     duration = parseDuration(durationHours, durationMinutes),
-                    dateStartBooking = java.time.LocalDate.parse(dateStartBooking),
-                    dateFinishBooking = java.time.LocalDate.parse(dateFinishBooking),
-                    bookingConfirmType = "Manual",
-                    isDeleted = false
+                    dateStartBooking = LocalDate.parse(dateStartBooking),
+                    dateFinishBooking = LocalDate.parse(dateFinishBooking),
+                    bookingConfirmType = ServiceBookingConfirmType.Manual,
+                    isDeleted = false,
+                    createdBy = createdBy
                 )
             )
             _addSolutionResult.emit(AddSolutionResult.Success)
