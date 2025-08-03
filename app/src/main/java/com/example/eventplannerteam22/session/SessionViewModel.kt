@@ -44,13 +44,15 @@ class SessionViewModel @Inject constructor(
                     Authority::class.java
                 )[0]
         )
+        val id = JWT.decode(tokenResponse.accessToken).getClaim("userId").asInt()
         _session.update {
             it.copy(
                 accessToken = tokenResponse.accessToken,
                 refreshToken = tokenResponse.refreshToken,
                 expiresIn = tokenResponse.expiresIn,
                 loggedIn = true,
-                userRole = role
+                userRole = role,
+                userId = id
             )
         }
         Log.i(logTag, session.value.toString())
@@ -63,7 +65,8 @@ class SessionViewModel @Inject constructor(
                 refreshToken = "",
                 expiresIn = 0L,
                 loggedIn = false,
-                userRole = null
+                userRole = null,
+                userId = null
             )
         }
     }

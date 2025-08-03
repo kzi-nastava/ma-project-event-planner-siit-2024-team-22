@@ -1,16 +1,11 @@
 package com.example.eventplannerteam22.products.data.model
 
-import java.math.BigDecimal
-
-data class ProductDTO(
-    val id: Int,
+data class CreateProductDTO(
     val name: String,
     val description: String,
-    val price: BigDecimal,
-    val discount: BigDecimal?,
-    val imageSource: String?,
+    val price: Double,
+    val discount: Double,
     val isPrivate: Boolean,
-    val isDeleted: Boolean,
     val userId: Int,
     val productCategoryId: Int
 )

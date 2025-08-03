@@ -7,7 +7,8 @@ data class Session(
     val refreshToken: String = "",
     val expiresIn: Long = 0L,
     val loggedIn: Boolean = false,
-    val userRole: UserRole? = null
+    val userRole: UserRole? = null,
+    val userId: Int? = null
 ) {
     override fun toString(): String {
         return buildString {
