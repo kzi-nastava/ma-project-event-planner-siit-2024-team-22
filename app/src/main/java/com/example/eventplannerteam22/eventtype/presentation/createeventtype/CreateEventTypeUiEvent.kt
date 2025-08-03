@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.eventType.presentation.createeventtype
+package com.example.eventplannerteam22.eventtype.presentation.createeventtype
 
 sealed class CreateEventTypeUiEvent {
     data class NameChanged(val value: String) : CreateEventTypeUiEvent()

@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.eventType.presentation.eventtypelist
+package com.example.eventplannerteam22.eventtype.presentation.eventtypelist
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -90,11 +90,11 @@ fun EventTypesScreen(
 //                                text = eventType.description,
 //                                style = MaterialTheme.typography.bodyMedium
 //                            )
-//                            Spacer(modifier = Modifier.height(8.dp))
-//                            Text(
-//                                text = if (eventType.active) "Status: Visible" else "Status: Hidden",
-//                                style = MaterialTheme.typography.bodyMedium
-//                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = if (eventType.active) "Status: Visible" else "Status: Hidden",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
 //                            Spacer(modifier = Modifier.height(8.dp))
 //                            Switch(
 //                                checked = eventType.active,
@@ -102,34 +102,34 @@ fun EventTypesScreen(
 //                                    // TODO: add the hide action logic
 //                                }
 //                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Recommended solution categories:",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-//                            LazyRow {
-//                                items(eventType.solutionCategories) { solutionCategory ->
-//                                    Card(
-//                                        modifier = Modifier.padding(end = 8.dp),
-//                                        colors = CardDefaults.cardColors(
-//                                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-//                                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-//                                        )
-//                                    ) {
-//                                        Box(
-//                                            modifier = Modifier
-//                                                .fillMaxSize()
-//                                                .padding(horizontal = 12.dp, vertical = 6.dp),
-//                                            contentAlignment = Alignment.Center
-//                                        ) {
-//                                            Text(
-//                                                text = solutionCategory.name,
-//                                                style = MaterialTheme.typography.bodySmall
-//                                            )
-//                                        }
-//                                    }
-//                                }
-//                            }
+//                            Spacer(modifier = Modifier.height(8.dp))
+//                            Text(
+//                                text = "Recommended solution categories:",
+//                                style = MaterialTheme.typography.bodyMedium
+//                            )
+////                            LazyRow {
+////                                items(eventType.solutionCategories) { solutionCategory ->
+////                                    Card(
+////                                        modifier = Modifier.padding(end = 8.dp),
+////                                        colors = CardDefaults.cardColors(
+////                                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+////                                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+////                                        )
+////                                    ) {
+////                                        Box(
+////                                            modifier = Modifier
+////                                                .fillMaxSize()
+////                                                .padding(horizontal = 12.dp, vertical = 6.dp),
+////                                            contentAlignment = Alignment.Center
+////                                        ) {
+////                                            Text(
+////                                                text = solutionCategory.name,
+////                                                style = MaterialTheme.typography.bodySmall
+////                                            )
+////                                        }
+////                                    }
+////                                }
+////                            }
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.eventType.presentation.createeventtype
+package com.example.eventplannerteam22.eventtype.presentation.createeventtype
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

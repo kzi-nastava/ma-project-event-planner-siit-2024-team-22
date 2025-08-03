@@ -1,11 +1,11 @@
-package com.example.eventplannerteam22.eventType.presentation.eventtypelist
+package com.example.eventplannerteam22.eventtype.presentation.eventtypelist
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.eventplannerteam22.eventType.data.repository.EventTypeRepository
-import com.example.eventplannerteam22.eventType.domen.EventTypeListItem
+import com.example.eventplannerteam22.eventtype.data.repository.EventTypeRepository
+import com.example.eventplannerteam22.eventtype.domen.EventTypeListItem
 import com.example.eventplannerteam22.network.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
