@@ -12,6 +12,8 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.eventplannerteam22.R
+import com.example.eventplannerteam22.admin.comments.presentation.AdminCommentModerationScreen
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
@@ -40,6 +43,7 @@ import com.example.eventplannerteam22.products.presentation.productlist.Products
 import com.example.eventplannerteam22.profile.presentation.editprofile.EditProfileScreen
 import com.example.eventplannerteam22.profile.presentation.profile.ProfileScreen
 import com.example.eventplannerteam22.session.SessionViewModel
+import com.example.eventplannerteam22.session.UserRole
 import com.example.eventplannerteam22.solutions.AddSolutionScreen
 import com.example.eventplannerteam22.solutions.SolutionDetailScreen
 import com.example.eventplannerteam22.solutions.SolutionsScreen
@@ -271,6 +275,13 @@ fun Navigation() {
                 PriceListScreen(modifier = Modifier.padding(paddingValues))
             }
         }
+        composable(route = Screen.AdminModeration.route) {
+            AdminCommentModerationScreen(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope
+            )
+        }
     }
 }
 
@@ -280,7 +291,9 @@ fun DrawerContent(
     coroutineScope: CoroutineScope,
     drawerState: DrawerState,
     sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+
 ) {
+    val session by sessionViewModel.session.collectAsState()
     Column {
         Text(
             text = "Event Planner",
@@ -359,6 +372,24 @@ fun DrawerContent(
                 )
             }
         )
+        if (session.userRole == UserRole.Admin) {
+            HorizontalDivider()
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate(Screen.AdminModeration.route)
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Moderate Comments") },
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.sample_image),
+                        contentDescription = "Moderate Comments"
+                    )
+                }
+            )
+        }
+
         NavigationDrawerItem(
             onClick = {
                 navController.navigate(Screen.BudgetPlanScreen.route)

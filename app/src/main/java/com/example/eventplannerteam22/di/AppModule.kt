@@ -2,6 +2,8 @@ package com.example.eventplannerteam22.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.eventplannerteam22.admin.comments.data.api.AdminCommentApi
+import com.example.eventplannerteam22.admin.comments.domain.AdminComment
 import com.example.eventplannerteam22.auth.AuthApi
 import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
@@ -100,6 +102,12 @@ object AppModule {
     @Singleton
     fun provideEventTypeApi(retrofit: Retrofit): EventTypeApi {
         return retrofit.create(EventTypeApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAdminComments(retrofit: Retrofit): AdminCommentApi{
+        return retrofit.create(AdminCommentApi::class.java)
     }
 
     @Provides
