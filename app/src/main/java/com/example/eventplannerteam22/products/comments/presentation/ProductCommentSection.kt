@@ -78,27 +78,61 @@ fun ProductCommentSection(
 
 
         if (session.loggedIn && session.userId != null) {
-            BasicTextField(
-                value = input,
-                onValueChange = { input = it },
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = MaterialTheme.shapes.medium
+                    )
                     .padding(8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Button(
-                onClick = {
-                    if (input.isNotBlank() && session.accessToken != null) {
-                        viewModel.addComment(session.accessToken, session.userId!!, productId, input)
-                        input = ""
-                    }
-                },
-                modifier = Modifier.align(Alignment.End)
             ) {
-                Text("Add Comment")
+                BasicTextField(
+                    value = input,
+                    onValueChange = { input = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = MaterialTheme.colorScheme.background,
+                            shape = MaterialTheme.shapes.small
+                        )
+                        .padding(12.dp),
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    decorationBox = { innerTextField ->
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = MaterialTheme.colorScheme.background,
+                                    shape = MaterialTheme.shapes.small
+                                )
+                                .padding(8.dp)
+                        ) {
+                            if (input.isBlank()) {
+                                Text(
+                                    text = "Enter your comment...",
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        if (input.isNotBlank() && session.accessToken != null) {
+                            viewModel.addComment(session.accessToken, session.userId!!, productId, input)
+                            input = ""
+                        }
+                    },
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Add Comment")
+                }
             }
         } else {
             Text(
