@@ -45,6 +45,7 @@ class SessionViewModel @Inject constructor(
                 )[0]
         )
         val id = JWT.decode(tokenResponse.accessToken).getClaim("userId").asInt()
+        Log.i("LOGIN", "User logged in, id=$id, role=$role")
         _session.update {
             it.copy(
                 accessToken = tokenResponse.accessToken,

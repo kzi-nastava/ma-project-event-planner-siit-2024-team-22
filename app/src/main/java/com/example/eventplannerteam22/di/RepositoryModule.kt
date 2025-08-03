@@ -4,6 +4,8 @@ import com.example.eventplannerteam22.auth.AuthRepository
 import com.example.eventplannerteam22.auth.AuthRepositoryImpl
 import com.example.eventplannerteam22.eventtype.data.repository.EventTypeRepository
 import com.example.eventplannerteam22.eventtype.data.repository.EventTypeRepositoryImpl
+import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanRepository
+import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanRepositoryImpl
 import com.example.eventplannerteam22.events.data.repository.EventRepository
 import com.example.eventplannerteam22.events.data.repository.EventRepositoryImpl
 import com.example.eventplannerteam22.products.data.repository.ProductRepository
@@ -38,4 +40,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindProductRepository(impl: ProductRepositoryImpl): ProductRepository
+
+    @Binds
+    abstract fun bindBudgetPlanRepository(impl: BudgetPlanRepositoryImpl): BudgetPlanRepository
 }

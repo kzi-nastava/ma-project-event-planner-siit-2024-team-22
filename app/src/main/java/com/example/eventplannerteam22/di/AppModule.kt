@@ -3,14 +3,17 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
+import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
+import com.example.eventplannerteam22.products.comments.data.ProductCommentApi
 import com.example.eventplannerteam22.products.data.api.ProductApi
 import com.example.eventplannerteam22.profile.data.ProfileApi
+import com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryApi
 import com.example.eventplannerteam22.solutions.DurationAdapter
 import com.example.eventplannerteam22.solutions.LocalDateAdapter
-import com.example.eventplannerteam22.solutions.SolutionApi
+import com.example.eventplannerteam22.solutions.data.SolutionApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -74,6 +77,11 @@ object AppModule {
     fun provideProductApi(retrofit: Retrofit): ProductApi {
         return retrofit.create(ProductApi::class.java)
     }
+    @Provides
+    @Singleton
+    fun provideProductCommentApi(retrofit: Retrofit): ProductCommentApi {
+        return retrofit.create(ProductCommentApi::class.java)
+    }
 
     @Provides
     @Singleton
@@ -91,5 +99,17 @@ object AppModule {
     @Singleton
     fun provideEventTypeApi(retrofit: Retrofit): EventTypeApi {
         return retrofit.create(EventTypeApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSolutionCategoryApi(retrofit: Retrofit): SolutionCategoryApi {
+        return retrofit.create(SolutionCategoryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBudgetPlanApi(retrofit: Retrofit): BudgetPlanApiService {
+        return retrofit.create(BudgetPlanApiService::class.java)
     }
 }

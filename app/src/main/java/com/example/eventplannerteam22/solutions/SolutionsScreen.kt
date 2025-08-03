@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.session.SessionViewModel
 import com.example.eventplannerteam22.session.UserRole
+import com.example.eventplannerteam22.solutions.domain.Solution
 
 @Composable
 fun SolutionsScreen(
@@ -110,7 +111,7 @@ fun SolutionCard(
             Text(text = solution.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Category type: ${solution.solutionCategory.name}",
+                text = "Category type: ${solution.category.name}",
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(8.dp))

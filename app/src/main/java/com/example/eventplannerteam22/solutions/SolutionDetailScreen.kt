@@ -74,7 +74,7 @@ fun SolutionDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Category: ${solution!!.solutionCategory.name}",
+                    text = "Category: ${solution!!.category.name}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
