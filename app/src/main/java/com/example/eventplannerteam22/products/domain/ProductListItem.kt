@@ -6,6 +6,6 @@ data class ProductListItem(
     val id: Int,
     val name: String,
     val price: BigDecimal,
-    val discount: BigDecimal,
+    val discount: BigDecimal?,
     val isPrivate: Boolean
 )

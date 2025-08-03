@@ -1,7 +1,7 @@
 package com.example.eventplannerteam22.products.data.api
 
+import com.example.eventplannerteam22.products.data.model.CreateProductDTO
 import com.example.eventplannerteam22.products.data.model.ProductDTO
-import com.example.eventplannerteam22.products.domain.Product
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -16,7 +16,7 @@ interface ProductApi {
     ): List<ProductDTO>
 
     @POST("/products")
-    suspend fun addProduct(@Body product: Product)
+    suspend fun createProduct(@Body dto: CreateProductDTO)
 
     @GET("/products/{id}")
     suspend fun getProductById(@Path("id") id: Int): ProductDTO

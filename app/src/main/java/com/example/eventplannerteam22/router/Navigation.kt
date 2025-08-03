@@ -34,7 +34,7 @@ import com.example.eventplannerteam22.events.presentation.eventlist.EventsScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
-import com.example.eventplannerteam22.products.presentation.createproduct.AddProductScreen
+import com.example.eventplannerteam22.products.presentation.createproduct.CreateProductScreen
 import com.example.eventplannerteam22.products.presentation.productdetails.ProductDetailScreen
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsScreen
 import com.example.eventplannerteam22.profile.presentation.editprofile.EditProfileScreen
@@ -138,8 +138,15 @@ fun Navigation() {
             }
         }
 
-        composable(route = "add_product") {
-            AddProductScreen(navController)
+        composable(route = Screen.CreateProduct.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                CreateProductScreen(paddingValues)
+            }
         }
         composable("products/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
