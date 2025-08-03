@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.products.domain.ProductListItem
+import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
-import com.example.eventplannerteam22.session.UserRole
 
 @Composable
 fun ProductsScreen(
@@ -80,15 +80,15 @@ fun ProductsScreen(
                 }
             }
         }
-        if (session.value.loggedIn && session.value.userRole == UserRole.Supplier)
-            FloatingActionButton(
-                onClick = { navController.navigate("add_product") },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Product")
-            }
+//        if (session.value.loggedIn && session.value.userRole == UserRole.Supplier)
+        FloatingActionButton(
+            onClick = { navController.navigate(Screen.CreateProduct.route) },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add Product")
+        }
     }
 }
 
