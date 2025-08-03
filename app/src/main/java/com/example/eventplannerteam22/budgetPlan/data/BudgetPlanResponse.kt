@@ -1,5 +1,5 @@
 // data/api/model/BudgetPlanResponse.kt
-package com.example.eventplannerteam22.budgetPlan.presentation.data
+package com.example.eventplannerteam22.budgetPlan.data
 
 import com.example.eventplannerteam22.budgetPlan.presentation.model.SkebobEntry
 import java.math.BigDecimal

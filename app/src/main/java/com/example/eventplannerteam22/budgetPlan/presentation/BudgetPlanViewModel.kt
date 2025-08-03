@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eventplannerteam22.budgetPlan.presentation.data.BudgetPlanRepository
+import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanRepository
 import com.example.eventplannerteam22.budgetPlan.presentation.model.BudgetPlanItemUi
 import com.example.eventplannerteam22.budgetPlan.presentation.model.BudgetPlanState
 import com.example.eventplannerteam22.products.data.repository.ProductRepository

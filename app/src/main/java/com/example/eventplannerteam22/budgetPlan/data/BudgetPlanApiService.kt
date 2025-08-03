@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.budgetPlan.presentation.data
+package com.example.eventplannerteam22.budgetPlan.data
 
 import retrofit2.http.*
 
