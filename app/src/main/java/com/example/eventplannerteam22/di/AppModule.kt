@@ -3,7 +3,7 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.auth.AuthApi
-import com.example.eventplannerteam22.eventType.data.api.EventTypeApi
+import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.data.api.ProductApi

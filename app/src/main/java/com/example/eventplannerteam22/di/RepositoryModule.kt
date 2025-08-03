@@ -2,8 +2,8 @@ package com.example.eventplannerteam22.di
 
 import com.example.eventplannerteam22.auth.AuthRepository
 import com.example.eventplannerteam22.auth.AuthRepositoryImpl
-import com.example.eventplannerteam22.eventType.data.repository.EventTypeRepository
-import com.example.eventplannerteam22.eventType.data.repository.EventTypeRepositoryImpl
+import com.example.eventplannerteam22.eventtype.data.repository.EventTypeRepository
+import com.example.eventplannerteam22.eventtype.data.repository.EventTypeRepositoryImpl
 import com.example.eventplannerteam22.events.data.repository.EventRepository
 import com.example.eventplannerteam22.events.data.repository.EventRepositoryImpl
 import com.example.eventplannerteam22.products.data.repository.ProductRepository
