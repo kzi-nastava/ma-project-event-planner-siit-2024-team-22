@@ -14,8 +14,8 @@ interface ProductCategoryApi {
     suspend fun getProductCategoryById(@Path("id") id: Int): ProductCategory
     @POST("/product-categories")
     suspend fun addProductCategory(@Body solution: ProductCategory)
-    @PUT("/product-categories")
-    suspend fun updateProductCategory(@Body newSolutionCategory: ProductCategory)
-    @DELETE("/product-categories")
+    @PUT("/product-categories/{id}")
+    suspend fun updateProductCategory(@Body newSolutionCategory: ProductCategory, @Path("id") id: Int)
+    @DELETE("/product-categories/{id}")
     suspend fun deleteProductCategory(@Path("id") id: Int)
 }

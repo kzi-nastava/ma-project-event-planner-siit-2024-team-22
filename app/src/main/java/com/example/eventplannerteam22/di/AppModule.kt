@@ -5,6 +5,10 @@ import android.content.SharedPreferences
 import com.example.eventplannerteam22.admin.comments.data.api.AdminCommentApi
 import com.example.eventplannerteam22.auth.AuthApi
 import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
+import com.example.eventplannerteam22.chat.data.ChatApi
+import com.example.eventplannerteam22.chat.data.ChatRepository
+import com.example.eventplannerteam22.chat.data.ChatWebSocketService
+import com.example.eventplannerteam22.chat.utils.UUIDAdapter
 import com.example.eventplannerteam22.eventactivity.data.model.LocalTimeAdapter
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
@@ -15,6 +19,7 @@ import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.comments.data.ProductCommentApi
 import com.example.eventplannerteam22.products.data.api.ProductApi
 import com.example.eventplannerteam22.profile.data.ProfileApi
+import com.example.eventplannerteam22.session.SessionRepository
 import com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryApi
 import com.example.eventplannerteam22.solutions.DurationAdapter
 import com.example.eventplannerteam22.solutions.LocalDateAdapter
@@ -28,9 +33,24 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
+
+object UnauthenticatedPaths {
+    private val paths = setOf(
+        "auth/login",
+        "auth/register",
+        "auth/refresh",
+    )
+
+    fun isUnauthenticatedPath(path: String): Boolean {
+        return paths.any { unauthPath ->
+            path.contains(unauthPath, ignoreCase = true)
+        }
+    }
+}
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,9 +63,26 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        sessionRepository: SessionRepository
+    ): OkHttpClient {
         return OkHttpClient.Builder()
-            .retryOnConnectionFailure(true)
+            .addInterceptor { chain ->
+                val request = chain.request()
+                if (UnauthenticatedPaths.isUnauthenticatedPath(request.url.encodedPath)) {
+                    chain.proceed(request)
+                } else {
+                    val token = sessionRepository.getAccessToken()
+                    chain.proceed(
+                        request.newBuilder()
+                            .addHeader("Authorization", "Bearer $token")
+                            .build()
+                    )
+                }
+            }
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
     }
 
@@ -150,5 +187,40 @@ object AppModule {
     @Singleton
     fun provideNotificationApi(retrofit: Retrofit): NotificationApi {
         return retrofit.create(NotificationApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatWebSocketService(
+        sessionRepository: SessionRepository,
+        @ApplicationContext context: Context,
+        moshi: Moshi
+    ): ChatWebSocketService {
+        return ChatWebSocketService(sessionRepository, context, moshi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatRepository(
+        chatWebSocketService: ChatWebSocketService,
+        chatApi: ChatApi,
+        sessionRepository: SessionRepository
+    ): ChatRepository {
+        return ChatRepository(chatWebSocketService, chatApi, sessionRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatApi(retrofit: Retrofit): ChatApi {
+        return retrofit.create(ChatApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(UUIDAdapter())
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 }

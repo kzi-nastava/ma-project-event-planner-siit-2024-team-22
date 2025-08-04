@@ -17,7 +17,11 @@ class ProductCategoryRepository @Inject constructor(
         return productCategoryApi.addProductCategory(solutionCategory)
     }
 
-    suspend fun updateProductCategory(solutionCategory: ProductCategory) {
-        return productCategoryApi.updateProductCategory((solutionCategory))
+    suspend fun updateProductCategory(solutionCategory: ProductCategory, id: Int) {
+        return productCategoryApi.updateProductCategory(solutionCategory, id)
+    }
+
+    suspend fun deleteProductCategory(id: Int) {
+        return productCategoryApi.deleteProductCategory(id)
     }
 }

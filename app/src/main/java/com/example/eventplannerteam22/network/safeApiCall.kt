@@ -20,10 +20,10 @@ suspend fun <T> safeApiCall(okHttpClient: OkHttpClient, apiCall: suspend () -> T
             else -> ApiResult.UnknownError(e.code(), e.message())
         }
     } catch (e: ConnectException) {
-        okHttpClient.connectionPool().evictAll()
+        okHttpClient.connectionPool.evictAll()
         ApiResult.ConnectionError(e.message ?: "Failed to connect to the server")
     } catch (e: EOFException) {
-        okHttpClient.connectionPool().evictAll()
+        okHttpClient.connectionPool.evictAll()
         ApiResult.ConnectionError("Connection pool corrupted")
     } catch (e: IOException) {
         ApiResult.ConnectionError(e.message ?: "Network error")

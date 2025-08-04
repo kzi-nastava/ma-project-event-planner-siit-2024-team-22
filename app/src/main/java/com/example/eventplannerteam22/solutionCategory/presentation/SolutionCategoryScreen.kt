@@ -51,19 +51,33 @@ fun SolutionCategoryScreen(
     viewModel: SolutionCategoryViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    var showCreateDialog by rememberSaveable { mutableStateOf(false) }
-    var newCategoryName by rememberSaveable { mutableStateOf("") }
-    var newCategoryType by rememberSaveable { mutableStateOf("") } // Added for category type
 
-    LaunchedEffect(key1 = true) {
-        viewModel.state.collectLatest { currentState ->
-            currentState.error?.let { error ->
-                snackbarHostState.showSnackbar(
-                    message = error,
-                    actionLabel = "Retry"
-                )
-            }
+    // Dialog states
+    var showCreateDialog by rememberSaveable { mutableStateOf(false) }
+    var showEditDialog by rememberSaveable { mutableStateOf(false) }
+    var newCategoryName by rememberSaveable { mutableStateOf("") }
+    var newCategoryType by rememberSaveable { mutableStateOf("") }
+
+    // Handle edit dialog visibility
+    LaunchedEffect(selectedCategory) {
+        selectedCategory?.let {
+            newCategoryName = it.name ?: ""
+            newCategoryType = it.categoryType ?: ""
+            showEditDialog = true
+        }
+    }
+
+    // Handle snackbar messages
+    LaunchedEffect(key1 = state.error) {
+        state.error?.let { error ->
+            snackbarHostState.showSnackbar(
+                message = error,
+                actionLabel = "Retry"
+            )
+            // Clear error after showing
+            viewModel.retry()
         }
     }
 
@@ -72,7 +86,7 @@ fun SolutionCategoryScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Solution categories",
+                        text = "Solution Categories",
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -81,7 +95,11 @@ fun SolutionCategoryScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showCreateDialog = true }
+                onClick = {
+                    newCategoryName = ""
+                    newCategoryType = ""
+                    showCreateDialog = true
+                }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.add_24px),
@@ -95,99 +113,76 @@ fun SolutionCategoryScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Spacer(modifier = Modifier.height(3.dp))
-                HorizontalDivider()
-                Spacer(modifier = Modifier.height(3.dp))
-
-                if (state.isLoading) {
+            when {
+                state.isLoading -> {
                     CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(16.dp)
+                        modifier = Modifier.align(Alignment.Center)
                     )
-                } else if (state.categories.isEmpty() && !state.isLoading) {
+                }
+                state.categories.isEmpty() -> {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "No solution categories found",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Button(
-                            onClick = { viewModel.retry() },
-                            modifier = Modifier.padding(top = 16.dp)
-                        ) {
+                        Text("No categories found")
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = { viewModel.retry() }) {
                             Text("Retry")
                         }
                     }
-                } else {
+                }
+                else -> {
                     SolutionCategoryList(
                         categories = state.categories,
-                        modifier = Modifier.fillMaxSize(),
-                        onEditClick = { /* TODO: Implement edit */ },
-                        onDeleteClick = { /* TODO: Implement delete */ }
+                        onEditClick = { viewModel.setSelectedCategory(it) },
+                        onDeleteClick = { viewModel.deleteSolutionCategory(it) }
                     )
                 }
             }
-        }
 
-        if (showCreateDialog) {
-            ModalBottomSheet(
-                onDismissRequest = { showCreateDialog = false }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Create New Solution Category",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = newCategoryName,
-                        onValueChange = { newCategoryName = it },
-                        label = { Text("Category Name") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    OutlinedTextField(
-                        value = newCategoryType,
-                        onValueChange = { newCategoryType = it },
-                        label = { Text("Category Type") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = {
-                            viewModel.addSolutionCategory(
-                                SolutionCategory(
-                                    id = 0,
-                                    name = newCategoryName,
-                                    categoryType = newCategoryType
-                                )
+            // Create Dialog
+            if (showCreateDialog) {
+                CategoryEditDialog(
+                    title = "Create New Category",
+                    currentName = newCategoryName,
+                    currentType = newCategoryType,
+                    onNameChange = { newCategoryName = it },
+                    onTypeChange = { newCategoryType = it },
+                    onConfirm = {
+                        viewModel.addSolutionCategory(
+                            SolutionCategory(
+                                id = 0, // Will be assigned by backend
+                                name = newCategoryName,
+                                categoryType = newCategoryType
                             )
-                            newCategoryName = ""
-                            newCategoryType = ""
-                            showCreateDialog = false
-                        },
-                        enabled = newCategoryName.isNotBlank(),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Create")
-                    }
+                        )
+                        showCreateDialog = false
+                    },
+                    onDismiss = { showCreateDialog = false }
+                )
+            }
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+            // Edit Dialog
+            if (showEditDialog && selectedCategory != null) {
+                CategoryEditDialog(
+                    title = "Edit Category",
+                    currentName = newCategoryName,
+                    currentType = newCategoryType,
+                    onNameChange = { newCategoryName = it },
+                    onTypeChange = { newCategoryType = it },
+                    onConfirm = {
+                        viewModel.updateSolutionCategory(
+                            selectedCategory!!.copy(
+                                name = if (newCategoryName.isBlank()) selectedCategory!!.name else newCategoryName,
+                                categoryType = if (newCategoryType.isBlank()) selectedCategory!!.categoryType else newCategoryType
+                            ),
+                            id = selectedCategory!!.id
+                        )
+                        showEditDialog = false
+                    },
+                    onDismiss = { showEditDialog = false }
+                )
             }
         }
     }
@@ -196,9 +191,9 @@ fun SolutionCategoryScreen(
 @Composable
 private fun SolutionCategoryList(
     categories: List<SolutionCategory>,
-    modifier: Modifier = Modifier,
     onEditClick: (SolutionCategory) -> Unit,
-    onDeleteClick: (SolutionCategory) -> Unit
+    onDeleteClick: (Int) -> Unit,  // Changed to accept Int (category ID)
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier,
@@ -208,9 +203,8 @@ private fun SolutionCategoryList(
         items(categories) { category ->
             SolutionCategoryItem(
                 category = category,
-                modifier = Modifier.fillMaxWidth(),
                 onEditClick = { onEditClick(category) },
-                onDeleteClick = { onDeleteClick(category) }
+                onDeleteClick = { onDeleteClick(category.id) }  // Passing ID here
             )
         }
     }
@@ -219,34 +213,42 @@ private fun SolutionCategoryList(
 @Composable
 private fun SolutionCategoryItem(
     category: SolutionCategory,
-    modifier: Modifier = Modifier,
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,  // No parameters needed here
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier,
-        onClick = { /* Optional: Add click handling if needed */ }
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = category.name ?: "Unnamed category",
+                text = category.name ?: "Unnamed Category",
                 style = MaterialTheme.typography.titleMedium
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            category.categoryType?.let {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Type: $it",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
                     onClick = onEditClick,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = 8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
                 ) {
                     Text("Edit")
                 }
@@ -261,6 +263,63 @@ private fun SolutionCategoryItem(
                     Text("Delete")
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CategoryEditDialog(
+    title: String,
+    currentName: String,
+    currentType: String,
+    onNameChange: (String) -> Unit,
+    onTypeChange: (String) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            OutlinedTextField(
+                value = currentName,
+                onValueChange = onNameChange,
+                label = { Text("Name (leave blank to keep current)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = currentType,
+                onValueChange = onTypeChange,
+                label = { Text("Type (leave blank to keep current)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onConfirm,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = currentName.isNotBlank() || currentType.isNotBlank()
+            ) {
+                Text("Confirm")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

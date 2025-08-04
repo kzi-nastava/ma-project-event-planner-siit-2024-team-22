@@ -14,8 +14,8 @@ interface SolutionCategoryApi {
     suspend fun getSolutionCategoryById(@Path("id") id: Int): SolutionCategory
     @POST("/solution_category")
     suspend fun addSolutionCategory(@Body solution: SolutionCategory)
-    @PUT("/solution_category")
-    suspend fun updateSolutionCategory(@Body newSolutionCategory: SolutionCategory)
-    @DELETE("/solution_category")
+    @PUT("/solution_category/{id}")
+    suspend fun updateSolutionCategory(@Body newSolutionCategory: SolutionCategory, @Path("id") id: Int)
+    @DELETE("/solution_category/{id}")
     suspend fun deleteSolutionCategory(@Path("id") id: Int)
 }

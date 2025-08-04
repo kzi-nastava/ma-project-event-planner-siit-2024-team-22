@@ -51,18 +51,31 @@ fun ProductCategoryScreen(
     viewModel: ProductCategoryViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // Dialog states
     var showCreateDialog by rememberSaveable { mutableStateOf(false) }
+    var showEditDialog by rememberSaveable { mutableStateOf(false) }
     var newCategoryName by rememberSaveable { mutableStateOf("") }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.state.collectLatest { currentState ->
-            currentState.error?.let { error ->
-                snackbarHostState.showSnackbar(
-                    message = error,
-                    actionLabel = "Retry"
-                )
-            }
+    // Handle edit dialog visibility
+    LaunchedEffect(selectedCategory) {
+        selectedCategory?.let {
+            newCategoryName = it.name
+            showEditDialog = true
+        }
+    }
+
+    // Handle snackbar messages
+    LaunchedEffect(key1 = state.error) {
+        state.error?.let { error ->
+            snackbarHostState.showSnackbar(
+                message = error,
+                actionLabel = "Retry"
+            )
+            // Clear error after showing
+            viewModel.retry()
         }
     }
 
@@ -71,7 +84,7 @@ fun ProductCategoryScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Product categories",
+                        text = "Product Categories",
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -80,7 +93,10 @@ fun ProductCategoryScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showCreateDialog = true }
+                onClick = {
+                    newCategoryName = ""
+                    showCreateDialog = true
+                }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.add_24px),
@@ -101,84 +117,74 @@ fun ProductCategoryScreen(
                 HorizontalDivider()
                 Spacer(modifier = Modifier.height(3.dp))
 
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(16.dp)
-                    )
-                } else if (state.categories.isEmpty() && !state.isLoading) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "No product categories found",
-                            style = MaterialTheme.typography.bodyLarge
+                when {
+                    state.isLoading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(16.dp)
                         )
-                        Button(
-                            onClick = { viewModel.retry() },
-                            modifier = Modifier.padding(top = 16.dp)
+                    }
+                    state.categories.isEmpty() -> {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("Retry")
+                            Text("No categories found")
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(onClick = { viewModel.retry() }) {
+                                Text("Retry")
+                            }
                         }
                     }
-                } else {
-                    ProductCategoryList(
-                        categories = state.categories,
-                        modifier = Modifier.fillMaxSize(),
-                        onEditClick = { /* TODO: Implement edit */ },
-                        onDeleteClick = { /* TODO: Implement delete */ }
-                    )
+                    else -> {
+                        ProductCategoryList(
+                            categories = state.categories,
+                            modifier = Modifier.fillMaxSize(),
+                            onEditClick = { viewModel.setSelectedCategory(it) },
+                            onDeleteClick = { viewModel.deleteProductCategory(it) }
+                        )
+                    }
                 }
             }
-        }
 
-        if (showCreateDialog) {
-            ModalBottomSheet(
-                onDismissRequest = { showCreateDialog = false }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Create New Product Category",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = newCategoryName,
-                        onValueChange = { newCategoryName = it },
-                        label = { Text("Category Name") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = {
-                            viewModel.addProductCategory(
-                                ProductCategory(
-                                    id = 0, // Server will ignore/generate this
-                                    name = newCategoryName
-                                )
+            // Create Dialog
+            if (showCreateDialog) {
+                ProductCategoryEditDialog(
+                    title = "Create New Category",
+                    currentName = newCategoryName,
+                    onNameChange = { newCategoryName = it },
+                    onConfirm = {
+                        viewModel.addProductCategory(
+                            ProductCategory(
+                                id = 0, // Will be assigned by backend
+                                name = newCategoryName
                             )
-                            newCategoryName = ""
-                            showCreateDialog = false
-                        },
-                        enabled = newCategoryName.isNotBlank(),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Create")
-                    }
+                        )
+                        showCreateDialog = false
+                    },
+                    onDismiss = { showCreateDialog = false }
+                )
+            }
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+            // Edit Dialog
+            if (showEditDialog && selectedCategory != null) {
+                ProductCategoryEditDialog(
+                    title = "Edit Category",
+                    currentName = newCategoryName,
+                    onNameChange = { newCategoryName = it },
+                    onConfirm = {
+                        viewModel.updateProductCategory(
+                            selectedCategory!!.copy(
+                                name = if (newCategoryName.isBlank()) selectedCategory!!.name else newCategoryName
+                            ),
+                            id = selectedCategory!!.id
+                        )
+                        showEditDialog = false
+                    },
+                    onDismiss = { showEditDialog = false }
+                )
             }
         }
     }
@@ -189,7 +195,7 @@ private fun ProductCategoryList(
     categories: List<ProductCategory>,
     modifier: Modifier = Modifier,
     onEditClick: (ProductCategory) -> Unit,
-    onDeleteClick: (ProductCategory) -> Unit
+    onDeleteClick: (Int) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -201,7 +207,7 @@ private fun ProductCategoryList(
                 category = category,
                 modifier = Modifier.fillMaxWidth(),
                 onEditClick = { onEditClick(category) },
-                onDeleteClick = { onDeleteClick(category) }
+                onDeleteClick = { onDeleteClick(category.id) }
             )
         }
     }
@@ -215,8 +221,7 @@ private fun ProductCategoryItem(
     onDeleteClick: () -> Unit
 ) {
     Card(
-        modifier = modifier,
-        onClick = { /* Optional: Add click handling if needed */ }
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
@@ -237,7 +242,11 @@ private fun ProductCategoryItem(
             ) {
                 Button(
                     onClick = onEditClick,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = 8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
                 ) {
                     Text("Edit")
                 }
@@ -252,6 +261,52 @@ private fun ProductCategoryItem(
                     Text("Delete")
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ProductCategoryEditDialog(
+    title: String,
+    currentName: String,
+    onNameChange: (String) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            OutlinedTextField(
+                value = currentName,
+                onValueChange = onNameChange,
+                label = { Text("Name (leave blank to keep current)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onConfirm,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = currentName.isNotBlank()
+            ) {
+                Text("Confirm")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

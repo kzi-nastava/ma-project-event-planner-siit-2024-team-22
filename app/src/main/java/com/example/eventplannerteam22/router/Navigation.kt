@@ -34,6 +34,8 @@ import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.budgetPlan.presentation.BudgetPlanScreen
+import com.example.eventplannerteam22.chat.presentation.ChatListScreen
+import com.example.eventplannerteam22.chat.presentation.ChatScreen
 import com.example.eventplannerteam22.events.presentation.addevent.CreateEventScreen
 import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
 import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
@@ -359,6 +361,44 @@ fun Navigation() {
         composable(Screen.NotificationPermission.route) {
             NotificationPermissionScreen(navController)
         }
+
+        composable(route = Screen.ChatList.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                ChatListScreen(
+                    navController = navController,
+                    modifier = Modifier.padding(paddingValues)
+                )
+            }
+        }
+
+        composable(
+            route = Screen.Chat.route,
+            arguments = listOf(
+                navArgument("conversationId") { type = NavType.StringType },
+                navArgument("receiverId") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val conversationId = backStackEntry.arguments?.getString("conversationId") ?: return@composable
+            val receiverId = backStackEntry.arguments?.getInt("receiverId") ?: return@composable
+
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                ChatScreen(
+                    conversationId = conversationId,
+                    receiverId = receiverId,
+                    modifier = Modifier.padding(paddingValues)
+                )
+            }
+        }
     }
 }
 
@@ -536,6 +576,20 @@ fun DrawerContent(
             }
         )
     }
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.ChatList.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Messages") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.edit_24px), // Add your chat icon
+                    contentDescription = "Chat"
+                )
+            }
+        )
     }
 }
 

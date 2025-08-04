@@ -20,6 +20,13 @@ class ProductCategoryViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProductCategoryState())
     val state: StateFlow<ProductCategoryState> = _state.asStateFlow()
 
+    private var _selectedCategory = MutableStateFlow<ProductCategory?>(null)
+    val selectedCategory: StateFlow<ProductCategory?> = _selectedCategory.asStateFlow()
+
+    fun setSelectedCategory(category: ProductCategory?) {
+        _selectedCategory.value = category
+    }
+
     init {
         loadProductCategories()
     }
@@ -64,17 +71,34 @@ class ProductCategoryViewModel @Inject constructor(
         }
     }
 
-    fun updateProductCategory(category: ProductCategory) {
+    fun updateProductCategory(category: ProductCategory, id: Int) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                repository.updateProductCategory(category)
+                repository.updateProductCategory(category, id)
                 loadProductCategories() // Refresh the list
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
                         isLoading = false,
                         error = e.message ?: "Failed to update category"
+                    )
+                }
+            }
+        }
+    }
+
+    fun deleteProductCategory(id: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true, error = null) }
+            try {
+                repository.deleteProductCategory(id)
+                loadProductCategories() // Refresh the list
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message ?: "Failed to delete category"
                     )
                 }
             }

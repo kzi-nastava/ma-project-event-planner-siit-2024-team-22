@@ -17,7 +17,11 @@ class SolutionCategoryRepository @Inject constructor(
                 return solutionCategoryApi.addSolutionCategory(solutionCategory)
         }
 
-        suspend fun updateSolutionCategory(solutionCategory: SolutionCategory) {
-                return solutionCategoryApi.updateSolutionCategory((solutionCategory))
+        suspend fun updateSolutionCategory(solutionCategory: SolutionCategory, id: Int) {
+                return solutionCategoryApi.updateSolutionCategory(solutionCategory, id)
+        }
+
+        suspend fun deleteSolutionCategory(id: Int) {
+                return solutionCategoryApi.deleteSolutionCategory(id)
         }
 }

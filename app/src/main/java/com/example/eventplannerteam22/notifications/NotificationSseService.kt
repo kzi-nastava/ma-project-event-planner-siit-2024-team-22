@@ -38,7 +38,7 @@ class NotificationSseService(
 
             override fun onResponse(call: Call, response: Response) {
                 Log.i("SSE", "Connected to SSE stream")
-                val source = response.body()?.source() ?: return
+                val source = response.body?.source() ?: return
 
                 try {
                     while (!source.exhausted()) {
@@ -67,7 +67,7 @@ class NotificationSseService(
 
     fun stop() {
         call?.cancel()
-        client?.dispatcher()?.executorService()?.shutdown()
+        client?.dispatcher?.executorService?.shutdown()
     }
 
     private fun showNotification(message: String) {

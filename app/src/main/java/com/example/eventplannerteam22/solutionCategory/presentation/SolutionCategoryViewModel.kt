@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.solutionCategory.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryRepository
@@ -19,6 +20,13 @@ class SolutionCategoryViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(SolutionCategoryState())
     val state: StateFlow<SolutionCategoryState> = _state.asStateFlow()
+
+    private var _selectedCategory = MutableStateFlow<SolutionCategory?>(null)
+    val selectedCategory: StateFlow<SolutionCategory?> = _selectedCategory.asStateFlow()
+
+    fun setSelectedCategory(category: SolutionCategory?) {
+        _selectedCategory.value = category
+    }
 
     init {
         loadSolutionCategories()
@@ -54,6 +62,7 @@ class SolutionCategoryViewModel @Inject constructor(
                 repository.addSolutionCategory(category)
                 loadSolutionCategories() // Refresh the list
             } catch (e: Exception) {
+                Log.e("Error!", e.toString())
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -64,17 +73,34 @@ class SolutionCategoryViewModel @Inject constructor(
         }
     }
 
-    fun updateSolutionCategory(category: SolutionCategory) {
+    fun updateSolutionCategory(category: SolutionCategory, id: Int) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                repository.updateSolutionCategory(category)
+                repository.updateSolutionCategory(category, id)
                 loadSolutionCategories() // Refresh the list
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
                         isLoading = false,
                         error = e.message ?: "Failed to update category"
+                    )
+                }
+            }
+        }
+    }
+
+    fun deleteSolutionCategory(id: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true, error = null) }
+            try {
+                repository.deleteSolutionCategory(id)
+                loadSolutionCategories() // Refresh the list
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message ?: "Failed to delete category"
                     )
                 }
             }
