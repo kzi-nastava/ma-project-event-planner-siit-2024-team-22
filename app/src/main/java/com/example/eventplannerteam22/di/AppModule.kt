@@ -16,6 +16,7 @@ import com.example.eventplannerteam22.profile.data.ProfileApi
 import com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryApi
 import com.example.eventplannerteam22.solutions.DurationAdapter
 import com.example.eventplannerteam22.solutions.LocalDateAdapter
+import com.example.eventplannerteam22.solutions.comments.data.SolutionCommentApi
 import com.example.eventplannerteam22.solutions.data.SolutionApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -126,5 +127,11 @@ object AppModule {
     @Singleton
     fun providePriceListApi(retrofit: Retrofit): PriceListApiService {
         return retrofit.create(PriceListApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSolutionCommentApi(retrofit: Retrofit): SolutionCommentApi {
+        return retrofit.create(SolutionCommentApi::class.java)
     }
 }

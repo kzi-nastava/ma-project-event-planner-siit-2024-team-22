@@ -2,14 +2,9 @@ package com.example.eventplannerteam22.solutions
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
+import com.example.eventplannerteam22.session.SessionViewModel
+import com.example.eventplannerteam22.solutions.comments.presentation.SolutionCommentSection
 
 @Composable
 fun SolutionDetailScreen(
     solutionId: Int,
     navController: NavController,
+    sessionViewModel: SessionViewModel,
     viewModel: SolutionDetailViewModel = hiltViewModel()
 ) {
     val solution by viewModel.solution.collectAsState()
@@ -42,7 +40,7 @@ fun SolutionDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceVariant),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
         if (errorMessage != null) {
             Text(
@@ -52,14 +50,15 @@ fun SolutionDetailScreen(
         } else if (solution != null) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
                     .background(
                         MaterialTheme.colorScheme.surface,
                         shape = MaterialTheme.shapes.medium
                     )
                     .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -107,6 +106,12 @@ fun SolutionDetailScreen(
                     text = solution!!.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SolutionCommentSection(
+                    solutionId = solutionId,
+                    sessionViewModel = sessionViewModel
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
