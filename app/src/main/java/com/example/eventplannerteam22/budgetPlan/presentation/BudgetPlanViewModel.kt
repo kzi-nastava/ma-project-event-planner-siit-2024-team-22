@@ -118,7 +118,7 @@ class BudgetPlanViewModel @Inject constructor(
     private fun loadProductsAndSolutions() {
         viewModelScope.launch {
             try {
-                _products.value = productsRepository.getAllProducts( 12, 0)
+                _products.value = productsRepository.getAllProducts(12, 0)
                 _solutions.value = solutionsRepository.getSolutions(12, 0)
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = "Failed to load items: ${e.message}")
@@ -137,9 +137,10 @@ class BudgetPlanViewModel @Inject constructor(
                             eventId = _state.value.eventId,
                             skebobId = product.id,
                             skebobType = "PRODUCT",
-                            categoryId = product.productCategoryID
+                            categoryId = product.productCategory.id
                         )
                     }
+
                     selectedType == ItemType.SOLUTION && _selectedSolution.value != null -> {
                         val solution = _selectedSolution.value!!
                         repository.addAvailableItem(
@@ -149,6 +150,7 @@ class BudgetPlanViewModel @Inject constructor(
                             categoryId = solution.category.id
                         )
                     }
+
                     else -> {
                         _state.value = _state.value.copy(error = "Please select an item")
                         return@launch

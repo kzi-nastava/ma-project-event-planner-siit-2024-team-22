@@ -1,5 +1,7 @@
 package com.example.eventplannerteam22.products.data.model
 
+import com.example.eventplannerteam22.events.data.model.UserDTO
+import com.example.eventplannerteam22.productcategory.domen.ProductCategory
 import java.math.BigDecimal
 
 data class ProductDTO(
@@ -11,6 +13,6 @@ data class ProductDTO(
     val imageSource: String?,
     val isPrivate: Boolean,
     val isDeleted: Boolean,
-    val userId: Int,
-    val productCategoryId: Int
+    val user: UserDTO,
+    val productCategory: ProductCategory
 )
