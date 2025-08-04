@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.events.comments.presentation.EventCommentSection
+import com.example.eventplannerteam22.events.invite.presentation.InviteEmailSection
 import com.example.eventplannerteam22.network.apiResultHandler
 import com.example.eventplannerteam22.session.SessionViewModel
 import java.time.format.DateTimeFormatter
@@ -105,6 +106,7 @@ fun EventDetailScreen(
                     Text(text = it.description, style = MaterialTheme.typography.bodyMedium)
                 }
 
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,6 +142,13 @@ fun EventDetailScreen(
                         }
                     }
                 }
+                InviteEmailSection(
+                    eventId = eventId,
+                    organizerId = it.user.id,
+                    sessionViewModel = sessionViewModel,
+                    viewModel = viewModel
+                )
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
