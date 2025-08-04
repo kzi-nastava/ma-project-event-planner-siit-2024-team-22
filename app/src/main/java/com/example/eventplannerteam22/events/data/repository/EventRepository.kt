@@ -9,4 +9,5 @@ interface EventRepository {
     suspend fun getEvents(limit: Int, offset: Int): ApiResult<List<EventListItem>>
     suspend fun getEventById(id: Int): ApiResult<Event>
     suspend fun addEvent(dto: CreateEventDTO)
+
 }

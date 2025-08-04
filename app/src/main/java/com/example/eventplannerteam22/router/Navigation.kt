@@ -3,7 +3,6 @@ package com.example.eventplannerteam22.router
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -62,6 +61,10 @@ import com.example.eventplannerteam22.solutions.SolutionDetailScreen
 import com.example.eventplannerteam22.solutions.SolutionsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import com.example.eventplannerteam22.favorites.presentation.FavoriteScreen
+import kotlinx.coroutines.selects.select
 
 @Composable
 fun Navigation() {
@@ -379,6 +382,34 @@ fun Navigation() {
                 sessionViewModel = sessionViewModel
             )
         }
+
+//        composable("favorites") {
+//
+//            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+//            FavoriteScreen(
+//                sessionViewModel = sessionViewModel,
+//                navController = navController
+//            )
+//        }
+
+        composable("favorites") {
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = {
+                    DrawerContent(navController, coroutineScope, drawerState)
+                }
+            ) { paddingValues ->
+                FavoriteScreen(
+                    sessionViewModel = sessionViewModel,
+                    navController = navController,
+                    modifier = Modifier.padding(paddingValues)
+                )
+            }
+        }
+
         composable(Screen.NotificationPermission.route) {
             NotificationPermissionScreen(navController)
         }
@@ -622,7 +653,17 @@ fun DrawerContent(
                     Icon(Icons.Default.Notifications, contentDescription = null)
                 }
             )
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate("favorites")
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Favorites") },
+                icon = { Icon(Icons.Default.Favorite, contentDescription = null) }
+            )
         }
+
     }
 
 

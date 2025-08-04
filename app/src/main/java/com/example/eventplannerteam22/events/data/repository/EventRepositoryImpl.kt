@@ -26,4 +26,5 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun addEvent(dto: CreateEventDTO) {
         eventApi.addEvent(dto)
     }
+
 }

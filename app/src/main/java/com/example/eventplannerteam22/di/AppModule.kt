@@ -14,6 +14,10 @@ import com.example.eventplannerteam22.events.comments.data.EventCommentApi
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.events.invite.data.EventInviteApi
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
+import com.example.eventplannerteam22.favorites.data.api.FavoriteEventApi
+import com.example.eventplannerteam22.favorites.data.api.FavoriteProductApi
+import com.example.eventplannerteam22.favorites.data.api.FavoriteSolutionApi
+import com.example.eventplannerteam22.favorites.data.repository.FavoriteRepository
 import com.example.eventplannerteam22.notifications.data.api.NotificationApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
 import com.example.eventplannerteam22.productcategory.data.ProductCategoryApi
@@ -200,6 +204,29 @@ object AppModule {
     fun provideEventInviteApi(retrofit: Retrofit): EventInviteApi {
         return retrofit.create(EventInviteApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteEventApi(retrofit: Retrofit): FavoriteEventApi =
+        retrofit.create(FavoriteEventApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFavoriteProductApi(retrofit: Retrofit): FavoriteProductApi =
+        retrofit.create(FavoriteProductApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFavoriteSolutionApi(retrofit: Retrofit): FavoriteSolutionApi =
+        retrofit.create(FavoriteSolutionApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFavoriteRepository(
+        eventApi: FavoriteEventApi,
+        productApi: FavoriteProductApi,
+        solutionApi: FavoriteSolutionApi
+    ): FavoriteRepository = FavoriteRepository(eventApi, productApi, solutionApi)
 
     @Provides
     @Singleton

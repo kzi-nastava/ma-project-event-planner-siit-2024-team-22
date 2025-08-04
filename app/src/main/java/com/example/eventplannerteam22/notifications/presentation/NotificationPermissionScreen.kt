@@ -33,7 +33,7 @@ fun NotificationPermissionScreen(navController: NavController) {
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
             Log.d(LOG_TAG, "Initial notification permission granted: $granted")
-            navController.navigate(Screen.Auth.route) {
+            navController.navigate(Screen.Main.route) {
                 popUpTo(Screen.NotificationPermission.route) { inclusive = true }
             }
         }
@@ -50,12 +50,12 @@ fun NotificationPermissionScreen(navController: NavController) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             } else {
                 Log.d(LOG_TAG, "Permission already granted")
-                navController.navigate(Screen.Auth.route) {
+                navController.navigate(Screen.Main.route) {
                     popUpTo(Screen.NotificationPermission.route) { inclusive = true }
                 }
             }
         } else {
-            navController.navigate(Screen.Auth.route) {
+            navController.navigate(Screen.Main.route) {
                 popUpTo(Screen.NotificationPermission.route) { inclusive = true }
             }
         }
@@ -67,6 +67,6 @@ fun NotificationPermissionScreen(navController: NavController) {
             .padding(32.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text("Загрузка...")
+        Text("Загружаем скебобов...")
     }
 }
