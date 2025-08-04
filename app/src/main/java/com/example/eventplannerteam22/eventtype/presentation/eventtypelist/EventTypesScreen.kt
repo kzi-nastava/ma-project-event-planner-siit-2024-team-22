@@ -57,9 +57,11 @@ fun EventTypesScreen(
     ) {
         Column {
             Text(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
                 text = "Event types",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
             )
             Spacer(modifier = Modifier.height(3.dp))
             HorizontalDivider()

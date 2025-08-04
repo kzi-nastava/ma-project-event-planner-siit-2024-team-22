@@ -4,7 +4,7 @@ import com.example.eventplannerteam22.eventtype.data.model.EventTypeDTO
 import com.example.eventplannerteam22.eventtype.domen.EventType
 import com.example.eventplannerteam22.eventtype.domen.EventTypeListItem
 import com.example.eventplannerteam22.productcategory.data.toProductCategory
-import com.example.eventplannerteam22.solutioncategory.data.model.toSolutionCategory
+import com.example.eventplannerteam22.solutionCategory.data.model.toSolutionCategory
 
 fun EventTypeDTO.toEventTypeListItem(): EventTypeListItem {
     return EventTypeListItem(

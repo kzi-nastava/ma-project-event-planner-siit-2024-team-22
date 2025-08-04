@@ -1,9 +1,8 @@
 package com.example.eventplannerteam22.eventtype.data.model
 
 import com.example.eventplannerteam22.productcategory.data.model.ProductCategoryDTO
-import com.example.eventplannerteam22.solutioncategory.data.model.SolutionCategoryDTO
+import com.example.eventplannerteam22.solutionCategory.data.model.SolutionCategoryDTO
 import com.squareup.moshi.JsonClass
-
 
 @JsonClass(generateAdapter = true)
 data class EventTypeDTO(
