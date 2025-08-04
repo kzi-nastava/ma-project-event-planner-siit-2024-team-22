@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.products.comments.presentation.ProductCommentSection
+import com.example.eventplannerteam22.products.data.model.UpdateProductDTO
+import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
 
 @Composable
@@ -68,7 +70,6 @@ fun ProductDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                // TODO: Replace with AsyncImage or CoilImage if loading from URL
                 Image(
                     painter = painterResource(id = R.drawable.sample_image),
                     contentDescription = "Product Image",
@@ -133,6 +134,27 @@ fun ProductDetailScreen(
                         sessionViewModel = sessionViewModel
                     )
                 }
+
+                Button(
+                    onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            "productToEdit", UpdateProductDTO(
+                                name = item.name,
+                                description = item.description,
+                                price = item.price,
+                                discount = item.discount,
+                                isPrivate = item.isPrivate
+                            )
+                        )
+                        navController.navigate(Screen.UpdateProduct.createRoute(productId))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Text("Edit Product")
+                }
+
 
                 Button(
                     onClick = { navController.popBackStack() },

@@ -2,9 +2,11 @@ package com.example.eventplannerteam22.products.data.api
 
 import com.example.eventplannerteam22.products.data.model.CreateProductDTO
 import com.example.eventplannerteam22.products.data.model.ProductDTO
+import com.example.eventplannerteam22.products.data.model.UpdateProductDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -26,4 +28,7 @@ interface ProductApi {
 
     @GET("/products/{id}")
     suspend fun getProductById(@Path("id") id: Int): ProductDTO
+
+    @PUT("/products/{id}")
+    suspend fun updateProduct(@Path("id") id: Int, @Body dto: UpdateProductDTO): ProductDTO
 }

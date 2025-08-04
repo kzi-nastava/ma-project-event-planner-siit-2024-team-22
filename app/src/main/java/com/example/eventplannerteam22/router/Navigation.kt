@@ -47,6 +47,7 @@ import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.priceList.presentation.PriceListScreen
 import com.example.eventplannerteam22.productcategory.presentation.ProductCategoryScreen
 import com.example.eventplannerteam22.products.presentation.createproduct.CreateProductScreen
+import com.example.eventplannerteam22.products.presentation.editproduct.UpdateProductScreen
 import com.example.eventplannerteam22.products.presentation.productdetails.ProductDetailScreen
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsScreen
 import com.example.eventplannerteam22.profile.presentation.editprofile.EditProfileScreen
@@ -213,6 +214,26 @@ fun Navigation() {
                     productId = productId,
                     navController = navController,
                     sessionViewModel = sessionViewModel
+                )
+            }
+        }
+
+        composable(
+            route = Screen.UpdateProduct.route,
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("productId") ?: return@composable
+
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                UpdateProductScreen(
+                    productId = productId,
+                    paddingValues = paddingValues,
+                    navController = navController
                 )
             }
         }
@@ -524,18 +545,18 @@ fun DrawerContent(
             }
         )
         if (session.loggedIn && session.userId != null) {
-        NavigationDrawerItem(
-            onClick = {
-                navController.navigate("notifications")
-                coroutineScope.launch { drawerState.close() }
-            },
-            selected = false,
-            label = { Text("Notifications") },
-            icon = {
-                Icon(Icons.Default.Notifications, contentDescription = null)
-            }
-        )
-    }
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate("notifications")
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Notifications") },
+                icon = {
+                    Icon(Icons.Default.Notifications, contentDescription = null)
+                }
+            )
+        }
     }
 }
 

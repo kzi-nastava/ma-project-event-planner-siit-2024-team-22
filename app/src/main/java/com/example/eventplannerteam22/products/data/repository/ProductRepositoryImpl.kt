@@ -4,7 +4,7 @@ import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.network.safeApiCall
 import com.example.eventplannerteam22.products.data.api.ProductApi
 import com.example.eventplannerteam22.products.data.model.CreateProductDTO
-import com.example.eventplannerteam22.products.data.model.ProductDTO
+import com.example.eventplannerteam22.products.data.model.UpdateProductDTO
 import com.example.eventplannerteam22.products.data.toProduct
 import com.example.eventplannerteam22.products.data.toProductListItem
 import com.example.eventplannerteam22.products.domain.Product
@@ -30,5 +30,9 @@ class ProductRepositoryImpl @Inject constructor(
 
     override suspend fun createProduct(dto: CreateProductDTO): ApiResult<Unit> {
         return safeApiCall(okHttpClient) { productApi.createProduct(dto) }
+    }
+
+    override suspend fun updateProduct(id: Int, dto: UpdateProductDTO): ApiResult<Unit> {
+        return safeApiCall(okHttpClient) { productApi.updateProduct(id, dto) }
     }
 }
