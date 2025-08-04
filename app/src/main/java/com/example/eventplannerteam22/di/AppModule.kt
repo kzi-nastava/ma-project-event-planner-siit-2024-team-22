@@ -3,11 +3,11 @@ package com.example.eventplannerteam22.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.eventplannerteam22.admin.comments.data.api.AdminCommentApi
-import com.example.eventplannerteam22.admin.comments.domain.AdminComment
 import com.example.eventplannerteam22.auth.AuthApi
 import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
-import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
+import com.example.eventplannerteam22.eventactivity.data.model.LocalTimeAdapter
 import com.example.eventplannerteam22.events.data.api.EventApi
+import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.notifications.data.api.NotificationApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
 import com.example.eventplannerteam22.productcategory.data.ProductCategoryApi
@@ -57,6 +57,7 @@ object AppModule {
             .add(LocalDateAdapter())
             .add(DurationAdapter())
             .add(BigDecimalAdapter())
+            .add(LocalTimeAdapter())
             .addLast(KotlinJsonAdapterFactory())
             .build()
 
@@ -84,6 +85,7 @@ object AppModule {
     fun provideProductApi(retrofit: Retrofit): ProductApi {
         return retrofit.create(ProductApi::class.java)
     }
+
     @Provides
     @Singleton
     fun provideProductCommentApi(retrofit: Retrofit): ProductCommentApi {
@@ -110,7 +112,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAdminComments(retrofit: Retrofit): AdminCommentApi{
+    fun provideAdminComments(retrofit: Retrofit): AdminCommentApi {
         return retrofit.create(AdminCommentApi::class.java)
     }
 
