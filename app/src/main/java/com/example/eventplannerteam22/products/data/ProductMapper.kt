@@ -13,8 +13,8 @@ fun ProductDTO.toProduct(): Product {
         this.discount,
         this.imageSource,
         this.isPrivate,
-        this.userId,
-        this.productCategoryId
+        this.user,
+        this.productCategory
     )
 }
 

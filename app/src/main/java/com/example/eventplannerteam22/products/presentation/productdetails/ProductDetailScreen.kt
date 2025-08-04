@@ -58,6 +58,8 @@ fun ProductDetailScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         } else if (product != null) {
+            val item = product!!
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -66,6 +68,7 @@ fun ProductDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                // TODO: Replace with AsyncImage or CoilImage if loading from URL
                 Image(
                     painter = painterResource(id = R.drawable.sample_image),
                     contentDescription = "Product Image",
@@ -82,22 +85,41 @@ fun ProductDetailScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = product!!.name,
+                        text = item.name,
                         style = MaterialTheme.typography.headlineSmall
                     )
                     Text(
-                        text = "Price: ${product!!.price} RSD",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Text(
-                        text = "Discount: ${product!!.discount}%",
+                        text = "Category: ${item.productCategory.name}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = product!!.description,
+                        text = "Price: ${item.price} RSD",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    item.discount?.let {
+                        Text(
+                            text = "Discount: $it%",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                    Text(
+                        text = item.description,
                         style = MaterialTheme.typography.bodyMedium
                     )
+                    Text(
+                        text = "Posted by: ${item.user.name} ${item.user.surname}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (item.isPrivate) {
+                        Text(
+                            text = "Private Product",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
 
                 Column(
@@ -124,3 +146,4 @@ fun ProductDetailScreen(
         }
     }
 }
+
