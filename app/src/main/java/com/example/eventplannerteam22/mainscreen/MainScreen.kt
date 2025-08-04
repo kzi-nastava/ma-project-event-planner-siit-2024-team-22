@@ -25,8 +25,8 @@ import com.example.eventplannerteam22.events.domen.EventListItem
 import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsViewModel
 import com.example.eventplannerteam22.router.Screen
-import com.example.eventplannerteam22.solutions.domain.Solution
 import com.example.eventplannerteam22.solutions.SolutionsViewModel
+import com.example.eventplannerteam22.solutions.domain.Solution
 
 
 @Composable
@@ -125,7 +125,7 @@ fun ProductCard(product: ProductListItem, navController: NavController) {
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate("products/${product.id}")
+                navController.navigate(Screen.ProductDetails.createRoute(product.id))
             }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

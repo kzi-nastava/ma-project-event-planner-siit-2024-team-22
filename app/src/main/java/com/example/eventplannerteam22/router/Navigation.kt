@@ -21,15 +21,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.admin.comments.presentation.AdminCommentModerationScreen
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.budgetPlan.presentation.BudgetPlanScreen
+import com.example.eventplannerteam22.events.presentation.addevent.CreateEventScreen
 import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
 import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
@@ -60,12 +63,10 @@ fun Navigation() {
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
-        // Splash Screen (No MainLayout)
         composable(route = Screen.Splash.route) {
             SplashScreen(navController)
         }
 
-        // Other screens (wrapped in MainLayout)
         composable(route = Screen.Main.route) {
             MainLayout(
                 navController = navController,
@@ -126,8 +127,20 @@ fun Navigation() {
                 }
             ) { paddingValues ->
                 EventListScreen(
+                    navController = navController,
                     paddingValues = paddingValues
                 )
+            }
+        }
+
+        composable(route = Screen.CreateEvent.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                CreateEventScreen(navController, paddingValues)
             }
         }
 
@@ -151,14 +164,23 @@ fun Navigation() {
                 coroutineScope = coroutineScope,
                 drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
             ) { paddingValues ->
-                CreateProductScreen(paddingValues)
+                CreateProductScreen(navController, paddingValues)
             }
         }
-        composable("products/{productId}") { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
+        composable(
+            route = Screen.ProductDetails.route,
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("productId") ?: return@composable
             val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
-            if (productId != null) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
                 ProductDetailScreen(
+                    paddingValues = paddingValues,
                     productId = productId,
                     navController = navController,
                     sessionViewModel = sessionViewModel
@@ -168,7 +190,14 @@ fun Navigation() {
         composable("solutions/{solutionId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("solutionId")?.toIntOrNull()
             if (productId != null) {
-                SolutionDetailScreen(solutionId = productId, navController = navController)
+                MainLayout(
+                    navController = navController,
+                    drawerState = drawerState,
+                    coroutineScope = coroutineScope,
+                    drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+                ) {
+                    SolutionDetailScreen(solutionId = productId, navController = navController)
+                }
             }
         }
 

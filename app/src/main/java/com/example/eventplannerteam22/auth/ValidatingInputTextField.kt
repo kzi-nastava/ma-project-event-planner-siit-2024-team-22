@@ -18,11 +18,14 @@ fun ValidatingInputTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (String) -> Unit,
     isError: Boolean,
-    errorText: String?
+    errorText: String?,
+    readOnly: Boolean = false,
+    modifier: Modifier = Modifier,
+    trailingIcon: @Composable () -> Unit = {}
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         value = value,
         onValueChange = onValueChange,
@@ -35,5 +38,7 @@ fun ValidatingInputTextField(
         },
         singleLine = true,
         keyboardOptions = keyboardOptions,
+        readOnly = readOnly,
+        trailingIcon = trailingIcon
     )
 }
