@@ -4,6 +4,7 @@ sealed class Screen(val route: String) {
     object Main : Screen("main-screen")
     object Auth : Screen("auth-screen")
     object Login : Screen("login-screen")
+    object NotificationPermission : Screen("notification-permission")
     object Registration : Screen("registration-screen")
     object Events : Screen("event-screen")
     object CreateEvent : Screen("create-event")

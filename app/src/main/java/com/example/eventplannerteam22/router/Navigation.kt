@@ -3,6 +3,8 @@ package com.example.eventplannerteam22.router
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -37,6 +39,8 @@ import com.example.eventplannerteam22.events.presentation.eventlist.EventListScr
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
 import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
+import com.example.eventplannerteam22.notifications.NotificationPermissionScreen
+import com.example.eventplannerteam22.notifications.presentation.NotificationScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.priceList.presentation.PriceListScreen
@@ -63,7 +67,8 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+//        startDestination = Screen.Splash.route
+        startDestination = Screen.NotificationPermission.route
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(navController)
@@ -320,6 +325,18 @@ fun Navigation() {
                 coroutineScope = coroutineScope
             )
         }
+        composable("notifications") {
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+            NotificationScreen(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                sessionViewModel = sessionViewModel
+            )
+        }
+        composable(Screen.NotificationPermission.route) {
+            NotificationPermissionScreen(navController)
+        }
     }
 }
 
@@ -484,6 +501,19 @@ fun DrawerContent(
                 )
             }
         )
+        if (session.loggedIn && session.userId != null) {
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate("notifications")
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Notifications") },
+            icon = {
+                Icon(Icons.Default.Notifications, contentDescription = null)
+            }
+        )
+    }
     }
 }
 
