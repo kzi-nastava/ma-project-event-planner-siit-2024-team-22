@@ -8,6 +8,7 @@ import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
 import com.example.eventplannerteam22.eventactivity.data.model.LocalTimeAdapter
 import com.example.eventplannerteam22.events.comments.data.EventCommentApi
 import com.example.eventplannerteam22.events.data.api.EventApi
+import com.example.eventplannerteam22.events.invite.data.EventInviteApi
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.notifications.data.api.NotificationApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
@@ -157,5 +158,9 @@ object AppModule {
     @Singleton
     fun provideEventCommentApi(retrofit: Retrofit): EventCommentApi {
         return retrofit.create(EventCommentApi::class.java)
+    }
+    @Provides
+    fun provideEventInviteApi(retrofit: Retrofit): EventInviteApi {
+        return retrofit.create(EventInviteApi::class.java)
     }
 }
