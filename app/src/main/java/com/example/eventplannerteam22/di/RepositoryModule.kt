@@ -6,6 +6,7 @@ import com.example.eventplannerteam22.eventtype.data.repository.EventTypeReposit
 import com.example.eventplannerteam22.eventtype.data.repository.EventTypeRepositoryImpl
 import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanRepository
 import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanRepositoryImpl
+import com.example.eventplannerteam22.events.comments.data.EventCommentRepository
 import com.example.eventplannerteam22.events.data.repository.EventRepository
 import com.example.eventplannerteam22.events.data.repository.EventRepositoryImpl
 import com.example.eventplannerteam22.notifications.data.repository.NotificationRepository
@@ -49,5 +50,6 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindNotificationRepository(impl: NotificationRepositoryImpl): NotificationRepository
+
 
 }
