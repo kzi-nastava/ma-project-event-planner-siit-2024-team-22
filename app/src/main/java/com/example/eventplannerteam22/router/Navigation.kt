@@ -188,16 +188,14 @@ fun Navigation() {
             }
         }
         composable("solutions/{solutionId}") { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("solutionId")?.toIntOrNull()
-            if (productId != null) {
-                MainLayout(
+            val solutionId = backStackEntry.arguments?.getString("solutionId")?.toIntOrNull()
+            val sessionViewModel: SessionViewModel = hiltViewModel()
+            if (solutionId != null) {
+                SolutionDetailScreen(
+                    solutionId = solutionId,
                     navController = navController,
-                    drawerState = drawerState,
-                    coroutineScope = coroutineScope,
-                    drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
-                ) {
-                    SolutionDetailScreen(solutionId = productId, navController = navController)
-                }
+                    sessionViewModel = sessionViewModel
+                )
             }
         }
 

@@ -14,6 +14,7 @@ import com.example.eventplannerteam22.profile.data.ProfileRepository
 import com.example.eventplannerteam22.profile.data.ProfileRepositoryImpl
 import com.example.eventplannerteam22.session.SessionRepository
 import com.example.eventplannerteam22.session.SessionRepositorySharedPreferencesImpl
+import com.example.eventplannerteam22.solutions.comments.data.SolutionCommentRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -43,4 +44,5 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindBudgetPlanRepository(impl: BudgetPlanRepositoryImpl): BudgetPlanRepository
+
 }
