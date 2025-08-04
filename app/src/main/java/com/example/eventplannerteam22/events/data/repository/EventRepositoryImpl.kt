@@ -2,6 +2,8 @@ package com.example.eventplannerteam22.events.data.repository
 
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.events.data.model.CreateEventDTO
+import com.example.eventplannerteam22.events.data.model.EventDTO
+import com.example.eventplannerteam22.events.data.model.UpdateEventDTO
 import com.example.eventplannerteam22.events.data.toEvent
 import com.example.eventplannerteam22.events.data.toListItem
 import com.example.eventplannerteam22.events.domen.Event
@@ -27,4 +29,8 @@ class EventRepositoryImpl @Inject constructor(
         eventApi.addEvent(dto)
     }
 
+
+    override suspend fun editEvent(eventId: Int, dto: UpdateEventDTO): ApiResult<EventDTO> {
+        return safeApiCall(okHttpClient) { eventApi.editEvent(eventId, dto) }
+    }
 }

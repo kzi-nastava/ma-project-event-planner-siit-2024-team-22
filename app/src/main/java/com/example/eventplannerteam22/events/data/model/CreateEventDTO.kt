@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.events.data.model
 
+import com.example.eventplannerteam22.eventactivity.data.model.CreateEventActivityDTO
 import java.time.LocalDate
 
 data class CreateEventDTO(
@@ -10,5 +11,6 @@ data class CreateEventDTO(
     val isPrivate: Boolean,
     val location: String,
     val dateOfEvent: LocalDate,
-    val userId: Int
+    val userId: Int,
+    val eventActivities: List<CreateEventActivityDTO>
 )

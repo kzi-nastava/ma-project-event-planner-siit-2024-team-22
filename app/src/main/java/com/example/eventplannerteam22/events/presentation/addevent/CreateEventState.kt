@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.events.presentation.addevent
 
+import com.example.eventplannerteam22.eventactivity.data.model.CreateEventActivityDTO
 import com.example.eventplannerteam22.eventtype.domen.EventTypeListItem
 import java.time.LocalDate
 
@@ -22,5 +23,7 @@ data class CreateEventState(
     val location: String = "",
     val locationError: String? = null,
 
-    val dateOfEvent: LocalDate = LocalDate.now()
+    val dateOfEvent: LocalDate = LocalDate.now(),
+
+    val eventActivities: List<CreateEventActivityDTO> = emptyList()
 )

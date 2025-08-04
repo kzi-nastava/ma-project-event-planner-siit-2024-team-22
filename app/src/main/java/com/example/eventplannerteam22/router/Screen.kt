@@ -13,6 +13,10 @@ sealed class Screen(val route: String) {
     }
 
     object CreateEvent : Screen("create-event")
+    object EditEvent : Screen("edit-event/{eventId}") {
+        fun createRoute(eventId: Int): String = "edit-event/$eventId"
+    }
+
     object Products : Screen("products-screen")
     object ProductDetails : Screen("product/{productId}") {
         fun createRoute(productId: Int): String = "product/$productId"

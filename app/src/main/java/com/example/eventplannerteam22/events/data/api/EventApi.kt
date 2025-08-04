@@ -2,9 +2,11 @@ package com.example.eventplannerteam22.events.data.api
 
 import com.example.eventplannerteam22.events.data.model.CreateEventDTO
 import com.example.eventplannerteam22.events.data.model.EventDTO
+import com.example.eventplannerteam22.events.data.model.UpdateEventDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -20,4 +22,7 @@ interface EventApi {
 
     @POST("/events")
     suspend fun addEvent(@Body eventRequest: CreateEventDTO)
+
+    @PUT("/events/{eventId}")
+    suspend fun editEvent(@Path("eventId") eventId: Int, @Body dto: UpdateEventDTO): EventDTO
 }

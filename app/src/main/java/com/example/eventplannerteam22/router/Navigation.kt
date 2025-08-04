@@ -36,6 +36,7 @@ import com.example.eventplannerteam22.budgetPlan.presentation.BudgetPlanScreen
 import com.example.eventplannerteam22.chat.presentation.ChatListScreen
 import com.example.eventplannerteam22.chat.presentation.ChatScreen
 import com.example.eventplannerteam22.events.presentation.addevent.CreateEventScreen
+import com.example.eventplannerteam22.events.presentation.editevent.EditEventScreen
 import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
 import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
@@ -156,6 +157,27 @@ fun Navigation() {
             ) { paddingValues ->
                 CreateEventScreen(navController, paddingValues)
             }
+        }
+
+        composable(
+            route = Screen.EditEvent.route,
+            arguments = listOf(navArgument("eventId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getInt("eventId") ?: return@composable
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                EditEventScreen(
+                    paddingValues = paddingValues,
+                    eventId = eventId,
+                    navController = navController
+                )
+            }
+
         }
 
         composable(

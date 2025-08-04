@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.events.presentation.addevent
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -82,7 +83,22 @@ class CreateEventViewModel @Inject constructor(
                 screenState = screenState.copy(dateOfEvent = event.input)
             }
 
+            is CreateEventUiEvent.AddActivity -> {
+                screenState = screenState.copy(
+                    eventActivities = screenState.eventActivities + event.activity
+                )
+            }
+
+            is CreateEventUiEvent.RemoveActivity -> {
+                screenState = screenState.copy(
+                    eventActivities = screenState.eventActivities.toMutableList().also {
+                        it.removeAt(event.index)
+                    }
+                )
+            }
+
             is CreateEventUiEvent.Submit -> {
+                Log.d("CreateEventViewModel", screenState.eventActivities.toString())
                 submit()
             }
         }
@@ -96,7 +112,6 @@ class CreateEventViewModel @Inject constructor(
     }
 
     fun isAllValid(): Boolean {
-
         val nameError = isValidName(screenState.name)
         val descriptionError = isValidDescription(screenState.description)
         val locationError = isValidLocation(screenState.location)
@@ -164,7 +179,8 @@ class CreateEventViewModel @Inject constructor(
                     isPrivate = screenState.isPrivate,
                     location = screenState.location,
                     dateOfEvent = screenState.dateOfEvent,
-                    userId = sessionRepository.getUserId()
+                    userId = sessionRepository.getUserId(),
+                    eventActivities = screenState.eventActivities
                 )
             )
         }

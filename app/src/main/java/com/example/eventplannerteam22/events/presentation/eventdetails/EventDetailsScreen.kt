@@ -28,8 +28,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.events.comments.presentation.EventCommentSection
+import com.example.eventplannerteam22.events.data.model.UpdateEventDTO
 import com.example.eventplannerteam22.events.invite.presentation.InviteEmailSection
 import com.example.eventplannerteam22.network.apiResultHandler
+import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
 import java.time.format.DateTimeFormatter
 
@@ -141,6 +143,25 @@ fun EventDetailScreen(
                             }
                         }
                     }
+                }
+                Button(
+                    onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            "eventToEdit", UpdateEventDTO(
+                                name = event!!.name,
+                                description = event!!.description,
+                                maxCapacity = event!!.maxCapacity,
+                                location = event!!.location,
+                                eventDate = event!!.eventDate
+                            )
+                        )
+                        navController.navigate(Screen.EditEvent.createRoute(eventId))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Text("Edit event")
                 }
                 InviteEmailSection(
                     eventId = eventId,
