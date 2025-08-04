@@ -3,6 +3,8 @@ package com.example.eventplannerteam22.router
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -38,9 +40,12 @@ import com.example.eventplannerteam22.events.presentation.eventlist.EventListScr
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
 import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
+import com.example.eventplannerteam22.notifications.NotificationPermissionScreen
+import com.example.eventplannerteam22.notifications.presentation.NotificationScreen
 import com.example.eventplannerteam22.presentation.MainLayout
 import com.example.eventplannerteam22.presentation.screens.SplashScreen
 import com.example.eventplannerteam22.priceList.presentation.PriceListScreen
+import com.example.eventplannerteam22.productcategory.presentation.ProductCategoryScreen
 import com.example.eventplannerteam22.products.presentation.createproduct.CreateProductScreen
 import com.example.eventplannerteam22.products.presentation.productdetails.ProductDetailScreen
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsScreen
@@ -48,6 +53,7 @@ import com.example.eventplannerteam22.profile.presentation.editprofile.EditProfi
 import com.example.eventplannerteam22.profile.presentation.profile.ProfileScreen
 import com.example.eventplannerteam22.session.SessionViewModel
 import com.example.eventplannerteam22.session.UserRole
+import com.example.eventplannerteam22.solutionCategory.presentation.SolutionCategoryScreen
 import com.example.eventplannerteam22.solutions.AddSolutionScreen
 import com.example.eventplannerteam22.solutions.SolutionDetailScreen
 import com.example.eventplannerteam22.solutions.SolutionsScreen
@@ -62,7 +68,8 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+//        startDestination = Screen.Splash.route
+        startDestination = Screen.NotificationPermission.route
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(navController)
@@ -209,6 +216,11 @@ fun Navigation() {
                 )
             }
         }
+
+        composable("product-categories") {
+            ProductCategoryScreen()
+        }
+
         composable("solutions/{solutionId}") { backStackEntry ->
             val solutionId = backStackEntry.arguments?.getString("solutionId")?.toIntOrNull()
             val sessionViewModel: SessionViewModel = hiltViewModel()
@@ -219,6 +231,10 @@ fun Navigation() {
                     sessionViewModel = sessionViewModel
                 )
             }
+        }
+
+        composable("solution-categories") {
+            SolutionCategoryScreen()
         }
 
         composable("add_solution") {
@@ -331,6 +347,18 @@ fun Navigation() {
                 coroutineScope = coroutineScope
             )
         }
+        composable("notifications") {
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+            NotificationScreen(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                sessionViewModel = sessionViewModel
+            )
+        }
+        composable(Screen.NotificationPermission.route) {
+            NotificationPermissionScreen(navController)
+        }
     }
 }
 
@@ -409,6 +437,34 @@ fun DrawerContent(
         HorizontalDivider()
         NavigationDrawerItem(
             onClick = {
+                navController.navigate(Screen.SolutionCategoriesScreen.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Solution categories") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.home_repair_service_24px),
+                    contentDescription = "Solution categories management"
+                )
+            }
+        )
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.ProductCategoriesScreen.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Product categories") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.home_repair_service_24px),
+                    contentDescription = "Product categories management"
+                )
+            }
+        )
+        NavigationDrawerItem(
+            onClick = {
                 navController.navigate(Screen.EventTypes.route)
                 coroutineScope.launch { drawerState.close() }
             },
@@ -467,6 +523,19 @@ fun DrawerContent(
                 )
             }
         )
+        if (session.loggedIn && session.userId != null) {
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate("notifications")
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Notifications") },
+            icon = {
+                Icon(Icons.Default.Notifications, contentDescription = null)
+            }
+        )
+    }
     }
 }
 

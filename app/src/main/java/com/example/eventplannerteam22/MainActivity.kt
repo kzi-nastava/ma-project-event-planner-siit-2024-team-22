@@ -22,6 +22,7 @@ class MainActivity constructor(
             }
         }
     }
+
 }
 
 @Preview(showBackground = true)
@@ -31,3 +32,5 @@ fun MainScreenPreview() {
         Navigation()
     }
 }
+
+

@@ -1,7 +1,7 @@
 package com.example.eventplannerteam22.eventtype.domen
 
 import com.example.eventplannerteam22.productcategory.domen.ProductCategory
-import com.example.eventplannerteam22.solutioncategory.domen.SolutionCategory
+import com.example.eventplannerteam22.solutionCategory.domain.SolutionCategory
 
 data class EventType(
     val id: Int,

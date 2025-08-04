@@ -1,6 +1,15 @@
 package com.example.eventplannerteam22.auth
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,8 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.auth0.jwt.JWT
 import com.example.eventplannerteam22.auth.login.LoginUiEvent
 import com.example.eventplannerteam22.auth.login.LoginViewModel
 import com.example.eventplannerteam22.auth.registration.RegistrationUiEvent
@@ -37,6 +48,7 @@ import com.example.eventplannerteam22.auth.registration.RegistrationViewModel
 import com.example.eventplannerteam22.auth.registration.UserRole
 import com.example.eventplannerteam22.network.ApiResult
 import com.example.eventplannerteam22.network.apiResultHandler
+import com.example.eventplannerteam22.notifications.NotificationSseService
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
 
@@ -48,10 +60,30 @@ fun AuthScreen(
     registrationViewModel: RegistrationViewModel = hiltViewModel(),
     sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    var isLogin by remember { mutableStateOf(true) }
     val loginState = loginViewModel.state
     val registrationState = registrationViewModel.registrationScreenState
     val context = LocalContext.current
+    val activity = context as ComponentActivity
+
+    var isLogin by remember { mutableStateOf(true) }
+    var sseStarted by remember { mutableStateOf(false) }
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            if (granted) {
+                val userId = sessionViewModel.session.value.accessToken?.let {
+                    JWT.decode(it).getClaim("userId").asInt()
+                }
+                if (userId != null && !sseStarted) {
+                    NotificationSseService(context, userId).start()
+                    sseStarted = true
+                }
+            } else {
+                Log.w("AuthScreen", "Notification permission denied")
+            }
+        }
+    )
 
     LaunchedEffect(loginViewModel, context) {
         loginViewModel.apiResults.collect { result ->
@@ -59,6 +91,48 @@ fun AuthScreen(
                 onSuccess = {
                     if (result is ApiResult.Success) {
                         sessionViewModel.login(result.data)
+
+                        val accessToken = result.data.accessToken
+                        val userId = JWT.decode(accessToken).getClaim("userId").asInt()
+
+                        // Создаем канал уведомлений
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            val channel = NotificationChannel(
+                                "sse_channel",
+                                "SSE Уведомления",
+                                NotificationManager.IMPORTANCE_HIGH
+                            ).apply {
+                                description = "Канал для push-уведомлений через SSE"
+                            }
+                            val notificationManager =
+                                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                            notificationManager.createNotificationChannel(channel)
+                        }
+
+                        // Проверяем разрешения на Android 13+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val permissionStatus = ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            )
+
+                            if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                                if (!sseStarted) {
+                                    NotificationSseService(context, userId).start()
+                                    sseStarted = true
+                                }
+                            } else {
+                                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        } else {
+                            // Для старых версий просто запускаем
+                            if (!sseStarted) {
+                                NotificationSseService(context, userId).start()
+                                sseStarted = true
+                            }
+                        }
+
+                        // Навигация после успешного логина
                         navController.navigate(Screen.Main.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
@@ -71,6 +145,7 @@ fun AuthScreen(
             )
         }
     }
+
 
     LaunchedEffect(registrationViewModel, context) {
         registrationViewModel.authResults.collect { result ->

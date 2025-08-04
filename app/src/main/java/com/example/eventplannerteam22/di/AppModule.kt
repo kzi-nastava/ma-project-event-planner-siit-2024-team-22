@@ -8,7 +8,9 @@ import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
 import com.example.eventplannerteam22.eventactivity.data.model.LocalTimeAdapter
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
+import com.example.eventplannerteam22.notifications.data.api.NotificationApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
+import com.example.eventplannerteam22.productcategory.data.ProductCategoryApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.comments.data.ProductCommentApi
 import com.example.eventplannerteam22.products.data.api.ProductApi
@@ -51,6 +53,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val moshi = Moshi.Builder()
+            .add(com.example.eventplannerteam22.notifications.data.LocalDateTimeAdapter())
             .add(LocalDateAdapter())
             .add(DurationAdapter())
             .add(BigDecimalAdapter())
@@ -121,6 +124,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideProductCategoryApi(retrofit: Retrofit): ProductCategoryApi {
+        return retrofit.create(ProductCategoryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideBudgetPlanApi(retrofit: Retrofit): BudgetPlanApiService {
         return retrofit.create(BudgetPlanApiService::class.java)
     }
@@ -135,5 +144,11 @@ object AppModule {
     @Singleton
     fun provideSolutionCommentApi(retrofit: Retrofit): SolutionCommentApi {
         return retrofit.create(SolutionCommentApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationApi(retrofit: Retrofit): NotificationApi {
+        return retrofit.create(NotificationApi::class.java)
     }
 }

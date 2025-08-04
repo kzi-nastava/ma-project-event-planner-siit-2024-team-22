@@ -4,6 +4,7 @@ sealed class Screen(val route: String) {
     object Main : Screen("main-screen")
     object Auth : Screen("auth-screen")
     object Login : Screen("login-screen")
+    object NotificationPermission : Screen("notification-permission")
     object Registration : Screen("registration-screen")
     object Events : Screen("event-screen")
 
@@ -29,4 +30,6 @@ sealed class Screen(val route: String) {
     object BudgetPlanScreen : Screen("budget-plan")
     object CreateProduct : Screen("create-product")
     object PriceListScreen : Screen("price-list")
+    object SolutionCategoriesScreen : Screen("solution-categories")
+    object ProductCategoriesScreen : Screen("product-categories")
 }
