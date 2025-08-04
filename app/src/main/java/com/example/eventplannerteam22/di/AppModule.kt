@@ -10,7 +10,9 @@ import com.example.eventplannerteam22.chat.data.ChatRepository
 import com.example.eventplannerteam22.chat.data.ChatWebSocketService
 import com.example.eventplannerteam22.chat.utils.UUIDAdapter
 import com.example.eventplannerteam22.eventactivity.data.model.LocalTimeAdapter
+import com.example.eventplannerteam22.events.comments.data.EventCommentApi
 import com.example.eventplannerteam22.events.data.api.EventApi
+import com.example.eventplannerteam22.events.invite.data.EventInviteApi
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.notifications.data.api.NotificationApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
@@ -187,6 +189,16 @@ object AppModule {
     @Singleton
     fun provideNotificationApi(retrofit: Retrofit): NotificationApi {
         return retrofit.create(NotificationApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventCommentApi(retrofit: Retrofit): EventCommentApi {
+        return retrofit.create(EventCommentApi::class.java)
+    }
+    @Provides
+    fun provideEventInviteApi(retrofit: Retrofit): EventInviteApi {
+        return retrofit.create(EventInviteApi::class.java)
     }
 
     @Provides

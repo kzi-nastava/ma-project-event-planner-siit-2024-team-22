@@ -1,16 +1,20 @@
 package com.example.eventplannerteam22.products.data.model
 
+import com.example.eventplannerteam22.events.data.model.UserDTO
+import com.example.eventplannerteam22.productcategory.domen.ProductCategory
+import com.squareup.moshi.JsonClass
 import java.math.BigDecimal
 
+@JsonClass(generateAdapter = true)
 data class ProductDTO(
     val id: Int,
     val name: String,
     val description: String,
     val price: BigDecimal,
-    val discount: BigDecimal? = BigDecimal.ZERO,
+    val discount: BigDecimal = BigDecimal.ZERO,
     val imageSource: String?,
     val isPrivate: Boolean,
     val isDeleted: Boolean,
-    val userId: Int,
-    val productCategoryId: Int
+    val user: UserDTO,
+    val productCategory: ProductCategory
 )

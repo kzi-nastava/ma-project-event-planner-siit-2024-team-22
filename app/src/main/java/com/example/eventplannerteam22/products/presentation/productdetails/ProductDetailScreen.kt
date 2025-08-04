@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.products.comments.presentation.ProductCommentSection
+import com.example.eventplannerteam22.products.data.model.UpdateProductDTO
+import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
 
 @Composable
@@ -58,6 +60,8 @@ fun ProductDetailScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         } else if (product != null) {
+            val item = product!!
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -82,22 +86,41 @@ fun ProductDetailScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = product!!.name,
+                        text = item.name,
                         style = MaterialTheme.typography.headlineSmall
                     )
                     Text(
-                        text = "Price: ${product!!.price} RSD",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Text(
-                        text = "Discount: ${product!!.discount}%",
+                        text = "Category: ${item.productCategory.name}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = product!!.description,
+                        text = "Price: ${item.price} RSD",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    item.discount?.let {
+                        Text(
+                            text = "Discount: $it%",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                    Text(
+                        text = item.description,
                         style = MaterialTheme.typography.bodyMedium
                     )
+                    Text(
+                        text = "Posted by: ${item.user.name} ${item.user.surname}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (item.isPrivate) {
+                        Text(
+                            text = "Private Product",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
 
                 Column(
@@ -113,6 +136,27 @@ fun ProductDetailScreen(
                 }
 
                 Button(
+                    onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            "productToEdit", UpdateProductDTO(
+                                name = item.name,
+                                description = item.description,
+                                price = item.price,
+                                discount = item.discount,
+                                isPrivate = item.isPrivate
+                            )
+                        )
+                        navController.navigate(Screen.UpdateProduct.createRoute(productId))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Text("Edit Product")
+                }
+
+
+                Button(
                     onClick = { navController.popBackStack() },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -124,3 +168,4 @@ fun ProductDetailScreen(
         }
     }
 }
+
