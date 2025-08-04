@@ -35,7 +35,7 @@ class AddSolutionViewModel @Inject constructor(
             repository.addSolution(
                 CreateSolutionDTO(
                     name = name,
-                    category = SolutionCategory(1, null, null),
+                    category = SolutionCategory(1, "Cleaning", "House cleaning"),
                     description = description,
                     features = features,
                     price = price.toDouble(),

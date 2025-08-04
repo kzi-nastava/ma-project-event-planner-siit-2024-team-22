@@ -9,6 +9,7 @@ import com.example.eventplannerteam22.budgetPlan.data.BudgetPlanApiService
 import com.example.eventplannerteam22.eventtype.data.api.EventTypeApi
 import com.example.eventplannerteam22.events.data.api.EventApi
 import com.example.eventplannerteam22.priceList.data.PriceListApiService
+import com.example.eventplannerteam22.productcategory.data.ProductCategoryApi
 import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.comments.data.ProductCommentApi
 import com.example.eventplannerteam22.products.data.api.ProductApi
@@ -115,6 +116,12 @@ object AppModule {
     @Singleton
     fun provideSolutionCategoryApi(retrofit: Retrofit): SolutionCategoryApi {
         return retrofit.create(SolutionCategoryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductCategoryApi(retrofit: Retrofit): ProductCategoryApi {
+        return retrofit.create(ProductCategoryApi::class.java)
     }
 
     @Provides
