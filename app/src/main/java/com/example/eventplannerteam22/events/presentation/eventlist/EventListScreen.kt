@@ -1,5 +1,6 @@
 package com.example.eventplannerteam22.events.presentation.eventlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -57,11 +58,15 @@ fun EventListScreen(
             )
         }
     }
-    EventListContent(events, paddingValues) { navController.navigate(Screen.CreateEvent.route) }
+    EventListContent(
+        events, paddingValues,
+        onAddProductClick = { navController.navigate(Screen.CreateEvent.route) },
+        onEventClick = { eventId -> navController.navigate(Screen.EventDetails.createRoute(eventId)) }
+    )
 }
 
 @Composable
-fun EventListContent(events: List<EventListItem>, paddingValues: PaddingValues, onAddProductClick: () -> Unit) {
+fun EventListContent(events: List<EventListItem>, paddingValues: PaddingValues, onAddProductClick: () -> Unit, onEventClick: (Int) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             contentPadding = paddingValues,
@@ -81,7 +86,8 @@ fun EventListContent(events: List<EventListItem>, paddingValues: PaddingValues, 
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(15.dp),
+                        .padding(15.dp)
+                        .clickable { onEventClick(event.id) },
                     shape = MaterialTheme.shapes.medium,
                     elevation = CardDefaults.cardElevation(4.dp)
                 ) {
@@ -136,5 +142,5 @@ fun EventListPreview() {
             eventDate = LocalDate.of(2025, 8, 20)
         )
     )
-    EventListContent(events, paddingValues) {}
+    EventListContent(events, paddingValues, {}, {})
 }

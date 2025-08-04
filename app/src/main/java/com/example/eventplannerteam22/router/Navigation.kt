@@ -33,6 +33,7 @@ import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
 import com.example.eventplannerteam22.budgetPlan.presentation.BudgetPlanScreen
 import com.example.eventplannerteam22.events.presentation.addevent.CreateEventScreen
+import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
 import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
 import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
@@ -141,6 +142,27 @@ fun Navigation() {
                 drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
             ) { paddingValues ->
                 CreateEventScreen(navController, paddingValues)
+            }
+        }
+
+        composable(
+            route = Screen.EventDetails.route,
+            arguments = listOf(navArgument("eventId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getInt("eventId") ?: return@composable
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+            ) { paddingValues ->
+                EventDetailScreen(
+                    paddingValues = paddingValues,
+                    eventId = eventId,
+                    navController = navController,
+                    sessionViewModel = sessionViewModel
+                )
             }
         }
 

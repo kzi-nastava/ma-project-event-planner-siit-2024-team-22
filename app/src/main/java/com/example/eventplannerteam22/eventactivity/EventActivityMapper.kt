@@ -6,6 +6,9 @@ import com.example.eventplannerteam22.eventactivity.domen.EventActivity
 fun EventActivityDTO.toEventActivity(): EventActivity {
     return EventActivity(
         this.id,
-        this.name
+        this.name,
+        this.startTime,
+        this.endTime,
+        this.location
     )
 }
