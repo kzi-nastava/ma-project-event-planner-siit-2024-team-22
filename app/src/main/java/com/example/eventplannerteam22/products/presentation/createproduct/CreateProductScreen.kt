@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,12 +23,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.eventplannerteam22.auth.ValidatingInputTextField
 import com.example.eventplannerteam22.network.apiResultHandler
 import com.example.eventplannerteam22.session.SessionViewModel
 
 @Composable
 fun CreateProductScreen(
+    navController: NavController,
     paddingValues: PaddingValues,
     viewModel: CreateProductViewModel = hiltViewModel(),
     sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
@@ -53,6 +57,15 @@ fun CreateProductScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
+        Text(
+            text = "Create product",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+        )
+        HorizontalDivider()
 
         ValidatingInputTextField(
             label = "Product Name",

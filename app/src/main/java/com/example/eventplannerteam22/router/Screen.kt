@@ -6,7 +6,12 @@ sealed class Screen(val route: String) {
     object Login : Screen("login-screen")
     object Registration : Screen("registration-screen")
     object Events : Screen("event-screen")
+    object CreateEvent : Screen("create-event")
     object Products : Screen("products-screen")
+    object ProductDetails : Screen("product/{productId}") {
+        fun createRoute(productId: Int): String = "product/$productId"
+    }
+
     object Services : Screen("services-screen")
     object Profile : Screen("profile-screen")
     object EditProfile : Screen("edit-profile-screen")

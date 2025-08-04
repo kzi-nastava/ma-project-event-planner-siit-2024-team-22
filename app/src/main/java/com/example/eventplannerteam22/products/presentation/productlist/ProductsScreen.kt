@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +33,6 @@ import androidx.navigation.NavController
 import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
-import com.example.eventplannerteam22.session.UserRole
 
 @Composable
 fun ProductsScreen(
@@ -52,6 +52,14 @@ fun ProductsScreen(
             .padding(paddingValues)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+            Text(
+                text = "Products",
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+            )
+            HorizontalDivider()
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp)
@@ -103,7 +111,7 @@ fun ProductCard(
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate("products/${product.id}")
+                navController.navigate(Screen.ProductDetails.createRoute(product.id))
             }
     ) {
         Column(

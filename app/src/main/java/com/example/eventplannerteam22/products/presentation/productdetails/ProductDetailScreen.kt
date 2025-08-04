@@ -1,15 +1,18 @@
 package com.example.eventplannerteam22.products.presentation.productdetails
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,12 +30,9 @@ import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.products.comments.presentation.ProductCommentSection
 import com.example.eventplannerteam22.session.SessionViewModel
 
-
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.rememberScrollState
-
 @Composable
 fun ProductDetailScreen(
+    paddingValues: PaddingValues,
     productId: Int,
     navController: NavController,
     sessionViewModel: SessionViewModel,
@@ -49,40 +49,74 @@ fun ProductDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .padding(paddingValues)
     ) {
         if (errorMessage != null) {
-            Text(text = errorMessage ?: "Unknown error", color = MaterialTheme.colorScheme.error)
+            Text(
+                text = errorMessage ?: "Unknown error",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.align(Alignment.Center)
+            )
         } else if (product != null) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.sample_image),
-                    contentDescription = "Product Image"
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = product!!.name, style = MaterialTheme.typography.headlineSmall)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Price: ${product!!.price}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "Discount: ${product!!.discount}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = product!!.description, style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ProductCommentSection(
-                    productId = productId,
-                    sessionViewModel = sessionViewModel
+                    contentDescription = "Product Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = product!!.name,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = "Price: ${product!!.price} RSD",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = "Discount: ${product!!.discount}%",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = product!!.description,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium)
+                        .padding(16.dp)
+                ) {
+                    ProductCommentSection(
+                        productId = productId,
+                        sessionViewModel = sessionViewModel
+                    )
+                }
 
                 Button(
                     onClick = { navController.popBackStack() },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
                 ) {
                     Text("Back")
                 }
