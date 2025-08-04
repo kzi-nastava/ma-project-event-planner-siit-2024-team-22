@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutioncategory.data.model
+package com.example.eventplannerteam22.solutionCategory.data.model
 
 import com.squareup.moshi.JsonClass
 
