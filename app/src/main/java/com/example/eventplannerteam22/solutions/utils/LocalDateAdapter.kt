@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.utils
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson

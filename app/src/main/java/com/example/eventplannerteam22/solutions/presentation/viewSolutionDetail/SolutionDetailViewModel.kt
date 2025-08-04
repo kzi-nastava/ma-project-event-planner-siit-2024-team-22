@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.presentation.viewSolutionDetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

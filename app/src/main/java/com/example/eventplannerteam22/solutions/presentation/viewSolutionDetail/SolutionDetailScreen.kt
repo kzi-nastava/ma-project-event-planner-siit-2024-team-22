@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.presentation.viewSolutionDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.R
+import com.example.eventplannerteam22.solutions.utils.toReadableFormat
 
 @Composable
 fun SolutionDetailScreen(
@@ -109,11 +110,21 @@ fun SolutionDetailScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
                     onClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Back")
+                }
+
+                Button(
+                    onClick = {
+                        navController.navigate("edit_solution/${solutionId}")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Edit")
                 }
             }
         }

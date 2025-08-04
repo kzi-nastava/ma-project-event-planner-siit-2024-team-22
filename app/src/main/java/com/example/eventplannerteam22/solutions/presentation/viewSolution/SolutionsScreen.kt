@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.presentation.viewSolution
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable

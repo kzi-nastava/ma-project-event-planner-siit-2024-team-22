@@ -1,6 +1,7 @@
 package com.example.eventplannerteam22.solutions.data
 
 import com.example.eventplannerteam22.solutions.domain.CreateSolutionDTO
+import com.example.eventplannerteam22.solutions.domain.PutSolutionDTO
 import com.example.eventplannerteam22.solutions.domain.Solution
 import javax.inject.Inject
 
@@ -15,5 +16,9 @@ class SolutionRepository @Inject constructor(
     }
     suspend fun addSolution(solution: CreateSolutionDTO) {
         return solutionApi.addSolution(solution)
+    }
+
+    suspend fun updateSolution(solution: PutSolutionDTO, id: Int) {
+        return solutionApi.updateSolution(solution, id)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.presentation.viewSolution
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

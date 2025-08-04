@@ -10,8 +10,8 @@ import com.example.eventplannerteam22.products.BigDecimalAdapter
 import com.example.eventplannerteam22.products.data.api.ProductApi
 import com.example.eventplannerteam22.profile.data.ProfileApi
 import com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryApi
-import com.example.eventplannerteam22.solutions.DurationAdapter
-import com.example.eventplannerteam22.solutions.LocalDateAdapter
+import com.example.eventplannerteam22.solutions.utils.DurationAdapter
+import com.example.eventplannerteam22.solutions.utils.LocalDateAdapter
 import com.example.eventplannerteam22.solutions.data.SolutionApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

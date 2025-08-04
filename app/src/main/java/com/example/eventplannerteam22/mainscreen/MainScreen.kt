@@ -27,7 +27,7 @@ import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.products.presentation.productlist.ProductsViewModel
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.solutions.domain.Solution
-import com.example.eventplannerteam22.solutions.SolutionsViewModel
+import com.example.eventplannerteam22.solutions.presentation.viewSolution.SolutionsViewModel
 
 
 @Composable

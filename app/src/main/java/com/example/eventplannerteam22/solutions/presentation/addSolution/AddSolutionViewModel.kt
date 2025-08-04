@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.presentation.addSolution
 
 import androidx.lifecycle.ViewModel
 import com.example.eventplannerteam22.solutionCategory.domain.SolutionCategory

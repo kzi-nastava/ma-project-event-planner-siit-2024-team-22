@@ -19,9 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
@@ -41,9 +43,10 @@ import com.example.eventplannerteam22.products.presentation.productlist.Products
 import com.example.eventplannerteam22.profile.presentation.editprofile.EditProfileScreen
 import com.example.eventplannerteam22.profile.presentation.profile.ProfileScreen
 import com.example.eventplannerteam22.session.SessionViewModel
-import com.example.eventplannerteam22.solutions.AddSolutionScreen
-import com.example.eventplannerteam22.solutions.SolutionDetailScreen
-import com.example.eventplannerteam22.solutions.SolutionsScreen
+import com.example.eventplannerteam22.solutions.presentation.addSolution.AddSolutionScreen
+import com.example.eventplannerteam22.solutions.presentation.editSolution.EditSolutionScreen
+import com.example.eventplannerteam22.solutions.presentation.viewSolutionDetail.SolutionDetailScreen
+import com.example.eventplannerteam22.solutions.presentation.viewSolution.SolutionsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -174,6 +177,27 @@ fun Navigation() {
 
         composable("add_solution") {
             AddSolutionScreen(navController)
+        }
+
+        composable("edit_solution/{solutionId}") { backStackEntry ->
+            val solutionId = backStackEntry.arguments?.getString("solutionId")?.toIntOrNull()
+            if (solutionId != null) {
+                EditSolutionScreen(
+                    solutionId = solutionId,
+                    navController = navController
+                )
+            }
+        }
+
+        composable(
+            route = "edit_solution/{solutionId}",
+            arguments = listOf(navArgument("solutionId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val solutionId = backStackEntry.arguments?.getInt("solutionId") ?: 0
+            EditSolutionScreen(
+                solutionId = solutionId,
+                navController = navController
+            )
         }
 
         composable(route = Screen.Services.route) {

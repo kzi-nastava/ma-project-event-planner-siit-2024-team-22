@@ -1,4 +1,4 @@
-package com.example.eventplannerteam22.solutions
+package com.example.eventplannerteam22.solutions.presentation.addSolution
 
 import android.app.DatePickerDialog
 import android.widget.Toast
