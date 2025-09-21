@@ -1,4 +1,9 @@
+
 package com.example.eventplannerteam22.di
+
+import com.example.eventplannerteam22.blockedusers.data.BlockedUsersApi
+import com.example.eventplannerteam22.blockedusers.data.BlockedUsersRepositoryImpl
+import com.example.eventplannerteam22.blockedusers.domain.BlockedUsersRepository
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -61,6 +66,18 @@ object UnauthenticatedPaths {
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideBlockedUsersApi(retrofit: Retrofit): BlockedUsersApi {
+        return retrofit.create(BlockedUsersApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBlockedUsersRepository(api: BlockedUsersApi): BlockedUsersRepository {
+        return BlockedUsersRepositoryImpl(api)
+    }
     @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {

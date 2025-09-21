@@ -46,4 +46,6 @@ sealed class Screen(val route: String) {
             "chat/$conversationId/$receiverId"
     }
 
+    object BlockedUsers : Screen("blocked-users")
+
 }
