@@ -64,6 +64,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Block
 import com.example.eventplannerteam22.favorites.presentation.FavoriteScreen
 import kotlinx.coroutines.selects.select
 
@@ -92,6 +93,31 @@ fun Navigation() {
                 }
             ) { paddingValues ->
                 MainScreen(navController, paddingValues)
+            }
+        }
+
+        composable(route = Screen.BlockedUsers.route) {
+            val sessionViewModel: com.example.eventplannerteam22.session.SessionViewModel = androidx.hilt.navigation.compose.hiltViewModel(LocalContext.current as ComponentActivity)
+            val session = sessionViewModel.session.collectAsState().value
+            val userId = session.userId ?: -1
+            val blockedUsersViewModel: com.example.eventplannerteam22.blockedusers.presentation.BlockedUsersViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+            val state = blockedUsersViewModel.state.collectAsState().value
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = {
+                    DrawerContent(navController, coroutineScope, drawerState)
+                },
+                topBarTitle = "Blocked users"
+            ) { paddingValues ->
+                com.example.eventplannerteam22.blockedusers.presentation.BlockedUsersScreen(
+                    blockedUsers = state.blockedUsers,
+                    onBlockUser = { email -> blockedUsersViewModel.blockUserByEmail(email) },
+                    onUnblockUser = { id -> blockedUsersViewModel.unblockUser(id) },
+                    isLoading = state.isLoading,
+                    error = state.error
+                )
             }
         }
 
@@ -638,18 +664,38 @@ fun DrawerContent(
             }
         )
         if (session.loggedIn && session.userId != null) {
-        NavigationDrawerItem(
-            onClick = {
-                navController.navigate("notifications")
-                coroutineScope.launch { drawerState.close() }
-            },
-            selected = false,
-            label = { Text("Notifications") },
-            icon = {
-                Icon(Icons.Default.Notifications, contentDescription = null)
-            }
-        )
-    }
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate(Screen.BlockedUsers.route)
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Blocked users") },
+                icon = {
+                    Icon(imageVector = Icons.Default.Block, contentDescription = "Blocked users")
+                }
+            )
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate("notifications")
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Notifications") },
+                icon = {
+                    Icon(Icons.Default.Notifications, contentDescription = null)
+                }
+            )
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate("favorites")
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Favorites") },
+                icon = { Icon(Icons.Default.Favorite, contentDescription = null) }
+            )
+        }
         NavigationDrawerItem(
             onClick = {
                 navController.navigate(Screen.ChatList.route)
