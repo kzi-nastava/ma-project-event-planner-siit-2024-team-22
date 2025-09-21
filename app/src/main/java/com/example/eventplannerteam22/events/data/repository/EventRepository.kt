@@ -11,7 +11,14 @@ interface EventRepository {
     suspend fun getEvents(limit: Int, offset: Int): ApiResult<List<EventListItem>>
     suspend fun getEventById(id: Int): ApiResult<Event>
     suspend fun addEvent(dto: CreateEventDTO)
-
     suspend fun editEvent(eventId: Int, dto: UpdateEventDTO): ApiResult<EventDTO>
-
+    suspend fun searchAndFilterEvents(
+        name: String? = null,
+        location: String? = null,
+        eventType: String? = null,
+        fromDate: String? = null,
+        toDate: String? = null,
+        maxCapacity: Int? = null,
+        isPrivate: Boolean? = null
+    ): ApiResult<List<EventListItem>>
 }

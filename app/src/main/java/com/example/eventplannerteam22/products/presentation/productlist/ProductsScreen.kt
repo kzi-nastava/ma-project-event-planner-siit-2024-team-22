@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.products.domain.ProductListItem
+import com.example.eventplannerteam22.products.presentation.filters.ProductFilterComponent
 import com.example.eventplannerteam22.router.Screen
 import com.example.eventplannerteam22.session.SessionViewModel
 
@@ -41,7 +42,7 @@ fun ProductsScreen(
     viewModel: ProductsViewModel = hiltViewModel(),
     sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val products = viewModel.products
+    val products = if (viewModel.isFiltered) viewModel.filteredProducts else viewModel.products
     val isLoading = viewModel.isLoading
     val hasMoreProducts = viewModel.hasMoreProducts
     val session = sessionViewModel.session.collectAsState()
@@ -60,6 +61,16 @@ fun ProductsScreen(
                     .padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
             )
             HorizontalDivider()
+            
+            // Фильтр продуктов
+            ProductFilterComponent(
+                filterState = viewModel.filterState,
+                onFilterChange = { filterState -> viewModel.updateFilterState(filterState) },
+                onClearFilters = { viewModel.clearFilters() },
+                onApplyFilters = { viewModel.applyFilters() },
+                modifier = Modifier.padding(16.dp)
+            )
+            
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp)
@@ -78,7 +89,7 @@ fun ProductsScreen(
                 ) {
                     CircularProgressIndicator()
                 }
-            } else if (hasMoreProducts) {
+            } else if (hasMoreProducts && !viewModel.isFiltered) {
                 Button(
                     onClick = { viewModel.loadProducts() },
                     modifier = Modifier

@@ -9,6 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.time.LocalDate
 
 interface EventApi {
     @GET("/events")
@@ -25,4 +26,15 @@ interface EventApi {
 
     @PUT("/events/{eventId}")
     suspend fun editEvent(@Path("eventId") eventId: Int, @Body dto: UpdateEventDTO): EventDTO
+
+    @GET("/events/search")
+    suspend fun searchAndFilterEvents(
+        @Query("name") name: String? = null,
+        @Query("location") location: String? = null,
+        @Query("eventType") eventType: String? = null,
+        @Query("fromDate") fromDate: String? = null,
+        @Query("toDate") toDate: String? = null,
+        @Query("maxCapacity") maxCapacity: Int? = null,
+        @Query("isPrivate") isPrivate: Boolean? = null
+    ): List<EventDTO>
 }
