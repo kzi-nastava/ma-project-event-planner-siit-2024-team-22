@@ -1,6 +1,9 @@
 
 package com.example.eventplannerteam22.di
 
+import com.example.eventplannerteam22.userreport.presentation.UserReportApi
+import com.example.eventplannerteam22.userreport.presentation.UserReportRepository
+
 import com.example.eventplannerteam22.blockedusers.data.BlockedUsersApi
 import com.example.eventplannerteam22.blockedusers.data.BlockedUsersRepositoryImpl
 import com.example.eventplannerteam22.blockedusers.domain.BlockedUsersRepository
@@ -66,6 +69,18 @@ object UnauthenticatedPaths {
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideUserReportApi(retrofit: Retrofit): UserReportApi {
+        return retrofit.create(UserReportApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserReportRepository(api: UserReportApi): UserReportRepository {
+        return UserReportRepository(api)
+    }
 
     @Provides
     @Singleton

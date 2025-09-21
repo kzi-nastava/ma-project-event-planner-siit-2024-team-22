@@ -48,4 +48,6 @@ sealed class Screen(val route: String) {
 
     object BlockedUsers : Screen("blocked-users")
 
+    object UserReport : Screen("user-report")
+
 }
