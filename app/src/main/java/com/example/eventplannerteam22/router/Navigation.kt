@@ -1,6 +1,8 @@
 package com.example.eventplannerteam22.router
 
+
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.filled.Notifications
@@ -76,9 +78,26 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-//        startDestination = Screen.Splash.route
         startDestination = Screen.NotificationPermission.route
     ) {
+        composable(route = Screen.UserReport.route) {
+            val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+            val session = sessionViewModel.session.collectAsState().value
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) },
+                topBarTitle = "Report user"
+            ) { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    com.example.eventplannerteam22.userreport.presentation.UserReportScreen(
+                        navController = navController,
+                        reporterId = session.userId ?: 0
+                    )
+                }
+            }
+        }
         composable(route = Screen.Splash.route) {
             SplashScreen(navController)
         }
@@ -663,7 +682,21 @@ fun DrawerContent(
                 )
             }
         )
-        if (session.loggedIn && session.userId != null) {
+    if (session.loggedIn && session.userId != null) {
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate(Screen.UserReport.route)
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Report user") },
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.sample_image),
+                        contentDescription = "Report user"
+                    )
+                }
+            )
             NavigationDrawerItem(
                 onClick = {
                     navController.navigate(Screen.BlockedUsers.route)
