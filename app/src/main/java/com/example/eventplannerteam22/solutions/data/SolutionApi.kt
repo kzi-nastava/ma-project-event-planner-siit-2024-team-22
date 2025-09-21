@@ -18,4 +18,13 @@ interface SolutionApi {
     suspend fun getSolutionById(@Path("id") id: Int): Solution
     @POST("/solutions")
     suspend fun addSolution(@Body solution: CreateSolutionDTO)
+
+    @GET("/solutions/search")
+    suspend fun searchAndFilterSolutions(
+        @Query("name") name: String? = null,
+        @Query("description") description: String? = null,
+        @Query("category") category: String? = null,
+        @Query("price") price: Double? = null,
+        @Query("discount") discount: Double? = null
+    ): List<Solution>
 }

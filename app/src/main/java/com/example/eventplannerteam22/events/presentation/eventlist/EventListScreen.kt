@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventplannerteam22.events.domen.EventListItem
+import com.example.eventplannerteam22.events.presentation.filters.EventFilterComponent
 import com.example.eventplannerteam22.network.apiResultHandler
 import com.example.eventplannerteam22.router.Screen
 import java.time.LocalDate
@@ -42,7 +43,8 @@ fun EventListScreen(
     eventListViewModel: EventListViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val events = eventListViewModel.screenState.events
+    val screenState = eventListViewModel.screenState
+    val events = if (screenState.isFiltered) screenState.filteredEvents else screenState.events
 
     LaunchedEffect(Unit) {
         eventListViewModel.fetchEvents()
@@ -59,14 +61,28 @@ fun EventListScreen(
         }
     }
     EventListContent(
-        events, paddingValues,
+        events, 
+        screenState, 
+        paddingValues,
         onAddProductClick = { navController.navigate(Screen.CreateEvent.route) },
-        onEventClick = { eventId -> navController.navigate(Screen.EventDetails.createRoute(eventId)) }
+        onEventClick = { eventId -> navController.navigate(Screen.EventDetails.createRoute(eventId)) },
+        onFilterChange = { filterState -> eventListViewModel.updateFilterState(filterState) },
+        onApplyFilters = { eventListViewModel.applyFilters() },
+        onClearFilters = { eventListViewModel.clearFilters() }
     )
 }
 
 @Composable
-fun EventListContent(events: List<EventListItem>, paddingValues: PaddingValues, onAddProductClick: () -> Unit, onEventClick: (Int) -> Unit) {
+fun EventListContent(
+    events: List<EventListItem>, 
+    screenState: EventListState,
+    paddingValues: PaddingValues, 
+    onAddProductClick: () -> Unit, 
+    onEventClick: (Int) -> Unit,
+    onFilterChange: (com.example.eventplannerteam22.events.presentation.filters.EventFilterState) -> Unit,
+    onApplyFilters: () -> Unit,
+    onClearFilters: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             contentPadding = paddingValues,
@@ -82,6 +98,18 @@ fun EventListContent(events: List<EventListItem>, paddingValues: PaddingValues, 
                 )
                 HorizontalDivider()
             }
+            
+            // Фильтр событий
+            item {
+                EventFilterComponent(
+                    filterState = screenState.filterState,
+                    onFilterChange = onFilterChange,
+                    onClearFilters = onClearFilters,
+                    onApplyFilters = onApplyFilters,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            
             items(events) { event ->
                 Card(
                     modifier = Modifier
@@ -142,5 +170,20 @@ fun EventListPreview() {
             eventDate = LocalDate.of(2025, 8, 20)
         )
     )
-    EventListContent(events, paddingValues, {}, {})
+    val mockState = EventListState(
+        events = events,
+        filteredEvents = events,
+        isFiltered = false,
+        filterState = com.example.eventplannerteam22.events.presentation.filters.EventFilterState()
+    )
+    EventListContent(
+        events = events,
+        screenState = mockState,
+        paddingValues = paddingValues,
+        onAddProductClick = {},
+        onEventClick = {},
+        onFilterChange = {},
+        onApplyFilters = {},
+        onClearFilters = {}
+    )
 }

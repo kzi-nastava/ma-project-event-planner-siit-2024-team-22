@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import androidx.navigation.NavController
 import com.example.eventplannerteam22.session.SessionViewModel
 import com.example.eventplannerteam22.session.UserRole
 import com.example.eventplannerteam22.solutions.domain.Solution
+import com.example.eventplannerteam22.solutions.presentation.filters.SolutionFilterComponent
 
 @Composable
 fun SolutionsScreen(
@@ -40,7 +42,7 @@ fun SolutionsScreen(
     viewModel: SolutionsViewModel = hiltViewModel(),
     sessionViewModel: SessionViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val solutions = viewModel.solutions
+    val solutions = if (viewModel.isFiltered) viewModel.filteredSolutions else viewModel.solutions
     val isLoading = viewModel.isLoading
     val hasMoreSolutions = viewModel.hasMoreSolutions
     val session = sessionViewModel.session.collectAsState()
@@ -51,6 +53,24 @@ fun SolutionsScreen(
             .padding(paddingValues)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+            Text(
+                text = "Services",
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+            )
+            HorizontalDivider()
+            
+            // Фильтр сервисов
+            SolutionFilterComponent(
+                filterState = viewModel.filterState,
+                onFilterChange = { filterState -> viewModel.updateFilterState(filterState) },
+                onClearFilters = { viewModel.clearFilters() },
+                onApplyFilters = { viewModel.applyFilters() },
+                modifier = Modifier.padding(16.dp)
+            )
+            
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp)
@@ -69,7 +89,7 @@ fun SolutionsScreen(
                 ) {
                     CircularProgressIndicator()
                 }
-            } else if (hasMoreSolutions) {
+            } else if (hasMoreSolutions && !viewModel.isFiltered) {
                 Button(
                     onClick = { viewModel.loadSolutions() },
                     modifier = Modifier

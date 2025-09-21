@@ -9,6 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.math.BigDecimal
 
 interface ProductApi {
     @GET("/products")
@@ -31,4 +32,15 @@ interface ProductApi {
 
     @PUT("/products/{id}")
     suspend fun updateProduct(@Path("id") id: Int, @Body dto: UpdateProductDTO): ProductDTO
+
+    @GET("/products/search")
+    suspend fun searchAndFilterProducts(
+        @Query("name") name: String? = null,
+        @Query("description") description: String? = null,
+        @Query("category") category: String? = null,
+        @Query("price") price: BigDecimal? = null,
+        @Query("discount") discount: BigDecimal? = null,
+        @Query("imageSource") imageSource: String? = null,
+        @Query("isPrivate") isPrivate: Boolean? = null
+    ): List<ProductDTO>
 }

@@ -33,4 +33,26 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun editEvent(eventId: Int, dto: UpdateEventDTO): ApiResult<EventDTO> {
         return safeApiCall(okHttpClient) { eventApi.editEvent(eventId, dto) }
     }
+
+    override suspend fun searchAndFilterEvents(
+        name: String?,
+        location: String?,
+        eventType: String?,
+        fromDate: String?,
+        toDate: String?,
+        maxCapacity: Int?,
+        isPrivate: Boolean?
+    ): ApiResult<List<EventListItem>> {
+        return safeApiCall(okHttpClient) { 
+            eventApi.searchAndFilterEvents(
+                name = name,
+                location = location,
+                eventType = eventType,
+                fromDate = fromDate,
+                toDate = toDate,
+                maxCapacity = maxCapacity,
+                isPrivate = isPrivate
+            ).map { it.toListItem() }
+        }
+    }
 }
