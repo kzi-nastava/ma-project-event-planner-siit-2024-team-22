@@ -1,3 +1,4 @@
+
 package com.example.eventplannerteam22.router
 
 
@@ -41,6 +42,7 @@ import com.example.eventplannerteam22.events.presentation.addevent.CreateEventSc
 import com.example.eventplannerteam22.events.presentation.editevent.EditEventScreen
 import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
 import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
+import com.example.eventplannerteam22.booking.presentation.BookingListScreen
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
 import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
@@ -67,6 +69,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Block
+import androidx.compose.runtime.LaunchedEffect
+import com.example.eventplannerteam22.booking.presentation.BookingViewModel
 import com.example.eventplannerteam22.favorites.presentation.FavoriteScreen
 import kotlinx.coroutines.selects.select
 
@@ -192,6 +196,27 @@ fun Navigation() {
                 )
             }
         }
+
+            composable(route = Screen.Bookings.route) {
+                val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
+                val session = sessionViewModel.session.collectAsState().value
+                val userId = session.userId ?: -1
+                val bookingViewModel: BookingViewModel = hiltViewModel()
+                LaunchedEffect(userId) {
+                    if (userId != -1) bookingViewModel.loadBookings(userId)
+                }
+                MainLayout(
+                    navController = navController,
+                    drawerState = drawerState,
+                    coroutineScope = coroutineScope,
+                    drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
+                ) { paddingValues ->
+                    BookingListScreen(
+                        bookings = bookingViewModel.bookings,
+                        userId = userId
+                    )
+                }
+            }
 
         composable(route = Screen.CreateEvent.route) {
             MainLayout(
@@ -683,6 +708,20 @@ fun DrawerContent(
             }
         )
     if (session.loggedIn && session.userId != null) {
+        NavigationDrawerItem(
+            onClick = {
+                navController.navigate(Screen.Bookings.route)
+                coroutineScope.launch { drawerState.close() }
+            },
+            selected = false,
+            label = { Text("Bookings") },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.event_list_24px),
+                    contentDescription = "Bookings"
+                )
+            }
+        )
             NavigationDrawerItem(
                 onClick = {
                     navController.navigate(Screen.UserReport.route)
