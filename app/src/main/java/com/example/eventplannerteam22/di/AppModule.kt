@@ -72,6 +72,18 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideBookingApi(retrofit: Retrofit): com.example.eventplannerteam22.booking.data.remote.BookingApi {
+        return retrofit.create(com.example.eventplannerteam22.booking.data.remote.BookingApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookingRepository(api: com.example.eventplannerteam22.booking.data.remote.BookingApi): com.example.eventplannerteam22.booking.data.repository.BookingRepository {
+        return com.example.eventplannerteam22.booking.data.repository.BookingRepository(api)
+    }
+
+    @Provides
+    @Singleton
     fun provideUserReportApi(retrofit: Retrofit): UserReportApi {
         return retrofit.create(UserReportApi::class.java)
     }
