@@ -26,18 +26,28 @@ class SolutionRepository @Inject constructor(
     suspend fun searchAndFilterSolutions(
         name: String? = null,
         description: String? = null,
-        category: String? = null,
-        price: Double? = null,
-        discount: Double? = null
+        categoryId: Int? = null,
+        minPrice: Double? = null,
+        maxPrice: Double? = null,
+        minDiscount: Double? = null,
+        maxDiscount: Double? = null
     ): ApiResult<List<Solution>> {
         return safeApiCall(okHttpClient) { 
-            solutionApi.searchAndFilterSolutions(
+            val response = solutionApi.searchAndFilterSolutions(
                 name = name,
                 description = description,
-                category = category,
-                price = price,
-                discount = discount
+                categoryId = categoryId,
+                minPrice = minPrice,
+                maxPrice = maxPrice,
+                minDiscount = minDiscount,
+                maxDiscount = maxDiscount
             )
+            // Обрабатываем 204 No Content как пустой список
+            if (response.code() == 204) {
+                emptyList()
+            } else {
+                response.body() ?: emptyList()
+            }
         }
     }
 }

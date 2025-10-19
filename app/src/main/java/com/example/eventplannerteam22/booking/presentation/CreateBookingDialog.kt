@@ -19,13 +19,12 @@ fun CreateBookingDialog(
     userId: Int,
     eventOptions: List<Pair<Int, String>>,
     serviceOptions: List<Pair<Int, String>>,
-    onCreate: (eventId: Int, serviceId: Int, startDate: String, endDate: String) -> Unit,
+    onCreate: (eventId: Int, serviceId: Int, startTime: String) -> Unit,
     onDismiss: () -> Unit
 ) {
     var selectedEventId by remember { mutableStateOf<Int?>(null) }
     var selectedServiceId by remember { mutableStateOf<Int?>(null) }
-    var startDate by remember { mutableStateOf("") }
-    var endDate by remember { mutableStateOf("") }
+    var startTime by remember { mutableStateOf("10:00:00") }
     var eventMenuExpanded by remember { mutableStateOf(false) }
     var serviceMenuExpanded by remember { mutableStateOf(false) }
 
@@ -50,6 +49,7 @@ fun CreateBookingDialog(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
+                
                 Text("Service:")
                 OutlinedButton(onClick = { serviceMenuExpanded = true }) {
                     Text(serviceOptions.find { it.first == selectedServiceId }?.second ?: "Select service")
@@ -66,27 +66,22 @@ fun CreateBookingDialog(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
+                
                 OutlinedTextField(
-                    value = startDate,
-                    onValueChange = { startDate = it },
-                    label = { Text("Start date (YYYY-MM-DD)") }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = endDate,
-                    onValueChange = { endDate = it },
-                    label = { Text("End date (YYYY-MM-DD)") }
+                    value = startTime,
+                    onValueChange = { startTime = it },
+                    label = { Text("Start time (HH:mm:ss)") }
                 )
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    if (selectedEventId != null && selectedServiceId != null && startDate.isNotBlank() && endDate.isNotBlank()) {
-                        onCreate(selectedEventId!!, selectedServiceId!!, startDate, endDate)
+                    if (selectedEventId != null && selectedServiceId != null && startTime.isNotBlank()) {
+                        onCreate(selectedEventId!!, selectedServiceId!!, startTime)
                     }
                 },
-                enabled = selectedEventId != null && selectedServiceId != null && startDate.isNotBlank() && endDate.isNotBlank()
+                enabled = selectedEventId != null && selectedServiceId != null && startTime.isNotBlank()
             ) { Text("Create") }
         },
         dismissButton = {

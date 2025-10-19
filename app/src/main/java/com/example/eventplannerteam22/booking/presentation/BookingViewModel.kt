@@ -47,14 +47,21 @@ class BookingViewModel @Inject constructor(
             when (val result = repository.createBooking(request)) {
                 is ApiResult.Success -> {
                     loadBookings(request.userId)
+                    error = null
                     onSuccess()
                 }
                 is ApiResult.UnknownError -> {
                     error = result.message
                 }
-                else -> {}
+                else -> {
+                    error = "Unknown error occurred"
+                }
             }
             isLoading = false
         }
+    }
+
+    fun clearError() {
+        error = null
     }
 }

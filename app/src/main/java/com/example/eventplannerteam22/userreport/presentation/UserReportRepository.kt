@@ -24,4 +24,18 @@ class UserReportRepository @Inject constructor(
     suspend fun submitReport(reporterId: Int, reportedUserId: Int, text: String) {
         api.submitReport(CreateUserReportRequest(reporterId, reportedUserId, text))
     }
+
+    suspend fun getPendingReports(): Result<List<UserReport>> = try {
+        val reports = api.getPendingReports()
+        Result.success(reports)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun updateReportStatus(reportId: Int, status: String): Result<UserReport> = try {
+        val report = api.updateReportStatus(reportId, status)
+        Result.success(report)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
 }

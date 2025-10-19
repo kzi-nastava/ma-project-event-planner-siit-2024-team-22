@@ -22,13 +22,16 @@ class EventListViewModel @Inject constructor(
 ) : ViewModel() {
     var screenState by mutableStateOf(EventListState())
         private set
+    
+    var events by mutableStateOf<List<EventListItem>>(emptyList())
+        private set
 
     private val fetchResultChannel = Channel<ApiResult<List<EventListItem>>>()
     val fetchResults = fetchResultChannel.receiveAsFlow()
 
     fun fetchEvents() {
         viewModelScope.launch {
-            screenState.copy(isLoading = true)
+            screenState = screenState.copy(isLoading = true)
             val result = eventRepository.getEvents(5, 0)
             fetchResultChannel.send(result)
         }
@@ -38,6 +41,7 @@ class EventListViewModel @Inject constructor(
         when (result) {
             is ApiResult.Success -> {
                 Log.d("EventListViewModel", result.data.toString())
+                events = result.data
                 screenState = screenState.copy(
                     events = result.data,
                     filteredEvents = result.data,

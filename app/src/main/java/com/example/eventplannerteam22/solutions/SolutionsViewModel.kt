@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SolutionsViewModel @Inject constructor(
-    private val repository: SolutionRepository
+    private val repository: SolutionRepository,
+    private val categoryRepository: com.example.eventplannerteam22.solutionCategory.data.SolutionCategoryRepository
 ) : ViewModel() {
 
     var solutions by mutableStateOf<List<Solution>>(emptyList())
@@ -40,6 +41,18 @@ class SolutionsViewModel @Inject constructor(
 
     init {
         loadSolutions()
+        loadCategories()
+    }
+
+    private fun loadCategories() {
+        viewModelScope.launch {
+            try {
+                val categories = categoryRepository.getSolutionCategories(100, 0)
+                updateFilterState(filterState.copy(categories = categories))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun loadSolutions() {
@@ -71,12 +84,23 @@ class SolutionsViewModel @Inject constructor(
             isLoading = true
             
             try {
+                val nameParam = filterState.name.takeIf { it.isNotEmpty() }
+                val descParam = filterState.description.takeIf { it.isNotEmpty() }
+                val minPriceParam = filterState.minPrice.toDoubleOrNull()
+                val maxPriceParam = filterState.maxPrice.toDoubleOrNull()
+                val minDiscountParam = filterState.minDiscount.toDoubleOrNull()
+                val maxDiscountParam = filterState.maxDiscount.toDoubleOrNull()
+                
+                println("Filter params: name=$nameParam, desc=$descParam, categoryId=${filterState.selectedCategory?.id}, minPrice=$minPriceParam, maxPrice=$maxPriceParam, minDiscount=$minDiscountParam, maxDiscount=$maxDiscountParam")
+                
                 val result = repository.searchAndFilterSolutions(
-                    name = filterState.name.takeIf { it.isNotEmpty() },
-                    description = filterState.description.takeIf { it.isNotEmpty() },
-                    category = filterState.category.takeIf { it.isNotEmpty() },
-                    price = filterState.price.toDoubleOrNull(),
-                    discount = filterState.discount.toDoubleOrNull()
+                    name = nameParam,
+                    description = descParam,
+                    categoryId = filterState.selectedCategory?.id,
+                    minPrice = minPriceParam,
+                    maxPrice = maxPriceParam,
+                    minDiscount = minDiscountParam,
+                    maxDiscount = maxDiscountParam
                 )
                 
                 when (result) {
@@ -85,7 +109,7 @@ class SolutionsViewModel @Inject constructor(
                         isFiltered = true
                     }
                     else -> {
-                        // Если нет результатов (204) или ошибка, показываем пустой список
+                        // Если нет результатов или ошибка, показываем пустой список
                         filteredSolutions = emptyList()
                         isFiltered = true
                     }
