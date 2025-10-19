@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -30,18 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.eventplannerteam22.solutionCategory.domain.SolutionCategory
 
-data class SolutionFilterState(
-    val name: String = "",
-    val description: String = "",
-    val price: String = "",
-    val discount: String = "",
-    val selectedFilter: String = "",
-    val isExpanded: Boolean = false,
-    val isCategoryExpanded: Boolean = false,
-    val selectedCategory: SolutionCategory? = null,
-    val categories: List<SolutionCategory> = emptyList()
-)
-
 @Composable
 fun SolutionFilterComponent(
     filterState: SolutionFilterState,
@@ -57,6 +46,8 @@ fun SolutionFilterComponent(
         "price" to "Price",
         "discount" to "Discount"
     )
+
+    val showCategoryDropdown = filterState.selectedFilter == "Category"
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -118,8 +109,58 @@ fun SolutionFilterComponent(
                     }
                 }
                 
-                // Поле ввода для значения фильтра
-                if (filterState.selectedFilter == "Category") {
+                // Поле ввода для значения фильтра или выпадающее меню для категории
+                if (filterState.selectedFilter == "Price") {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = filterState.minPrice,
+                            onValueChange = { newValue ->
+                                onFilterChange(filterState.copy(minPrice = newValue.filter { it.isDigit() || it == '.' }))
+                            },
+                            label = { Text("Min Price") },
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        OutlinedTextField(
+                            value = filterState.maxPrice,
+                            onValueChange = { newValue ->
+                                onFilterChange(filterState.copy(maxPrice = newValue.filter { it.isDigit() || it == '.' }))
+                            },
+                            label = { Text("Max Price") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                } else if (filterState.selectedFilter == "Discount") {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = filterState.minDiscount,
+                            onValueChange = { newValue ->
+                                onFilterChange(filterState.copy(minDiscount = newValue.filter { it.isDigit() || it == '.' }))
+                            },
+                            label = { Text("Min Discount") },
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        OutlinedTextField(
+                            value = filterState.maxDiscount,
+                            onValueChange = { newValue ->
+                                onFilterChange(filterState.copy(maxDiscount = newValue.filter { it.isDigit() || it == '.' }))
+                            },
+                            label = { Text("Max Discount") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                } else if (showCategoryDropdown) {
                     ExposedDropdownMenuBox(
                         expanded = filterState.isCategoryExpanded,
                         onExpandedChange = { 
@@ -205,8 +246,8 @@ private fun getFilterValue(filterState: SolutionFilterState): String {
         "Name" -> filterState.name
         "Description" -> filterState.description
         "Category" -> filterState.selectedCategory?.name ?: "Select Category"
-        "Price" -> filterState.price
-        "Discount" -> filterState.discount
+        "Price" -> "${filterState.minPrice}-${filterState.maxPrice}"
+        "Discount" -> "${filterState.minDiscount}-${filterState.maxDiscount}"
         else -> ""
     }
 }
@@ -215,8 +256,8 @@ private fun updateFilterValue(filterState: SolutionFilterState, newValue: String
     return when (filterState.selectedFilter) {
         "Name" -> filterState.copy(name = newValue)
         "Description" -> filterState.copy(description = newValue)
-        "Price" -> filterState.copy(price = newValue)
-        "Discount" -> filterState.copy(discount = newValue)
+        "Price" -> filterState.copy(minPrice = newValue)
+        "Discount" -> filterState.copy(minDiscount = newValue)
         else -> filterState
     }
 }

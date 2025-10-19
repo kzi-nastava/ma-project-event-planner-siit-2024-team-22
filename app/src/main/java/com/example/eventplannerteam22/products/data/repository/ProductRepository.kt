@@ -18,8 +18,10 @@ interface ProductRepository {
         name: String? = null,
         description: String? = null,
         categoryId: Int? = null,
-        price: BigDecimal? = null,
-        discount: BigDecimal? = null,
+        minPrice: Double? = null,
+        maxPrice: Double? = null,
+        minDiscount: Double? = null,
+        maxDiscount: Double? = null,
         imageSource: String? = null,
         isPrivate: Boolean? = null
     ): ApiResult<List<ProductDTO>?>

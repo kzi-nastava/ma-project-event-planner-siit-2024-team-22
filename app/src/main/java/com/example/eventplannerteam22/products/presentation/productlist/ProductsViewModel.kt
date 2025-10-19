@@ -11,7 +11,6 @@ import com.example.eventplannerteam22.products.domain.ProductListItem
 import com.example.eventplannerteam22.products.presentation.filters.ProductFilterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,12 +86,21 @@ class ProductsViewModel @Inject constructor(
             isLoading = true
             
             try {
+                val minPrice = filterState.minPrice.toDoubleOrNull()
+                val maxPrice = filterState.maxPrice.toDoubleOrNull()
+                val minDiscount = filterState.minDiscount.toDoubleOrNull()
+                val maxDiscount = filterState.maxDiscount.toDoubleOrNull()
+                
+                println("Filter params - minPrice: $minPrice, maxPrice: $maxPrice, minDiscount: $minDiscount, maxDiscount: $maxDiscount")
+                
                 val result = repository.searchAndFilterProducts(
                     name = filterState.name.takeIf { it.isNotEmpty() },
                     description = filterState.description.takeIf { it.isNotEmpty() },
                     categoryId = filterState.selectedCategory?.id,
-                    price = filterState.price.toBigDecimalOrNull(),
-                    discount = filterState.discount.toBigDecimalOrNull(),
+                    minPrice = minPrice,
+                    maxPrice = maxPrice,
+                    minDiscount = minDiscount,
+                    maxDiscount = maxDiscount,
                     imageSource = null,
                     isPrivate = when (filterState.isPrivate) {
                         "Yes" -> true

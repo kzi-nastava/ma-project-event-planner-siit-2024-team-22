@@ -5,8 +5,10 @@ import com.example.eventplannerteam22.productcategory.domen.ProductCategory
 data class ProductFilterState(
     val name: String = "",
     val description: String = "",
-    val price: String = "",
-    val discount: String = "",
+    val minPrice: String = "",
+    val maxPrice: String = "",
+    val minDiscount: String = "",
+    val maxDiscount: String = "",
     val isPrivate: String = "",
     val selectedFilter: String = "",
     val isExpanded: Boolean = false,

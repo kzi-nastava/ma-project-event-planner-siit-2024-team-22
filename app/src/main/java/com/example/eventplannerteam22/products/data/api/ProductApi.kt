@@ -39,8 +39,10 @@ interface ProductApi {
         @Query("name") name: String? = null,
         @Query("description") description: String? = null,
         @Query("category") categoryId: Int? = null,
-        @Query("price") price: BigDecimal? = null,
-        @Query("discount") discount: BigDecimal? = null,
+        @Query("minPrice") minPrice: BigDecimal? = null,
+        @Query("maxPrice") maxPrice: BigDecimal? = null,
+        @Query("minDiscount") minDiscount: BigDecimal? = null,
+        @Query("maxDiscount") maxDiscount: BigDecimal? = null,
         @Query("imageSource") imageSource: String? = null,
         @Query("isPrivate") isPrivate: Boolean? = null
     ): Response<List<ProductDTO>>

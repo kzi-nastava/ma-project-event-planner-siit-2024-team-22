@@ -27,16 +27,20 @@ class SolutionRepository @Inject constructor(
         name: String? = null,
         description: String? = null,
         categoryId: Int? = null,
-        price: Double? = null,
-        discount: Double? = null
+        minPrice: Double? = null,
+        maxPrice: Double? = null,
+        minDiscount: Double? = null,
+        maxDiscount: Double? = null
     ): ApiResult<List<Solution>> {
         return safeApiCall(okHttpClient) { 
             val response = solutionApi.searchAndFilterSolutions(
                 name = name,
                 description = description,
                 categoryId = categoryId,
-                price = price,
-                discount = discount
+                minPrice = minPrice,
+                maxPrice = maxPrice,
+                minDiscount = minDiscount,
+                maxDiscount = maxDiscount
             )
             // Обрабатываем 204 No Content как пустой список
             if (response.code() == 204) {

@@ -42,8 +42,10 @@ class ProductRepositoryImpl @Inject constructor(
         name: String?,
         description: String?,
         categoryId: Int?,
-        price: BigDecimal?,
-        discount: BigDecimal?,
+        minPrice: Double?,
+        maxPrice: Double?,
+        minDiscount: Double?,
+        maxDiscount: Double?,
         imageSource: String?,
         isPrivate: Boolean?
     ): ApiResult<List<ProductDTO>> {
@@ -52,8 +54,10 @@ class ProductRepositoryImpl @Inject constructor(
                 name = name,
                 description = description,
                 categoryId = categoryId,
-                price = price,
-                discount = discount,
+                minPrice = minPrice?.toBigDecimal(),
+                maxPrice = maxPrice?.toBigDecimal(),
+                minDiscount = minDiscount?.toBigDecimal(),
+                maxDiscount = maxDiscount?.toBigDecimal(),
                 imageSource = imageSource,
                 isPrivate = isPrivate
             )

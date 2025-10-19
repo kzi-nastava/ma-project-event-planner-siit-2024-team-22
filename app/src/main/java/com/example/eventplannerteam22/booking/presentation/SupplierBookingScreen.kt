@@ -11,38 +11,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.eventplannerteam22.booking.domain.model.Booking
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-
 @Composable
-fun BookingListScreen(
-    bookings: List<Booking>,
-    userId: Int = -1,
-    bookingViewModel: BookingViewModel = hiltViewModel(),
-    bookingFormViewModel: BookingFormViewModel = hiltViewModel(),
+fun SupplierBookingScreen(
+    supplierId: Int = -1,
+    viewModel: SupplierBookingViewModel = hiltViewModel(),
 ) {
-    var showDialog by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     var showErrorDialog by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
-    LaunchedEffect(bookingViewModel.error) {
-        bookingViewModel.error?.let { error ->
+    LaunchedEffect(viewModel.error) {
+        viewModel.error?.let { error ->
             errorMessage = error
             showErrorDialog = true
         }
     }
 
+    LaunchedEffect(Unit) {
+        if (supplierId != -1) {
+            viewModel.loadSupplierBookings(supplierId)
+        }
+    }
+
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Booking")
-            }
-        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
-            if (bookings.isEmpty()) {
+            if (viewModel.bookings.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -57,27 +52,16 @@ fun BookingListScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 80.dp)
+                        .padding(vertical = paddingValues.calculateTopPadding())
                 ) {
                     item {
-                        Spacer(modifier = Modifier.height(paddingValues.calculateTopPadding() + 16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                    items(bookings) { booking ->
-                        BookingListItem(booking)
-                    }
-                }
-            }
-            if (bookingViewModel.error != null) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = paddingValues.calculateTopPadding() + 8.dp)
-                ) {
-                    Surface(color = MaterialTheme.colorScheme.error, shadowElevation = 4.dp) {
-                        Text(
-                            text = bookingViewModel.error ?: "",
-                            color = MaterialTheme.colorScheme.onError,
-                            modifier = Modifier.padding(12.dp)
+                    items(viewModel.bookings) { booking ->
+                        SupplierBookingListItem(
+                            booking = booking,
+                            onConfirm = { viewModel.confirmBooking(booking.id) },
+                            isLoading = viewModel.isLoading
                         )
                     }
                 }
@@ -88,7 +72,7 @@ fun BookingListScreen(
             AlertDialog(
                 onDismissRequest = { 
                     showErrorDialog = false
-                    bookingViewModel.clearError()
+                    viewModel.clearError()
                 },
                 title = { Text("Error") },
                 text = { Text(errorMessage) },
@@ -96,7 +80,7 @@ fun BookingListScreen(
                     Button(
                         onClick = {
                             showErrorDialog = false
-                            bookingViewModel.clearError()
+                            viewModel.clearError()
                         }
                     ) {
                         Text("OK")
@@ -104,57 +88,41 @@ fun BookingListScreen(
                 }
             )
         }
-
-        if (showDialog) {
-            val events by bookingFormViewModel.events.collectAsState()
-            val services by bookingFormViewModel.services.collectAsState()
-            LaunchedEffect(showDialog) {
-                if (showDialog) {
-                    bookingFormViewModel.loadEvents()
-                    bookingFormViewModel.loadServices()
-                }
-            }
-            CreateBookingDialog(
-                userId = userId,
-                eventOptions = events.map { it.id to it.name },
-                serviceOptions = services.map { it.id to it.name },
-                onCreate = { eventId, serviceId, startTime ->
-                    bookingViewModel.createBooking(
-                        com.example.eventplannerteam22.booking.data.remote.CreateBookingRequest(
-                            userId = userId,
-                            eventId = eventId,
-                            solutionId = serviceId,
-                            startTime = startTime
-                        ),
-                        onSuccess = { showDialog = false }
-                    )
-                },
-                onDismiss = { showDialog = false }
-            )
-        }
     }
 }
 
 @Composable
-fun BookingListItem(booking: Booking) {
+fun SupplierBookingListItem(
+    booking: Booking,
+    onConfirm: () -> Unit,
+    isLoading: Boolean
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
-            .padding(top = 24.dp, bottom = 8.dp),
+            .padding(top = 8.dp, bottom = 8.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Event: ${booking.event.name}", style = MaterialTheme.typography.titleMedium)
+            Text(text = "Organizer: ${booking.user.name}")
             Text(text = "Service: ${booking.services.joinToString { it.name }}")
             Text(text = "Date: ${booking.bookingDate}")
             Text(text = "Time: ${booking.startTime} - ${booking.endTime}")
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Status: ")
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Status Badge
                 val statusText = if (booking.confirmed) "CONFIRMED" else "PENDING"
                 Surface(
                     color = if (booking.confirmed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text(
                         text = statusText,
@@ -162,6 +130,18 @@ fun BookingListItem(booking: Booking) {
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         style = MaterialTheme.typography.labelSmall
                     )
+                }
+                
+                // Confirm Button (only show if not confirmed)
+                if (!booking.confirmed) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = onConfirm,
+                        enabled = !isLoading,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Confirm")
+                    }
                 }
             }
         }

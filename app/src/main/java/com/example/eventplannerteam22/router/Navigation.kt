@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.eventplannerteam22.R
 import com.example.eventplannerteam22.admin.comments.presentation.AdminCommentModerationScreen
+import com.example.eventplannerteam22.admin.reports.presentation.AdminReportModerationScreen
 import com.example.eventplannerteam22.auth.AuthScreen
 import com.example.eventplannerteam22.auth.login.LoginScreen
 import com.example.eventplannerteam22.auth.registration.RegistrationScreen
@@ -43,6 +44,7 @@ import com.example.eventplannerteam22.events.presentation.editevent.EditEventScr
 import com.example.eventplannerteam22.events.presentation.eventdetails.EventDetailScreen
 import com.example.eventplannerteam22.events.presentation.eventlist.EventListScreen
 import com.example.eventplannerteam22.booking.presentation.BookingListScreen
+import com.example.eventplannerteam22.booking.presentation.SupplierBookingScreen
 import com.example.eventplannerteam22.eventtype.presentation.createeventtype.CreateEventType
 import com.example.eventplannerteam22.eventtype.presentation.eventtypelist.EventTypesScreen
 import com.example.eventplannerteam22.mainscreen.MainScreen
@@ -201,20 +203,26 @@ fun Navigation() {
                 val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
                 val session = sessionViewModel.session.collectAsState().value
                 val userId = session.userId ?: -1
-                val bookingViewModel: BookingViewModel = hiltViewModel()
-                LaunchedEffect(userId) {
-                    if (userId != -1) bookingViewModel.loadBookings(userId)
-                }
+                val userRole = session.userRole
+                
                 MainLayout(
                     navController = navController,
                     drawerState = drawerState,
                     coroutineScope = coroutineScope,
                     drawerContent = { DrawerContent(navController, coroutineScope, drawerState) }
                 ) { paddingValues ->
-                    BookingListScreen(
-                        bookings = bookingViewModel.bookings,
-                        userId = userId
-                    )
+                    if (userRole == UserRole.Supplier) {
+                        SupplierBookingScreen(supplierId = userId)
+                    } else {
+                        val bookingViewModel: BookingViewModel = hiltViewModel()
+                        LaunchedEffect(userId) {
+                            if (userId != -1) bookingViewModel.loadBookings(userId)
+                        }
+                        BookingListScreen(
+                            bookings = bookingViewModel.bookings,
+                            userId = userId
+                        )
+                    }
                 }
             }
 
@@ -465,6 +473,19 @@ fun Navigation() {
                 coroutineScope = coroutineScope
             )
         }
+        composable(route = Screen.AdminReportModeration.route) {
+            MainLayout(
+                navController = navController,
+                drawerState = drawerState,
+                coroutineScope = coroutineScope,
+                drawerContent = { DrawerContent(navController, coroutineScope, drawerState) },
+                topBarTitle = "Report Moderation"
+            ) { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    AdminReportModerationScreen()
+                }
+            }
+        }
         composable("notifications") {
             val sessionViewModel = hiltViewModel<SessionViewModel>(LocalContext.current as ComponentActivity)
             NotificationScreen(
@@ -674,6 +695,20 @@ fun DrawerContent(
                     Icon(
                         painter = painterResource(R.drawable.sample_image),
                         contentDescription = "Moderate Comments"
+                    )
+                }
+            )
+            NavigationDrawerItem(
+                onClick = {
+                    navController.navigate(Screen.AdminReportModeration.route)
+                    coroutineScope.launch { drawerState.close() }
+                },
+                selected = false,
+                label = { Text("Moderate Reports") },
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.sample_image),
+                        contentDescription = "Moderate Reports"
                     )
                 }
             )

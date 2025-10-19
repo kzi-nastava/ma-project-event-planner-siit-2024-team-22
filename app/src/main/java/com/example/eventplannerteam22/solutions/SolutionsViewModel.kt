@@ -86,17 +86,21 @@ class SolutionsViewModel @Inject constructor(
             try {
                 val nameParam = filterState.name.takeIf { it.isNotEmpty() }
                 val descParam = filterState.description.takeIf { it.isNotEmpty() }
-                val priceParam = filterState.price.toDoubleOrNull()
-                val discountParam = filterState.discount.toDoubleOrNull()
+                val minPriceParam = filterState.minPrice.toDoubleOrNull()
+                val maxPriceParam = filterState.maxPrice.toDoubleOrNull()
+                val minDiscountParam = filterState.minDiscount.toDoubleOrNull()
+                val maxDiscountParam = filterState.maxDiscount.toDoubleOrNull()
                 
-                println("Filter params: name=$nameParam, desc=$descParam, categoryId=${filterState.selectedCategory?.id}, price=$priceParam, discount=$discountParam")
+                println("Filter params: name=$nameParam, desc=$descParam, categoryId=${filterState.selectedCategory?.id}, minPrice=$minPriceParam, maxPrice=$maxPriceParam, minDiscount=$minDiscountParam, maxDiscount=$maxDiscountParam")
                 
                 val result = repository.searchAndFilterSolutions(
                     name = nameParam,
                     description = descParam,
                     categoryId = filterState.selectedCategory?.id,
-                    price = priceParam,
-                    discount = discountParam
+                    minPrice = minPriceParam,
+                    maxPrice = maxPriceParam,
+                    minDiscount = minDiscountParam,
+                    maxDiscount = maxDiscountParam
                 )
                 
                 when (result) {

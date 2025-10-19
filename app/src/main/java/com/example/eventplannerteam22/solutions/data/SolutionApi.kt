@@ -25,7 +25,9 @@ interface SolutionApi {
         @Query("name") name: String? = null,
         @Query("description") description: String? = null,
         @Query("category") categoryId: Int? = null,
-        @Query("price") price: Double? = null,
-        @Query("discount") discount: Double? = null
+        @Query("minPrice") minPrice: Double? = null,
+        @Query("maxPrice") maxPrice: Double? = null,
+        @Query("minDiscount") minDiscount: Double? = null,
+        @Query("maxDiscount") maxDiscount: Double? = null
     ): Response<List<Solution>>
 }

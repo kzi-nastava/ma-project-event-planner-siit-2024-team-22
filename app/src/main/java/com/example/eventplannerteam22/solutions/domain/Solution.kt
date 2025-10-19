@@ -1,6 +1,7 @@
 package com.example.eventplannerteam22.solutions.domain
 
 import com.example.eventplannerteam22.solutionCategory.domain.SolutionCategory
+import com.example.eventplannerteam22.user.domain.model.User
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.time.Duration
@@ -21,7 +22,7 @@ data class Solution(
     val dateStartBooking: LocalDate,
     val dateFinishBooking: LocalDate,
     val bookingConfirmType: ServiceBookingConfirmType,
-//    val createdBy: Int, TODO: поменять на Profile
+    val createdBy: User? = null,
     @Json(name = "deleted") val isDeleted: Boolean
 )
 
