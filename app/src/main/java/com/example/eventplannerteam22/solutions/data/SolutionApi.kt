@@ -2,6 +2,7 @@ package com.example.eventplannerteam22.solutions.data
 
 import com.example.eventplannerteam22.solutions.domain.CreateSolutionDTO
 import com.example.eventplannerteam22.solutions.domain.Solution
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -23,8 +24,8 @@ interface SolutionApi {
     suspend fun searchAndFilterSolutions(
         @Query("name") name: String? = null,
         @Query("description") description: String? = null,
-        @Query("category") category: String? = null,
+        @Query("category") categoryId: Int? = null,
         @Query("price") price: Double? = null,
         @Query("discount") discount: Double? = null
-    ): List<Solution>
+    ): Response<List<Solution>>
 }

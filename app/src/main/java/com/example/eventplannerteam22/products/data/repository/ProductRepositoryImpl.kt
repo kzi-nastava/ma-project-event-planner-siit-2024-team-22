@@ -41,22 +41,28 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun searchAndFilterProducts(
         name: String?,
         description: String?,
-        category: String?,
+        categoryId: Int?,
         price: BigDecimal?,
         discount: BigDecimal?,
         imageSource: String?,
         isPrivate: Boolean?
     ): ApiResult<List<ProductDTO>> {
         return safeApiCall(okHttpClient) { 
-            productApi.searchAndFilterProducts(
+            val response = productApi.searchAndFilterProducts(
                 name = name,
                 description = description,
-                category = category,
+                categoryId = categoryId,
                 price = price,
                 discount = discount,
                 imageSource = imageSource,
                 isPrivate = isPrivate
             )
+            // Обрабатываем 204 No Content как пустой список
+            if (response.code() == 204) {
+                emptyList()
+            } else {
+                response.body() ?: emptyList()
+            }
         }
     }
 }

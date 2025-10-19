@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
-    private val repository: ProductRepositoryImpl
+    private val repository: ProductRepositoryImpl,
+    private val categoryRepository: com.example.eventplannerteam22.productcategory.data.ProductCategoryRepository
 ) : ViewModel() {
 
     var products by mutableStateOf<List<ProductListItem>>(emptyList())
@@ -42,6 +43,18 @@ class ProductsViewModel @Inject constructor(
 
     init {
         loadProducts()
+        loadCategories()
+    }
+
+    private fun loadCategories() {
+        viewModelScope.launch {
+            try {
+                val categories = categoryRepository.getProductCategories(100, 0) // Загрузим все категории
+                updateFilterState(filterState.copy(categories = categories))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun loadProducts() {
@@ -77,7 +90,7 @@ class ProductsViewModel @Inject constructor(
                 val result = repository.searchAndFilterProducts(
                     name = filterState.name.takeIf { it.isNotEmpty() },
                     description = filterState.description.takeIf { it.isNotEmpty() },
-                    category = filterState.category.takeIf { it.isNotEmpty() },
+                    categoryId = filterState.selectedCategory?.id,
                     price = filterState.price.toBigDecimalOrNull(),
                     discount = filterState.discount.toBigDecimalOrNull(),
                     imageSource = null,
@@ -90,16 +103,16 @@ class ProductsViewModel @Inject constructor(
                 
                 when (result) {
                     is com.example.eventplannerteam22.network.ApiResult.Success -> {
-                        // Преобразуем ProductDTO в ProductListItem
                         filteredProducts = result.data.map { dto ->
                             dto.toProductListItem()
                         }
                         isFiltered = true
                     }
                     else -> {
-                        // В случае ошибки показываем все продукты
-                        filteredProducts = products
-                        isFiltered = false
+                        // В случае ошибки показываем пустой список
+                        println("Error during filtering")
+                        filteredProducts = emptyList()
+                        isFiltered = true
                     }
                 }
             } catch (e: Exception) {

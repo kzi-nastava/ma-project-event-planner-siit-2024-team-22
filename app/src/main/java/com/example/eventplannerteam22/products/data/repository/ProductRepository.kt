@@ -17,10 +17,10 @@ interface ProductRepository {
     suspend fun searchAndFilterProducts(
         name: String? = null,
         description: String? = null,
-        category: String? = null,
+        categoryId: Int? = null,
         price: BigDecimal? = null,
         discount: BigDecimal? = null,
         imageSource: String? = null,
         isPrivate: Boolean? = null
-    ): ApiResult<List<ProductDTO>>
+    ): ApiResult<List<ProductDTO>?>
 }

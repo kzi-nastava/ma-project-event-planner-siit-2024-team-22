@@ -3,6 +3,7 @@ package com.example.eventplannerteam22.products.data.api
 import com.example.eventplannerteam22.products.data.model.CreateProductDTO
 import com.example.eventplannerteam22.products.data.model.ProductDTO
 import com.example.eventplannerteam22.products.data.model.UpdateProductDTO
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -37,10 +38,10 @@ interface ProductApi {
     suspend fun searchAndFilterProducts(
         @Query("name") name: String? = null,
         @Query("description") description: String? = null,
-        @Query("category") category: String? = null,
+        @Query("category") categoryId: Int? = null,
         @Query("price") price: BigDecimal? = null,
         @Query("discount") discount: BigDecimal? = null,
         @Query("imageSource") imageSource: String? = null,
         @Query("isPrivate") isPrivate: Boolean? = null
-    ): List<ProductDTO>
+    ): Response<List<ProductDTO>>
 }

@@ -26,18 +26,24 @@ class SolutionRepository @Inject constructor(
     suspend fun searchAndFilterSolutions(
         name: String? = null,
         description: String? = null,
-        category: String? = null,
+        categoryId: Int? = null,
         price: Double? = null,
         discount: Double? = null
     ): ApiResult<List<Solution>> {
         return safeApiCall(okHttpClient) { 
-            solutionApi.searchAndFilterSolutions(
+            val response = solutionApi.searchAndFilterSolutions(
                 name = name,
                 description = description,
-                category = category,
+                categoryId = categoryId,
                 price = price,
                 discount = discount
             )
+            // Обрабатываем 204 No Content как пустой список
+            if (response.code() == 204) {
+                emptyList()
+            } else {
+                response.body() ?: emptyList()
+            }
         }
     }
 }

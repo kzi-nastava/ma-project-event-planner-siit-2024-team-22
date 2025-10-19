@@ -29,18 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-data class ProductFilterState(
-    val name: String = "",
-    val description: String = "",
-    val category: String = "",
-    val price: String = "",
-    val discount: String = "",
-    val isPrivate: String = "",
-    val selectedFilter: String = "",
-    val isExpanded: Boolean = false,
-    val isPrivateExpanded: Boolean = false
-)
-
 @Composable
 fun ProductFilterComponent(
     filterState: ProductFilterState,
@@ -57,6 +45,8 @@ fun ProductFilterComponent(
         "discount" to "Discount",
         "isPrivate" to "Private"
     )
+
+    val showCategoryDropdown = filterState.selectedFilter == "Category"
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -157,6 +147,51 @@ fun ProductFilterComponent(
                             }
                         }
                     }
+                } else if (showCategoryDropdown) {
+                    ExposedDropdownMenuBox(
+                        expanded = filterState.isCategoryExpanded,
+                        onExpandedChange = { 
+                            onFilterChange(filterState.copy(isCategoryExpanded = !filterState.isCategoryExpanded))
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        OutlinedTextField(
+                            value = getFilterValue(filterState),
+                            onValueChange = { },
+                            readOnly = true,
+                            label = { Text("Category") },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = filterState.isCategoryExpanded)
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth(),
+                            enabled = filterState.selectedFilter.isNotEmpty()
+                        )
+
+                        if (filterState.selectedFilter == "Category") {
+                            ExposedDropdownMenu(
+                                expanded = filterState.isCategoryExpanded,
+                                onDismissRequest = { 
+                                    onFilterChange(filterState.copy(isCategoryExpanded = false))
+                                }
+                            ) {
+                                filterState.categories.forEach { category ->
+                                    androidx.compose.material3.DropdownMenuItem(
+                                        text = { 
+                                            androidx.compose.material3.Text(category.name)
+                                        },
+                                        onClick = {
+                                            onFilterChange(filterState.copy(
+                                                selectedCategory = category,
+                                                isCategoryExpanded = false
+                                            ))
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 } else {
                     OutlinedTextField(
                         value = getFilterValue(filterState),
@@ -197,7 +232,7 @@ private fun getFilterValue(filterState: ProductFilterState): String {
     return when (filterState.selectedFilter) {
         "Name" -> filterState.name
         "Description" -> filterState.description
-        "Category" -> filterState.category
+        "Category" -> filterState.selectedCategory?.name ?: "Select Category"
         "Price" -> filterState.price
         "Discount" -> filterState.discount
         "Private" -> filterState.isPrivate
@@ -209,7 +244,6 @@ private fun updateFilterValue(filterState: ProductFilterState, newValue: String)
     return when (filterState.selectedFilter) {
         "Name" -> filterState.copy(name = newValue)
         "Description" -> filterState.copy(description = newValue)
-        "Category" -> filterState.copy(category = newValue)
         "Price" -> filterState.copy(price = newValue)
         "Discount" -> filterState.copy(discount = newValue)
         "Private" -> filterState.copy(isPrivate = newValue)
